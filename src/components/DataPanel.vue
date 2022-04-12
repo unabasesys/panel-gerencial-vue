@@ -652,6 +652,7 @@ export default {
               });
           });
         };
+        //asdadsdsasda
 
         this.desserts = [];
         Promise.all([mov_arg(), mov_esp(), mov_mx(), mov_br(), mov_cl()]).then(
