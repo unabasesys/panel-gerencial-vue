@@ -64,7 +64,7 @@ export default {
     login() {
       if (this.password && this.user) {
         if (this.password == "primo2022" && this.user == "primo") {
-          this.$router.push({name: 'Panel', params: { username: this.user }})
+          this.$router.push({name: 'Panel'})
           this.tag = "success";
         } else {
           this.alert = true;

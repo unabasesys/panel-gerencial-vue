@@ -5,7 +5,7 @@
       <v-btn text color="white" @click="snackbar = false"> Cerrar </v-btn>
     </v-snackbar>
     <div>
-      <Aside :username="username"/>
+      <Aside :username="username" />
 
       <Navbar />
       <div id="container" class="content no-collapsed">
@@ -223,7 +223,6 @@
                 </v-row>
               </v-card-title>
 
-              
               <v-data-table
                 :headers="headers"
                 :items="desserts"
@@ -306,7 +305,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["negocio", "negocios", "cards"]),
+    ...mapState(["negocio", "negocios", "cards", "tokens"]),
     ...mapGetters({
       getNegocioStore: "getNegocios",
       getCardsStore: "getDataCards",
@@ -365,8 +364,8 @@ export default {
         percent: 0,
       });
 
-      console.log("VALOR: ", value)
-      if(this.select_empresa === "Primo españa" && value === "EURO"){
+      console.log("VALOR: ", value);
+      if (this.select_empresa === "Primo españa" && value === "EURO") {
         value = "";
         this.tipo_cambio_v = "Moneda original";
       }
@@ -552,17 +551,23 @@ export default {
           method: "get",
           url: url_,
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjMuMjEzLjE4Ny4xNTciLCJwb3J0IjoiODUyNSIsIm5hbWUiOiJQUklNT0NPTlRFTlQiLCJpZCI6IjEzMzE3IiwiaWF0IjoxNjQ2MzE4NTU5LCJleHAiOjE2Nzc4NTQ1NTl9.bquXHUvnsyUdLaXoIrC17oSeqa0yaqgtcQIBJ3y0HPs",
+            Authorization: `Bearer ${this.tokens.chile}`,
           },
         };
 
-        let config_esp = {
+        let config_esp_bc = {
           method: "get",
           url: url_,
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgyMDAiLCJuYW1lIjoiUFJJTU9CVUVOT1NBSVJFU1MuTCIsImlkIjoiOTU3NCIsImlhdCI6MTY0NDg2MDUwMSwiZXhwIjoxNjc2Mzk2NTAxfQ.0Ec4L4y_XWLvzIDl2_LWI6GBmt_0xkZXttCQo8J9etQ",
+            Authorization: `Bearer ${this.tokens.esp_barcelona}`,
+          },
+        };
+
+        let config_esp_mr = {
+          method: "get",
+          url: url_,
+          headers: {
+            Authorization: `Bearer ${this.tokens.esp_madrid}`,
           },
         };
 
@@ -570,8 +575,7 @@ export default {
           method: "get",
           url: url_,
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6Ijg0MDAiLCJuYW1lIjoiUFJJTU9DT05URU5UTUVYSUNPIiwiaWQiOiIxMTk1MiIsImlhdCI6MTY0NDkyOTkzNiwiZXhwIjoxNjc2NDY1OTM2fQ.Xcs40HRr-7ecirgMX85ySYvHYQ51RRAmhk3ZkvKbrr8",
+            Authorization: `Bearer ${this.tokens.mex}`,
           },
         };
 
@@ -579,8 +583,7 @@ export default {
           method: "get",
           url: url_,
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgzMDAiLCJuYW1lIjoiUFJJTU9DT05URU5UQVJHRU5USU5BIiwiaWQiOiIyMzM5MSIsImlhdCI6MTY0NDkyOTc0NSwiZXhwIjoxNjc2NDY1NzQ1fQ.MobpDClFUE3eXoz_imOwn0HBd0YNArtmZn50Q65NPTA",
+            Authorization: `Bearer ${this.tokens.arg}`,
           },
         };
 
@@ -588,14 +591,25 @@ export default {
           method: "get",
           url: url_,
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgxMDAiLCJuYW1lIjoiUFJJTU9DT05URU5UQlJBU0lMIiwiaWQiOiI1NDkxIiwiaWF0IjoxNjQ0OTI5NTk4LCJleHAiOjE2NzY0NjU1OTh9.VrtXBJQw1NpAlteIq7pCorZWI_B-_cgVIecBha6Yerw",
+            Authorization: `Bearer ${this.tokens.brasil}`,
           },
         };
 
-        let mov_esp = () => {
+        let mov_esp_bc = () => {
           return new Promise((resolve, reject) => {
-            axios(config_esp)
+            axios(config_esp_bc)
+              .then((r) => {
+                resolve(r.data);
+              })
+              .catch((err) => {
+                reject();
+              });
+          });
+        };
+
+        let mov_esp_mr = () => {
+          return new Promise((resolve, reject) => {
+            axios(config_esp_mr)
               .then((r) => {
                 resolve(r.data);
               })
@@ -655,55 +669,60 @@ export default {
         //asdadsdsasda
 
         this.desserts = [];
-        Promise.all([mov_arg(), mov_esp(), mov_mx(), mov_br(), mov_cl()]).then(
-          (respuestas) => {
-            let dt = [];
-            try {
-              if (respuestas != undefined) {
-                respuestas.forEach((e) => {
-                  if (e.data.rows != undefined) {
-                    e.data.rows.forEach((e) => {
-                      let close_compras = this.negocio.cierre_compras
-                        ? true
-                        : false;
-                      this.cierre_compras_v = close_compras ? "Si" : "No";
-                      if (
-                        e.estado === "NOTA DE VENTA" &&
-                        e.closed_compras == close_compras
-                      ) {
-                        let data_table = {
-                          nro_neg: e.folio,
-                          fecha_asignacion: e.fecha_asignacion,
-                          referencia: e.referencia,
-                          cliente: e.razon_cliente,
-                          total_venta: this.parse(e.total_neto),
-                          gasto_p: this.parse(e.costo.presupuestado),
-                          gasto_r: this.parse(e.costo.real),
-                          utilidad_final: this.parse(e.utilidad.final),
-                          facturado: this.parse(e.total_facturado),
-                          por_facturar: this.parse(e.total_por_facturar),
-                        };
+        Promise.all([
+          mov_arg(),
+          mov_esp_mr(),
+          mov_esp_bc(),
+          mov_mx(),
+          mov_br(),
+          mov_cl(),
+        ]).then((respuestas) => {
+          let dt = [];
+          try {
+            if (respuestas != undefined) {
+              respuestas.forEach((e) => {
+                if (e.data.rows != undefined) {
+                  e.data.rows.forEach((e) => {
+                    let close_compras = this.negocio.cierre_compras
+                      ? true
+                      : false;
+                    this.cierre_compras_v = close_compras ? "Si" : "No";
+                    if (
+                      e.estado === "NOTA DE VENTA" &&
+                      e.closed_compras == close_compras
+                    ) {
+                      let data_table = {
+                        nro_neg: e.folio,
+                        fecha_asignacion: e.fecha_asignacion,
+                        referencia: e.referencia,
+                        cliente: e.razon_cliente,
+                        total_venta: this.parse(e.total_neto),
+                        gasto_p: this.parse(e.costo.presupuestado),
+                        gasto_r: this.parse(e.costo.real),
+                        utilidad_final: this.parse(e.utilidad.final),
+                        facturado: this.parse(e.total_facturado),
+                        por_facturar: this.parse(e.total_por_facturar),
+                      };
 
-                        dt.push(data_table);
-                      }
-                    });
-                    this.desserts = [];
-                    this.desserts = dt;
-                    this.addNegocio(this.desserts);
-                    this.setCards();
-                  }
-                });
-              }
-            } catch (error) {
-              this.ocultarLoading(100);
-              this.desserts = [];
-              this.setCards();
-              console.log(error);
-            } finally {
-              this.ocultarLoading(100);
+                      dt.push(data_table);
+                    }
+                  });
+                  this.desserts = [];
+                  this.desserts = dt;
+                  this.addNegocio(this.desserts);
+                  this.setCards();
+                }
+              });
             }
+          } catch (error) {
+            this.ocultarLoading(100);
+            this.desserts = [];
+            this.setCards();
+            console.log(error);
+          } finally {
+            this.ocultarLoading(100);
           }
-        );
+        });
       };
 
       const getNeg = (token, date_start = "", date_end = "", currency = "") => {
@@ -786,38 +805,40 @@ export default {
       let token;
       this.select_empresa = value;
       switch (value) {
-        case "Primo españa": {
-          token =
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgyMDAiLCJuYW1lIjoiUFJJTU9CVUVOT1NBSVJFU1MuTCIsImlkIjoiOTU3NCIsImlhdCI6MTY0NDg2MDUwMSwiZXhwIjoxNjc2Mzk2NTAxfQ.0Ec4L4y_XWLvzIDl2_LWI6GBmt_0xkZXttCQo8J9etQ";
+        case "Primo españa barcelona": {
+          token = `Bearer ${this.tokens.esp_barcelona}`;
+
+          getNeg(token, date_start, date_end, "€");
+          break;
+        }
+
+        case "Primo españa madrid": {
+          token = `Bearer ${this.tokens.esp_madrid}`;
 
           getNeg(token, date_start, date_end, "€");
           break;
         }
 
         case "Primo brasil": {
-          token =
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgxMDAiLCJuYW1lIjoiUFJJTU9DT05URU5UQlJBU0lMIiwiaWQiOiI1NDkxIiwiaWF0IjoxNjQ0OTI5NTk4LCJleHAiOjE2NzY0NjU1OTh9.VrtXBJQw1NpAlteIq7pCorZWI_B-_cgVIecBha6Yerw";
+          token = `Bearer ${this.tokens.brasil}`;
           getNeg(token, date_start, date_end, "R$");
           break;
         }
 
         case "Primo chile": {
-          token =
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjMuMjEzLjE4Ny4xNTciLCJwb3J0IjoiODUyNSIsIm5hbWUiOiJQUklNT0NPTlRFTlQiLCJpZCI6IjEzMzE3IiwiaWF0IjoxNjQ2MzE4NTU5LCJleHAiOjE2Nzc4NTQ1NTl9.bquXHUvnsyUdLaXoIrC17oSeqa0yaqgtcQIBJ3y0HPs";
+          token = `Bearer ${this.tokens.chile}`;
           getNeg(token, date_start, date_end, "$");
           break;
         }
 
         case "Primo argentina": {
-          token =
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6IjgzMDAiLCJuYW1lIjoiUFJJTU9DT05URU5UQVJHRU5USU5BIiwiaWQiOiIyMzM5MSIsImlhdCI6MTY0NDkyOTc0NSwiZXhwIjoxNjc2NDY1NzQ1fQ.MobpDClFUE3eXoz_imOwn0HBd0YNArtmZn50Q65NPTA";
+          token = `Bearer ${this.tokens.arg}`;
           getNeg(token, date_start, date_end, "$");
           break;
         }
 
         case "Primo mexico": {
-          token =
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6Ijg0MDAiLCJuYW1lIjoiUFJJTU9DT05URU5UTUVYSUNPIiwiaWQiOiIxMTk1MiIsImlhdCI6MTY0NDkyOTkzNiwiZXhwIjoxNjc2NDY1OTM2fQ.Xcs40HRr-7ecirgMX85ySYvHYQ51RRAmhk3ZkvKbrr8";
+          token = `Bearer ${this.tokens.mex}`;
           getNeg(token, date_start, date_end, "$");
           break;
         }
@@ -895,13 +916,13 @@ export default {
   display: flow-root;
 }
 
-.no-collapsed{
-  margin-left: 220px;   
-  margin-top: 30px
+.no-collapsed {
+  margin-left: 220px;
+  margin-top: 30px;
 }
 
-.collapsed{
+.collapsed {
   margin-top: 30px;
-  margin-left: 80px; 
+  margin-left: 80px;
 }
 </style>
