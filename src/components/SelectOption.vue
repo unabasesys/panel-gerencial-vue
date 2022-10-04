@@ -17,7 +17,6 @@ export default {
   data: () => ({
     check_empresas: ["CLP", "MEX", "ESP", "BRA", "ARG"],
     items: [
-      "Todas",
       "Primo argentina",
       "Primo brasil",
       "Primo españa barcelona",

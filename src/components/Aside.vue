@@ -29,14 +29,21 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item link to="/panel" color="#03D6F9" hover="#03D6F9">
+        <v-list-item link to="/dashboard" color="#03D6F9" hover="#03D6F9">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link to="/configuracion" color="#03D6F9">
+        <v-list-item link to="/panel" color="#03D6F9" hover="#03D6F9">
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Panel</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item link color="#03D6F9">
           <v-list-item-icon>
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
@@ -64,7 +71,7 @@ export default {
 .aside {
   float: left;
   position: fixed;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   z-index: 1;
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background-general">
     <v-snackbar v-model="snackbar" :timeout="4000" top color="success">
       <span>{{ snackbar_message }}</span>
       <v-btn text color="white" @click="snackbar = false"> Cerrar </v-btn>
@@ -11,17 +11,17 @@
       <div id="container" class="content no-collapsed">
         <v-row>
           <v-col cols="3">
-            <SelectOption @getEmpresaSelect="getNegocios" />
+            <SelectOption @getEmpresaSelect="getNegocios" ref="selectOption"/>
           </v-col>
         </v-row>
 
         <v-row style="padding-top: 20px">
           <v-col cols="4">
             <v-card
-              class="mx-auto card-2"
+              class="mx-auto card-2 rounded-box"
               width="350"
               height="120"
-              color="#f000"
+              color="#ffffff"
               outlined
             >
               <v-list-item>
@@ -50,10 +50,10 @@
 
           <v-col cols="4">
             <v-card
-              class="mx-auto card-2"
+              class="mx-auto card-2 rounded-box"
               width="350"
               height="120"
-              color="#f000"
+              color="white"
               outlined
             >
               <v-list-item>
@@ -82,10 +82,10 @@
 
           <v-col cols="4">
             <v-card
-              class="mx-auto card-3"
+              class="mx-auto card-3 rounded-box"
               max-width="350"
               height="120"
-              color="#f000"
+              color="white"
               outlined
             >
               <v-list-item>
@@ -114,8 +114,14 @@
         </v-row>
 
         <v-row>
+          <v-col cols="12" class="ml-4">
+            <TipoCambio :empresa="select_empresa" ref="tipoCambio"></TipoCambio>
+          </v-col>
+        </v-row>
+
+        <v-row>
           <v-col cols="12" class="table">
-            <v-card style="margin-right: 20px">
+            <v-card style="margin-right: 20px" class="main-data-table">
               <v-card-title>
                 <v-row>
                   <v-col cols="2">
@@ -136,7 +142,6 @@
                                 v-model="date"
                                 label="Seleccione fecha"
                                 prepend-icon="mdi-calendar"
-                                readonly
                                 v-bind="attrs"
                                 v-on="on"
                               ></v-text-field>
@@ -242,6 +247,7 @@
 import Panel from "../components/DataPanel.vue";
 import Navbar from "../components/Navbar.vue";
 import Aside from "../components/Aside.vue";
+import TipoCambio from "../components/TipoCambio.vue";
 import axios from "axios";
 import { mapMutations, mapState, mapGetters } from "vuex";
 import SelectOption from "./SelectOption.vue";
@@ -252,6 +258,7 @@ export default {
     Navbar,
     SelectOption,
     Aside,
+    TipoCambio,
   },
   data() {
     return {
@@ -273,31 +280,31 @@ export default {
           align: "start",
           sortable: false,
           value: "nro_neg",
-          class: "headertable",
+          class: "headertable white--text",
         },
         {
           text: "FECHA ASIGNACION",
           value: "fecha_asignacion",
-          class: "headertable",
+          class: "headertable white--text",
         },
-        { text: "REFERENCIA", value: "referencia", class: "headertable" },
-        { text: "CLIENTE", value: "cliente", class: "headertable" },
-        { text: "TOTAL VENTA", value: "total_venta", class: "headertable" },
-        { text: "GASTO P", value: "gasto_p", class: "headertable" },
-        { text: "GASTO R", value: "gasto_r", class: "headertable" },
+        { text: "REFERENCIA", value: "referencia", class: "headertable white--text" },
+        { text: "CLIENTE", value: "cliente", class: "headertable white--text" },
+        { text: "TOTAL VENTA", value: "total_venta", class: "headertable white--text" },
+        { text: "GASTO P", value: "gasto_p", class: "headertable white--text" },
+        { text: "GASTO R", value: "gasto_r", class: "headertable white--text" },
         {
           text: "UTILIDAD FINAL",
           value: "utilidad_final",
-          class: "headertable",
+          class: "headertable white--text",
         },
-        { text: "FACTURADO", value: "facturado", class: "headertable" },
-        { text: "POR FACTURAR", value: "por_facturar", class: "headertable" },
+        { text: "FACTURADO", value: "facturado", class: "headertable white--text" },
+        { text: "POR FACTURAR", value: "por_facturar", class: "headertable white--text" },
         {
           text: "GASTOS OFICINA",
           value: "gasto_oficina",
-          class: "headertable",
+          class: "headertable white--text",
         },
-        { text: "IMPUESTOS", value: "impuestos", class: "headertable" },
+        { text: "IMPUESTOS", value: "impuestos", class: "headertable white--text" },
       ],
       desserts: [],
       token: "",
@@ -309,6 +316,7 @@ export default {
     ...mapGetters({
       getNegocioStore: "getNegocios",
       getCardsStore: "getDataCards",
+      getTipoCambioStore: "getTipoCambio",
     }),
   },
   methods: {
@@ -326,6 +334,7 @@ export default {
     init() {
       console.log("INIT");
       this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
+      this.verifyTokens()
     },
     parse(num) {
       return String(
@@ -357,6 +366,18 @@ export default {
         this.getNegocios(this.select_empresa);
       }
     },
+    convert(num1, tipocambio) {
+      let res = num1 / tipocambio;
+      return this.parse(res);
+    },
+    clearNum(num) {
+      return String(num)
+        .replace("$", "")
+        .replace("€", "")
+        .replace("R", "")
+        .replaceAll(".", "")
+        .replaceAll(",", ".");
+    },
     async setTipoCambio(value) {
       this.mostrarLoading({
         titulo: "Cargando información",
@@ -364,71 +385,27 @@ export default {
         percent: 0,
       });
 
-      console.log("VALOR: ", value);
-      if (this.select_empresa === "Primo españa" && value === "EURO") {
-        value = "";
-        this.tipo_cambio_v = "Moneda original";
-      }
-
-      let datos;
-      let tipo_cambio_f = false;
-      switch (value) {
-        case "USD": {
-          datos = await axios.get("https://mindicador.cl/api/dolar/");
-          console.log("DOLAR VALOR: ", datos.data.serie[0].valor);
-          tipo_cambio_f = true;
-          break;
-        }
-
-        case "EURO": {
-          datos = await axios.get("https://mindicador.cl/api/euro/");
-          console.log("EURO VALOR: ", datos.data.serie[0].valor);
-          tipo_cambio_f = true;
-          break;
-        }
-        default: {
-          this.getNegocios(this.select_empresa);
-        }
-      }
-
-      if (tipo_cambio_f) {
-        let tipo_cambio = datos.data.serie[0].valor;
-
-        const convert = (num1, tipocambio) => {
-          let res = num1 / tipocambio;
-          return this.parse(res);
-        };
-
-        const clearNum = (num) => {
-          return String(num)
-            .replace("$", "")
-            .replace("€", "")
-            .replace("R", "")
-            .replaceAll(".", "")
-            .replaceAll(",", ".");
-        };
-
+      const calculateCambio = (tipo_cambio) => {
+        debugger;
         //data de cards desde store
         this.getCardsStore.forEach((response) => {
-          this.total_ventas = convert(
-            clearNum(response.total_ventas),
+          this.total_ventas = this.convert(
+            this.clearNum(response.total_ventas),
             tipo_cambio
           );
-          this.total_costos = convert(
-            clearNum(response.total_costos),
+          this.total_costos = this.convert(
+            this.clearNum(response.total_costos),
             tipo_cambio
           );
-          this.total_utilidades = convert(
-            clearNum(response.total_utilidades),
+          this.total_utilidades = this.convert(
+            this.clearNum(response.total_utilidades),
             tipo_cambio
           );
         });
 
-        debugger;
         //Datos de tabla
         let data_t = [];
         if (this.getNegocioStore.length == 0) {
-          console.log("CARGA EN STORE");
           this.addNegocio(this.desserts);
         }
 
@@ -439,15 +416,24 @@ export default {
             fecha_asignacion: response.fecha_asignacion,
             referencia: response.referencia,
             cliente: response.cliente,
-            total_venta: convert(clearNum(response.total_venta), tipo_cambio),
-            gasto_p: convert(clearNum(response.gasto_p), tipo_cambio),
-            gasto_r: convert(clearNum(response.gasto_r), tipo_cambio),
-            utilidad_final: convert(
-              clearNum(response.utilidad_final),
+            total_venta: this.convert(
+              this.clearNum(response.total_venta),
               tipo_cambio
             ),
-            facturado: convert(clearNum(response.facturado), tipo_cambio),
-            por_facturar: convert(clearNum(response.por_facturar), tipo_cambio),
+            gasto_p: this.convert(this.clearNum(response.gasto_p), tipo_cambio),
+            gasto_r: this.convert(this.clearNum(response.gasto_r), tipo_cambio),
+            utilidad_final: this.convert(
+              this.clearNum(response.utilidad_final),
+              tipo_cambio
+            ),
+            facturado: this.convert(
+              this.clearNum(response.facturado),
+              tipo_cambio
+            ),
+            por_facturar: this.convert(
+              this.clearNum(response.por_facturar),
+              tipo_cambio
+            ),
             impuestos: response.impuestos,
             gasto_oficina: response.gasto_oficina,
           };
@@ -457,6 +443,27 @@ export default {
         this.desserts = data_t;
 
         this.ocultarLoading(100);
+      };
+
+      let tipo_cambio = '';
+
+      this.getTipoCambioStore.forEach((response) => {
+        switch (value) {
+          case "USD": {
+            tipo_cambio = response.valorDolar;
+            break;
+          }
+          case "EURO": {
+            tipo_cambio = response.valorEuro;
+            break;
+          }
+        }
+      });
+
+      if (tipo_cambio != '') {
+        calculateCambio(Number.parseFloat(tipo_cambio.replace(',','.')));
+      } else {
+        this.getNegocios(this.select_empresa);
       }
     },
     setCards() {
@@ -550,6 +557,7 @@ export default {
         let config_cl = {
           method: "get",
           url: url_,
+          timeout: 8000,
           headers: {
             Authorization: `Bearer ${this.tokens.chile}`,
           },
@@ -557,6 +565,7 @@ export default {
 
         let config_esp_bc = {
           method: "get",
+          timeout: 8000,
           url: url_,
           headers: {
             Authorization: `Bearer ${this.tokens.esp_barcelona}`,
@@ -565,6 +574,7 @@ export default {
 
         let config_esp_mr = {
           method: "get",
+          timeout: 8000,
           url: url_,
           headers: {
             Authorization: `Bearer ${this.tokens.esp_madrid}`,
@@ -573,6 +583,7 @@ export default {
 
         let config_mx = {
           method: "get",
+          timeout: 8000,
           url: url_,
           headers: {
             Authorization: `Bearer ${this.tokens.mex}`,
@@ -581,6 +592,7 @@ export default {
 
         let config_arg = {
           method: "get",
+          timeout: 8000,
           url: url_,
           headers: {
             Authorization: `Bearer ${this.tokens.arg}`,
@@ -589,6 +601,7 @@ export default {
 
         let config_br = {
           method: "get",
+          timeout: 8000,
           url: url_,
           headers: {
             Authorization: `Bearer ${this.tokens.brasil}`,
@@ -676,53 +689,57 @@ export default {
           mov_mx(),
           mov_br(),
           mov_cl(),
-        ]).then((respuestas) => {
-          let dt = [];
-          try {
-            if (respuestas != undefined) {
-              respuestas.forEach((e) => {
-                if (e.data.rows != undefined) {
-                  e.data.rows.forEach((e) => {
-                    let close_compras = this.negocio.cierre_compras
-                      ? true
-                      : false;
-                    this.cierre_compras_v = close_compras ? "Si" : "No";
-                    if (
-                      e.estado === "NOTA DE VENTA" &&
-                      e.closed_compras == close_compras
-                    ) {
-                      let data_table = {
-                        nro_neg: e.folio,
-                        fecha_asignacion: e.fecha_asignacion,
-                        referencia: e.referencia,
-                        cliente: e.razon_cliente,
-                        total_venta: this.parse(e.total_neto),
-                        gasto_p: this.parse(e.costo.presupuestado),
-                        gasto_r: this.parse(e.costo.real),
-                        utilidad_final: this.parse(e.utilidad.final),
-                        facturado: this.parse(e.total_facturado),
-                        por_facturar: this.parse(e.total_por_facturar),
-                      };
+        ])
+          .then((respuestas) => {
+            let dt = [];
+            try {
+              if (respuestas != undefined) {
+                respuestas.forEach((e) => {
+                  if (e.data.rows != undefined) {
+                    e.data.rows.forEach((e) => {
+                      let close_compras = this.negocio.cierre_compras
+                        ? true
+                        : false;
+                      this.cierre_compras_v = close_compras ? "Si" : "No";
+                      if (
+                        e.estado === "NOTA DE VENTA" &&
+                        e.closed_compras == close_compras
+                      ) {
+                        let data_table = {
+                          nro_neg: e.folio,
+                          fecha_asignacion: e.fecha_asignacion,
+                          referencia: e.referencia,
+                          cliente: e.razon_cliente,
+                          total_venta: this.parse(e.total_neto),
+                          gasto_p: this.parse(e.costo.presupuestado),
+                          gasto_r: this.parse(e.costo.real),
+                          utilidad_final: this.parse(e.utilidad.final),
+                          facturado: this.parse(e.total_facturado),
+                          por_facturar: this.parse(e.total_por_facturar),
+                        };
 
-                      dt.push(data_table);
-                    }
-                  });
-                  this.desserts = [];
-                  this.desserts = dt;
-                  this.addNegocio(this.desserts);
-                  this.setCards();
-                }
-              });
+                        dt.push(data_table);
+                      }
+                    });
+                    this.desserts = [];
+                    this.desserts = dt;
+                    this.addNegocio(this.desserts);
+                    this.setCards();
+                  }
+                });
+              }
+            } catch (error) {
+              this.ocultarLoading(100);
+              this.desserts = [];
+              this.setCards();
+              console.log(error);
+            } finally {
+              this.ocultarLoading(100);
             }
-          } catch (error) {
+          })
+          .catch((error) => {
             this.ocultarLoading(100);
-            this.desserts = [];
-            this.setCards();
-            console.log(error);
-          } finally {
-            this.ocultarLoading(100);
-          }
-        });
+          });
       };
 
       const getNeg = (token, date_start = "", date_end = "", currency = "") => {
@@ -791,6 +808,8 @@ export default {
             this.desserts = dt;
             this.addNegocio(this.desserts);
             this.setCards();
+            this.$refs.tipoCambio.setTipoCambio(value);
+            this.tipo_cambio_v = null
           } catch (error) {
             this.ocultarLoading(100);
             this.desserts = [];
@@ -853,6 +872,16 @@ export default {
         }
       }
     },
+
+    verifyTokens(){
+      let config = {
+        url: "http://3.213.187.157:3513/generar-api-key-v3",
+      };
+
+      axios(config).then((respuestas) => {
+        debugger
+      });
+    }
   },
   created: function () {
     this.init();
@@ -909,7 +938,7 @@ export default {
 
 .headertable {
   background-color: #34cc02;
-  color: white;
+  
 }
 
 .content {
@@ -925,4 +954,23 @@ export default {
   margin-top: 30px;
   margin-left: 80px;
 }
+
+.background-general {
+  background-color: #fafafb;
+}
+
+.rounded-box {
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px !important;
+  border-radius: 20px !important;
+  max-width: 400px;
+  background-color: white;
+}
+
+.main-data-table {
+  padding: 20px;
+  background-color: white;
+  border-radius: 25px !important;
+  margin-left: 20px !important;
+}
+
 </style>

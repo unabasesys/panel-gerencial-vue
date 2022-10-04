@@ -5,6 +5,7 @@
       <v-spacer></v-spacer>
       <v-btn icon to="/">
         <Icon icon="subway:power-batton" color="black" />
+        <i class="fa-solid fa-light-switch"></i>
       </v-btn>
     </v-app-bar>
   </div>
