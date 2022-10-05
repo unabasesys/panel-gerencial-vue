@@ -1,11 +1,19 @@
 <template>
   <div>
-    <Aside :username="username" v-if="activeAside"/>
-    <Navbar v-if="activeNav"/>
+    <Aside :username="username" v-if="activeAside" />
+    <Navbar v-if="activeNav" />
 
-    <div id="container" :class="classcontainer">
-      <span class="nunito-semi-bold-bright-gray-24px">Buen dia, {{user}}!</span>
-
+    <div id="container" :class="classcontainer" class="ml-4">
+      <v-row>
+        <v-col cols="12" class="mt-5">
+          <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
+        </v-col>
+        <v-col cols="12" style="margin-top: -20px">
+          <span class="nunito-semi-bold-bright-gray-24px"
+            >Buen día, {{ user }}!</span
+          >
+        </v-col>
+      </v-row>
 
       <v-row style="padding-top: 20px">
         <v-col
@@ -80,8 +88,6 @@
             </div>
           </v-card>
         </v-col>
-
-       
       </v-row>
     </div>
   </div>
@@ -102,10 +108,10 @@ export default {
   data() {
     return {
       username: this.$route.params.username,
-      user: '',
+      user: "",
       activeAside: true,
       activeNav: true,
-      classcontainer: 'content no-collapsed',
+      classcontainer: "content no-collapsed",
       indicadores: [
         {
           name: "Cotizaciones por aprobar",
@@ -156,18 +162,16 @@ export default {
     },
   },
 
-  mounted(){
-    let is = this.$route.params.from
-    if(is === 'v3'){
-      this.activeAside = false
-      this.activeNav = false
-      debugger
-      this.user = this.$route.params.user
-      this.classcontainer = this.classcontainer.split(' ')[0]
-
-      this.classcontainer = this.classcontainer + " " + "ml-4"
+  mounted() {
+    let is = this.$route.params.from;
+    if (is === "v3") {
+      this.activeAside = false;
+      this.activeNav = false;
+      debugger;
+      this.user = this.$route.params.user;
+      this.classcontainer = this.classcontainer.split(" ")[0];
     }
-  }
+  },
 };
 </script>
 
@@ -186,5 +190,9 @@ export default {
   border-radius: 20px !important;
   max-width: 400px;
   background-color: white;
+}
+
+.background-general {
+  background-color: #fafafb;
 }
 </style>
