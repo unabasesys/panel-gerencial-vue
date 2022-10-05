@@ -79,6 +79,14 @@
   font-weight: 400 !important;
 }
 
+.nunito-semi-bold-santas-gray-8px {
+  color: var(--santas-gray) !important;
+  font-family: var(--font-family-nunito) !important;
+  font-size: 8px;
+  font-style: normal !important;
+  font-weight: 600 !important;
+}
+
 .nunito-semi-bold-santas-gray-10px {
   color: var(--santas-gray) !important;
   font-family: var(--font-family-nunito) !important;

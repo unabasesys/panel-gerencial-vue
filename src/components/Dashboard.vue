@@ -78,7 +78,7 @@
             <v-card
               class="rounded-box"
               min-width="650"
-              min-height="450"
+              min-height="520"
               color="#ffffff"
               outlined
             >

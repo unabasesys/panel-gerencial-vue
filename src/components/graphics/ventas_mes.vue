@@ -1,21 +1,52 @@
 <template>
   <div>
-    <div>
-      <v-btn min-width="1" max-width="1">
-        <span style="font-size: 10px">1H</span>
-      </v-btn>
+    <div class="row mt-2 ml-2">
+      <div cols="12">
+        <span class="nunito-semi-bold-bright-gray-16px"
+          >Ventas por mes comparativo</span
+        >
+
+        <div class="row" style="float: right; margin-left: 200px; margin-top: 30px">
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">1H</span>
+          </div>
+
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">3H</span>
+          </div>
+
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">5H</span>
+          </div>
+
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">1D</span>
+          </div>
+
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">1W</span>
+          </div>
+
+          <div class="btn-graphic-div">
+            <span class="nunito-semi-bold-santas-gray-10px">1M</span>
+          </div>
+        </div>
+      </div>
+
+      <div cols="12" class="mt-10">
+        <Bar
+          :chart-options="chartOptions"
+          :chart-data="chartData"
+          :chart-id="chartId"
+          :dataset-id-key="datasetIdKey"
+          :plugins="plugins"
+          :css-classes="cssClasses"
+          :styles="styles"
+          :width="width"
+          :height="height"
+        />
+      </div>
     </div>
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
-    />
   </div>
 </template>
 
@@ -112,10 +143,13 @@ export default {
         ],
       },
       chartOptions: {
+        categoryPercentage: 0.8, // here
+        barPercentage: 0.98, // here
         responsive: true,
         plugins: {
           legend: {
             labels: {
+              position: 'bottom',
               // This more specific font property overrides the global property
               font: {
                 size: 12,
@@ -137,11 +171,11 @@ export default {
           },
           x: {
             ticks: {
-                font: {
-                    size: 8,
-                }
-            }
-        }
+              font: {
+                size: 8,
+              },
+            },
+          },
         },
       },
     };
@@ -150,4 +184,27 @@ export default {
 </script>
 
 <style>
+.btn-graphic-div {
+  background-color: #f6f7f8;
+  min-width: 30px;
+  max-width: 30px;
+
+  min-height: 20px;
+  max-height: 20px;
+
+  align-items: center;
+  border-radius: 4px !important;
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+.btn-graphic-div:hover {
+  background-color: #e4e7ec;
+}
+
+.btn-graphic-div > span {
+  display: table;
+  padding: 2px;
+  margin-left: 6px;
+}
 </style>
