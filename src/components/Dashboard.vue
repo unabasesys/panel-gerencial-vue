@@ -3,7 +3,7 @@
     <Aside :username="username" v-if="activeAside"/>
     <Navbar v-if="activeNav"/>
 
-    <div class="content no-collapsed">
+    <div class="content no-collapsed ml-5">
       <v-row style="padding-top: 20px">
         <v-col
           cols="2"
@@ -150,7 +150,7 @@ export default {
     },
   },
 
-  created(){
+  mounted(){
     let is = this.$route.params.from
     if(is === 'v3'){
       this.activeAside = false
