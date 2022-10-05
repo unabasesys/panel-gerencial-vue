@@ -3,7 +3,7 @@
     <Aside :username="username" v-if="activeAside"/>
     <Navbar v-if="activeNav"/>
 
-    <div class="content no-collapsed ml-5">
+    <div id="container" :class="classcontainer">
       <v-row style="padding-top: 20px">
         <v-col
           cols="2"
@@ -100,6 +100,7 @@ export default {
       username: this.$route.params.username,
       activeAside: true,
       activeNav: true,
+      classcontainer: 'content no-collapsed',
       indicadores: [
         {
           name: "Cotizaciones por aprobar",
@@ -155,8 +156,9 @@ export default {
     if(is === 'v3'){
       this.activeAside = false
       this.activeNav = false
+      debugger
+      this.classcontainer = this.classcontainer.split(' ')[0]
     }
-    debugger
   }
 };
 </script>
