@@ -88,6 +88,7 @@
 import Navbar from "../components/Navbar.vue";
 import Aside from "../components/Aside.vue";
 import ventas from "../components/graphics/ventas_mes.vue";
+import { timeStamp } from "console";
 export default {
   components: {
     Navbar,
@@ -158,6 +159,8 @@ export default {
       this.activeNav = false
       debugger
       this.classcontainer = this.classcontainer.split(' ')[0]
+
+      this.classcontainer = this.classcontainer + " " + "ml-4"
     }
   }
 };
