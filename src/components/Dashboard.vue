@@ -1,94 +1,96 @@
 <template>
-  <div>
+  <div class="background-general">
     <Aside :username="username" v-if="activeAside" />
     <Navbar v-if="activeNav" />
 
-    <div id="container" :class="classcontainer" class="ml-4">
-      <v-row>
-        <v-col cols="12" class="mt-5">
-          <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
-        </v-col>
-        <v-col cols="12" style="margin-top: -20px">
-          <span class="nunito-semi-bold-bright-gray-24px"
-            >Buen día, {{ user }}!</span
-          >
-        </v-col>
-      </v-row>
+    <div id="container" class="content no-collapsed">
+      <div class="ml-5">
+        <v-row>
+          <v-col cols="12" class="mt-5">
+            <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
+          </v-col>
+          <v-col cols="12" style="margin-top: -20px">
+            <span class="nunito-semi-bold-bright-gray-24px"
+              >Buen día, {{ user }}!</span
+            >
+          </v-col>
+        </v-row>
 
-      <v-row style="padding-top: 20px">
-        <v-col
-          cols="2"
-          v-for="item in indicadores"
-          :key="item.name"
-          style="margin-right: 30px"
-        >
-          <v-card
-            class="rounded-box"
-            width="210"
-            height="120"
-            color="#ffffff"
-            outlined
+        <v-row style="padding-top: 20px">
+          <v-col
+            cols="2"
+            v-for="item in indicadores"
+            :key="item.name"
+            style="margin-right: 30px"
           >
-            <div class="row mt-1 ml-2">
-              <div cols="6" style="min-width: 180px">
-                <span class="nunito-semi-bold-santas-gray-12px">{{
-                  item.name
-                }}</span>
-              </div>
-              <div cols="6">
-                <v-icon size="12" color="#98A2B3">ub-tres_puntos</v-icon>
-              </div>
-            </div>
-
-            <div class="row mt-4">
-              <div cols="6">
-                <div class="circle-responsive ml-4">
-                  <v-avatar color="#D0F7EB" size="50">
-                    <v-icon size="40">{{ item.icon }}</v-icon>
-                  </v-avatar>
+            <v-card
+              class="rounded-box"
+              width="210"
+              height="120"
+              color="#ffffff"
+              outlined
+            >
+              <div class="row mt-1 ml-2">
+                <div cols="6" style="min-width: 180px">
+                  <span class="nunito-semi-bold-santas-gray-12px">{{
+                    item.name
+                  }}</span>
+                </div>
+                <div cols="6">
+                  <v-icon size="12" color="#98A2B3">ub-tres_puntos</v-icon>
                 </div>
               </div>
 
-              <div cols="6" class="mt-2">
-                <span class="nunito-normal-16px">${{ item.nValue }}</span>
-              </div>
-            </div>
+              <div class="row mt-4">
+                <div cols="6">
+                  <div class="circle-responsive ml-4">
+                    <v-avatar color="#D0F7EB" size="50">
+                      <v-icon size="40">{{ item.icon }}</v-icon>
+                    </v-avatar>
+                  </div>
+                </div>
 
-            <div class="row">
-              <div cols="6" style="min-width: 150px">
-                <span class="nunito-semi-bold-santas-gray-10px ml-6"
-                  >Informatin text</span
-                >
+                <div cols="6" class="mt-2">
+                  <span class="nunito-normal-16px">${{ item.nValue }}</span>
+                </div>
               </div>
 
-              <div cols="6" class="">
-                <span class="nunito-semi-bold-emerald-14px"
-                  ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
-                    item.percent
-                  }}%</span
-                >
+              <div class="row">
+                <div cols="6" style="min-width: 150px">
+                  <span class="nunito-semi-bold-santas-gray-10px ml-6"
+                    >Informatin text</span
+                  >
+                </div>
+
+                <div cols="6" class="">
+                  <span class="nunito-semi-bold-emerald-14px"
+                    ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
+                      item.percent
+                    }}%</span
+                  >
+                </div>
               </div>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row style="padding-top: 20px">
-        <v-col cols="7" style="margin-right: 30px">
-          <v-card
-            class="rounded-box"
-            min-width="650"
-            min-height="450"
-            color="#ffffff"
-            outlined
-          >
-            <div class="row mt-1 ml-5 mt-5">
-              <div cols="8">
-                <ventas />
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row style="padding-top: 20px">
+          <v-col cols="7" style="margin-right: 30px">
+            <v-card
+              class="rounded-box"
+              min-width="650"
+              min-height="450"
+              color="#ffffff"
+              outlined
+            >
+              <div class="row mt-1 ml-5 mt-5">
+                <div cols="8">
+                  <ventas />
+                </div>
               </div>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>
@@ -111,7 +113,6 @@ export default {
       user: "",
       activeAside: true,
       activeNav: true,
-      classcontainer: "content no-collapsed",
       indicadores: [
         {
           name: "Cotizaciones por aprobar",
@@ -169,7 +170,9 @@ export default {
       this.activeNav = false;
       debugger;
       this.user = this.$route.params.user;
-      this.classcontainer = this.classcontainer.split(" ")[0];
+      document
+        .getElementsByClassName("no-collapsed")[0]
+        .classList.remove("no-collapsed");
     }
   },
 };
