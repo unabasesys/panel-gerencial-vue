@@ -4,6 +4,9 @@
     <Navbar v-if="activeNav"/>
 
     <div id="container" :class="classcontainer">
+      <span class="nunito-semi-bold-bright-gray-24px">Buen dia, {{user}}!</span>
+
+
       <v-row style="padding-top: 20px">
         <v-col
           cols="2"
@@ -99,6 +102,7 @@ export default {
   data() {
     return {
       username: this.$route.params.username,
+      user: '',
       activeAside: true,
       activeNav: true,
       classcontainer: 'content no-collapsed',
@@ -158,6 +162,7 @@ export default {
       this.activeAside = false
       this.activeNav = false
       debugger
+      this.user = this.$route.params.user
       this.classcontainer = this.classcontainer.split(' ')[0]
 
       this.classcontainer = this.classcontainer + " " + "ml-4"
