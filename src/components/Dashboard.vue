@@ -73,8 +73,35 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row style="padding-top: 20px">
-          <v-col cols="7" style="margin-right: 30px">
+
+
+
+
+        <v-row>
+          <v-col cols="12" md="8">
+            <v-card class="pa-2 rounded-box-div" outlined> <ventas /> </v-card>
+          </v-col>
+          <v-col cols="6" md="4">
+            <v-card class="pa-2 rounded-box-div" outlined> Rentabilidad </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+        <v-row>
+          <v-col v-for="n in 3" :key="n" cols="6" md="4">
+            <v-card class="pa-2" outlined tile> .col-6 .col-md-4 </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- Columns are always 50% wide, on mobile and desktop -->
+        <v-row>
+          <v-col v-for="n in 2" :key="n" cols="6">
+            <v-card class="pa-2" outlined tile> .col-6 </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- <v-row no-gutters>
+          <v-col>
             <v-card
               class="rounded-box"
               min-width="650"
@@ -90,7 +117,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="4" style="margin-right: 30px">
+          <v-col>
             <v-card
               class="rounded-box"
               min-width="650"
@@ -107,7 +134,7 @@
               </div>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </div>
     </div>
   </div>
@@ -131,6 +158,7 @@ export default {
       user: "",
       activeAside: true,
       activeNav: true,
+      justify: ["start", "center", "end", "space-around", "space-between"],
       indicadores: [
         {
           name: "Cotizaciones por aprobar",
@@ -209,6 +237,13 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px !important;
   border-radius: 20px !important;
   max-width: 400px;
+  background-color: white;
+}
+
+
+.rounded-box-div {
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px !important;
+  border-radius: 20px !important;
   background-color: white;
 }
 
