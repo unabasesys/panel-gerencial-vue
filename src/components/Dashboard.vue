@@ -168,7 +168,6 @@ export default {
     if (is === "v3") {
       this.activeAside = false;
       this.activeNav = false;
-      debugger;
       this.user = this.$route.params.user;
       document
         .getElementsByClassName("no-collapsed")[0]
