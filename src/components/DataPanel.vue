@@ -334,7 +334,6 @@ export default {
     init() {
       console.log("INIT");
       this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
-      this.verifyTokens()
     },
     parse(num) {
       return String(
