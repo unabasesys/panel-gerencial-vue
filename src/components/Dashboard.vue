@@ -58,7 +58,7 @@
               <div class="row">
                 <div cols="6" style="min-width: 150px">
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
-                    >Informatin text</span
+                    >Information text</span
                   >
                 </div>
 
@@ -85,6 +85,24 @@
               <div class="row mt-1 ml-5 mt-5">
                 <div cols="8">
                   <ventas />
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+
+          <v-col cols="4" style="margin-right: 30px">
+            <v-card
+              class="rounded-box"
+              min-width="650"
+              min-height="520"
+              color="#ffffff"
+              outlined
+            >
+              <div class="row mt-1 ml-5 mt-5">
+                <div cols="8">
+                  <span class="nunito-semi-bold-bright-gray-16px"
+                    >Rentabilidad</span
+                  >
                 </div>
               </div>
             </v-card>
