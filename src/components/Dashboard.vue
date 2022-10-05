@@ -65,7 +65,7 @@
                 <span class="nunito-semi-bold-emerald-14px"
                   ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
                     item.percent
-                  }}</span
+                  }}%</span
                 >
               </div>
             </div>
