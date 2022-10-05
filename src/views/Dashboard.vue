@@ -1,5 +1,8 @@
 <template>
-  <dashboard />
+  <div class="background-general">
+    <dashboard />
+
+  </div>
 </template>
 
 <script>
@@ -17,4 +20,7 @@ export default {
 </script>
 
 <style>
+  .background-general {
+  background-color: #fafafb;
+}
 </style>

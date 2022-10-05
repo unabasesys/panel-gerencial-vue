@@ -8,7 +8,7 @@
       <Aside :username="username" />
 
       <Navbar />
-      <div id="container" class="content no-collapsed">
+      <div class="content no-collapsed">
         <v-row>
           <v-col cols="3">
             <SelectOption @getEmpresaSelect="getNegocios" ref="selectOption"/>
