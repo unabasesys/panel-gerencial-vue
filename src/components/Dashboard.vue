@@ -74,27 +74,26 @@
           </v-col>
         </v-row>
 
-
-
-
-        <v-row>
+        <v-row class="mr-2">
           <v-col cols="12" md="8">
-            <v-card class="pa-2 rounded-box-div" outlined> <ventas /> </v-card>
+             <Ventas />
           </v-col>
           <v-col cols="6" md="4">
-            <v-card class="pa-2 rounded-box-div" outlined> Rentabilidad </v-card>
+            <v-card class="pa-2 rounded-box-div" outlined>
+              Rentabilidad
+            </v-card>
           </v-col>
         </v-row>
 
         <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-        <v-row>
+        <v-row class="mr-2">
           <v-col v-for="n in 3" :key="n" cols="6" md="4">
             <v-card class="pa-2" outlined tile> .col-6 .col-md-4 </v-card>
           </v-col>
         </v-row>
 
         <!-- Columns are always 50% wide, on mobile and desktop -->
-        <v-row>
+        <v-row class="mr-2">
           <v-col v-for="n in 2" :key="n" cols="6">
             <v-card class="pa-2" outlined tile> .col-6 </v-card>
           </v-col>
@@ -143,15 +142,14 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import Aside from "../components/Aside.vue";
-import ventas from "../components/graphics/ventas_mes.vue";
-import { timeStamp } from "console";
+import Ventas from "../components/graphics/ventas_mes.vue";
+
 export default {
   components: {
     Navbar,
     Aside,
-    ventas,
+    Ventas,
   },
-
   data() {
     return {
       username: this.$route.params.username,
@@ -192,6 +190,7 @@ export default {
           percent: 0,
         },
       ],
+
     };
   },
 
@@ -239,7 +238,6 @@ export default {
   max-width: 400px;
   background-color: white;
 }
-
 
 .rounded-box-div {
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px !important;
