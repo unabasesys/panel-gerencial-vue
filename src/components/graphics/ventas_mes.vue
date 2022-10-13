@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div">
+    <v-card class="pa-4 rounded-box-div" min-height="550">
       <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
       <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
         <div class="btn-graphic-div">
