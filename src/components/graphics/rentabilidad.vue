@@ -1,79 +1,66 @@
 <template>
   <div>
     <v-card class="pa-2 rounded-box-div" outlined max-width="800">
-      <span class="nunito-semi-bold-bright-gray-16px"
-        >Ventas por mes comparativo</span
-      >
-      <div class="row mr-1" style="float: right; margin-top: 30px">
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1H</span>
-        </div>
+      <span class="nunito-bold-bright-gray-18px">Rentabilidad</span>
 
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">3H</span>
-        </div>
 
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">5H</span>
-        </div>
+        <v-row class="mr-2">
+          <v-col cols="12" md="12" >
+            <v-select
+              :items="items"
+              label="Mensual"
+              class="customSelect"
+              dense
+              style="float: right;"
+            ></v-select>
 
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1D</span>
-        </div>
+          </v-col>
 
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1W</span>
-        </div>
+        </v-row>
 
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1M</span>
-        </div>
+
+
+      <div style="display: block">
+        <Pie
+          :chart-options="chartOptions"
+          :chart-data="chartData"
+          :chart-id="chartId"
+          :dataset-id-key="datasetIdKey"
+          :plugins="plugins"
+          :css-classes="cssClasses"
+          :styles="styles"
+          :width="300"
+          :height="300"
+        />
+
       </div>
-      <Bar
-        :chart-options="chartOptions"
-        :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
-        :css-classes="cssClasses"
-        :styles="styles"
-        :height="height"
-        :width="width"
-      />
     </v-card>
   </div>
 </template>
 
 <script>
-import { Bar } from "vue-chartjs/legacy";
-import { Chart, registerables } from "chart.js";
+import { Pie } from "vue-chartjs/legacy";
+
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  ArcElement,
   CategoryScale,
-  LinearScale,
 } from "chart.js";
 
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ...registerables
-);
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
-  name: "BarChart",
-  components: { Bar },
+  name: "PieChart",
+  components: {
+    Pie,
+  },
   props: {
     chartId: {
       type: String,
-      default: "bar-chart",
+      default: "pie-chart",
     },
     datasetIdKey: {
       type: String,
@@ -81,7 +68,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 600,
+      default: 400,
     },
     height: {
       type: Number,
@@ -96,80 +83,25 @@ export default {
       default: () => {},
     },
     plugins: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
   },
   data() {
     return {
+      items: ["Foo", "Bar", "Fizz", "Buzz"],
       chartData: {
-        labels: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre",
-        ],
+        labels: ["2019", "2018"],
         datasets: [
           {
-            label: "% Dif",
-            type: "line",
-            backgroundColor: "#667085",
-            data: [20, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-          },
-          {
-            label: "2018",
-            backgroundColor: "#6871EC",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-          },
-          {
-            label: "2019",
-            backgroundColor: "#A8BAF9",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            backgroundColor: ["#20A789", "#69DFC0"],
+            data: [10, 20],
           },
         ],
       },
       chartOptions: {
-        categoryPercentage: 0.8, // here
-        barPercentage: 0.98, // here
-        plugins: {
-          legend: {
-            labels: {
-              position: "bottom",
-              // This more specific font property overrides the global property
-              font: {
-                size: 12,
-                family: "Nunito",
-                lineHeight: "400",
-              },
-            },
-          },
-        },
-
-        scales: {
-          y: {
-            ticks: {
-              // Include a dollar sign in the ticks
-              callback: function (value, index, ticks) {
-                return value + " mil";
-              },
-            },
-          },
-          x: {
-            ticks: {
-              font: {
-                size: 8,
-              },
-            },
-          },
-        },
+        responsive: true,
+        maintainAspectRatio: false,
       },
     };
   },
@@ -177,27 +109,15 @@ export default {
 </script>
 
 <style>
-.btn-graphic-div {
+.v-input__control {
+  max-width: 100px;
+}
+
+.v-input__slot {
   background-color: #f6f7f8;
-  min-width: 30px;
-  max-width: 30px;
-
-  min-height: 20px;
-  max-height: 20px;
-
-  align-items: center;
-  border-radius: 4px !important;
-  cursor: pointer;
-  margin-right: 2px;
 }
 
-.btn-graphic-div:hover {
-  background-color: #e4e7ec;
-}
-
-.btn-graphic-div > span {
-  display: table;
-  padding: 2px;
-  margin-left: 6px;
+.v-select__selections {
+  min-height: 30px;
 }
 </style>

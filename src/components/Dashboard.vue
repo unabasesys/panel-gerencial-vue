@@ -76,12 +76,10 @@
 
         <v-row class="mr-2">
           <v-col cols="12" md="8">
-             <Ventas />
+            <Ventas />
           </v-col>
           <v-col cols="6" md="4">
-            <v-card class="pa-2 rounded-box-div" outlined>
-              Rentabilidad
-            </v-card>
+            <Rentabilidad />
           </v-col>
         </v-row>
 
@@ -98,42 +96,6 @@
             <v-card class="pa-2" outlined tile> .col-6 </v-card>
           </v-col>
         </v-row>
-
-        <!-- <v-row no-gutters>
-          <v-col>
-            <v-card
-              class="rounded-box"
-              min-width="650"
-              min-height="520"
-              color="#ffffff"
-              outlined
-            >
-              <div class="row mt-1 ml-5 mt-5">
-                <div cols="8">
-                  <ventas />
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-
-          <v-col>
-            <v-card
-              class="rounded-box"
-              min-width="650"
-              min-height="520"
-              color="#ffffff"
-              outlined
-            >
-              <div class="row mt-1 ml-5 mt-5">
-                <div cols="8">
-                  <span class="nunito-semi-bold-bright-gray-16px"
-                    >Rentabilidad</span
-                  >
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-        </v-row> -->
       </div>
     </div>
   </div>
@@ -143,12 +105,14 @@
 import Navbar from "../components/Navbar.vue";
 import Aside from "../components/Aside.vue";
 import Ventas from "../components/graphics/ventas_mes.vue";
+import Rentabilidad from "../components/graphics/rentabilidad.vue";
 
 export default {
   components: {
     Navbar,
     Aside,
     Ventas,
+    Rentabilidad,
   },
   data() {
     return {
@@ -190,7 +154,6 @@ export default {
           percent: 0,
         },
       ],
-
     };
   },
 

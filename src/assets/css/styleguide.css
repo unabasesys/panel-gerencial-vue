@@ -126,6 +126,14 @@
   font-weight: bold !important;
 }
 
+.nunito-bold-bright-gray-18px {
+  color: var(--bright-gray) !important;
+  font-family: var(--font-family-nunito) !important;
+  font-size: 18px;
+  font-style: normal !important;
+  font-weight: bold !important;
+}
+
 .nunito-semi-bold-bright-gray-24px {
   color: var(--bright-gray) !important;
   font-family: var(--font-family-nunito) !important;
