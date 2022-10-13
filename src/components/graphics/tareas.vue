@@ -11,12 +11,12 @@
           >
             <v-card
               class="rounded-box"
-              width="180"
+              width="170"
               height="120"
               color="#F0F5FF"
               outlined>
               <div class="row mt-1 ml-2">
-                <div cols="6" style="min-width: 150px">
+                <div cols="6" style="min-width: 145px">
                   <span class="nunito-semi-bold-santas-gray-12px">{{
                     item.name
                   }}</span>
@@ -41,7 +41,7 @@
               </div>
 
               <div class="row">
-                <div cols="6" style="min-width: 120px">
+                <div cols="6" style="min-width: 115px">
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
                     >Information text</span
                   >
