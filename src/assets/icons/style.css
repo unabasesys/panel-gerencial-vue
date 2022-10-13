@@ -61,12 +61,8 @@
   content: "\e90a";
   color: #20a789;
 }
-.ub-tres_puntos .path1:before {
+.ub-tres_puntos:before {
   content: "\e907";
   color: rgb(67, 89, 113);
 }
-.ub-tres_puntos .path2:before {
-  content: "\e908";
-  margin-left: -0.2861328125em;
-  color: rgb(152, 162, 179);
-}
+

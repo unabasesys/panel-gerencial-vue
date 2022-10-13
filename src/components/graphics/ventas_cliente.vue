@@ -92,7 +92,7 @@ export default {
         ],
         datasets: [
           {
-            label: "2018",
+            label: "Ventas",
             backgroundColor: "#69DFC0",
             data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
           },

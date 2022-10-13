@@ -28,8 +28,7 @@
               width="210"
               height="120"
               color="#ffffff"
-              outlined
-            >
+              outlined>
               <div class="row mt-1 ml-2">
                 <div cols="6" style="min-width: 180px">
                   <span class="nunito-semi-bold-santas-gray-12px">{{
