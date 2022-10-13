@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-2 rounded-box-div" outlined max-width="800">
+    <v-card class="pa-4 rounded-box-div" outlined max-width="900">
       <span class="nunito-bold-bright-gray-18px">Rentabilidad</span>
 
 
