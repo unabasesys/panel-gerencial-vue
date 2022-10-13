@@ -2,7 +2,7 @@
   <div>
     <v-card class="pa-4 rounded-box-div mb-10" outlined>
       <span class="nunito-bold-bright-gray-18px">Mis tareas</span>
-      <v-row>
+      <v-row class="mt-4">
           <v-col
             cols="5"
             v-for="item in indicadores"
@@ -11,12 +11,12 @@
           >
             <v-card
               class="rounded-box"
-              width="210"
+              width="180"
               height="120"
               color="#F0F5FF"
               outlined>
               <div class="row mt-1 ml-2">
-                <div cols="6" style="min-width: 180px">
+                <div cols="6" style="min-width: 150px">
                   <span class="nunito-semi-bold-santas-gray-12px">{{
                     item.name
                   }}</span>
@@ -41,7 +41,7 @@
               </div>
 
               <div class="row">
-                <div cols="6" style="min-width: 150px">
+                <div cols="6" style="min-width: 120px">
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
                     >Information text</span
                   >
