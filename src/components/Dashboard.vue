@@ -73,23 +73,24 @@
           </v-col>
         </v-row>
 
+
+
+
         <v-row class="mr-2">
           <v-col cols="12" md="8">
             <Ventas />
           </v-col>
           <v-col cols="6" md="4">
             <Rentabilidad />
+            <Tareas/>
           </v-col>
-        </v-row>
 
-        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-        <v-row class="mr-2">
           <v-col cols="12" md="8">
             <VentasCliente/>
           </v-col>
 
           <v-col cols="6" md="4">
-            <Tareas/>
+            
             <VentasCompras/>
           </v-col>
         </v-row>
