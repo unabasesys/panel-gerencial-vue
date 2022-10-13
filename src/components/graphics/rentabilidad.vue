@@ -3,22 +3,7 @@
     <v-card class="pa-4 rounded-box-div" outlined max-width="900">
       <span class="nunito-bold-bright-gray-18px">Rentabilidad</span>
 
-
-        <v-row class="mr-2">
-          <v-col cols="12" md="12" >
-            <v-select
-              :items="items"
-              label="Mensual"
-              class="customSelect"
-              dense
-              style="float: right;"
-            ></v-select>
-
-          </v-col>
-
-        </v-row>
-
-
+      <selectGraphic />
 
       <div style="display: block">
         <Pie
@@ -32,7 +17,6 @@
           :width="300"
           :height="300"
         />
-
       </div>
     </v-card>
   </div>
@@ -40,6 +24,7 @@
 
 <script>
 import { Pie } from "vue-chartjs/legacy";
+import selectGraphic from "../selector/select_graphic.vue";
 
 import {
   Chart as ChartJS,
@@ -56,6 +41,7 @@ export default {
   name: "PieChart",
   components: {
     Pie,
+    selectGraphic,
   },
   props: {
     chartId: {
@@ -109,15 +95,5 @@ export default {
 </script>
 
 <style>
-.v-input__control {
-  max-width: 100px;
-}
 
-.v-input__slot {
-  background-color: #f6f7f8;
-}
-
-.v-select__selections {
-  min-height: 30px;
-}
 </style>

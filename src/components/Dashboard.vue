@@ -85,17 +85,22 @@
 
         <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
         <v-row class="mr-2">
-          <v-col v-for="n in 3" :key="n" cols="6" md="4">
-            <v-card class="pa-2" outlined tile> .col-6 .col-md-4 </v-card>
+          <v-col cols="12" md="8">
+            <VentasCliente/>
+          </v-col>
+
+          <v-col cols="6" md="4">
+            <Tareas/>
+            <VentasCompras/>
           </v-col>
         </v-row>
 
         <!-- Columns are always 50% wide, on mobile and desktop -->
-        <v-row class="mr-2">
+        <!-- <v-row class="mr-2">
           <v-col v-for="n in 2" :key="n" cols="6">
             <v-card class="pa-2" outlined tile> .col-6 </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </div>
     </div>
   </div>
@@ -106,6 +111,9 @@ import Navbar from "../components/Navbar.vue";
 import Aside from "../components/Aside.vue";
 import Ventas from "../components/graphics/ventas_mes.vue";
 import Rentabilidad from "../components/graphics/rentabilidad.vue";
+import Tareas from "../components/graphics/tareas.vue";
+import VentasCliente from "../components/graphics/ventas_cliente.vue";
+import VentasCompras from "../components/graphics/ventas_compras.vue";
 
 export default {
   components: {
@@ -113,6 +121,9 @@ export default {
     Aside,
     Ventas,
     Rentabilidad,
+    Tareas,
+    VentasCliente,
+    VentasCompras
   },
   data() {
     return {
