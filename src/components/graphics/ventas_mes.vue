@@ -1,10 +1,8 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div" outlined>
-      <span class="nunito-bold-bright-gray-18px"
-        >Ventas por mes comparativo</span
-      >
-      <div class="row mr-1 mb-5 mt-10" style="float: right; margin-top: 30px">
+    <v-card class="pa-4 rounded-box-div">
+      <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
+      <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
         <div class="btn-graphic-div">
           <span class="nunito-semi-bold-santas-gray-10px">1H</span>
         </div>

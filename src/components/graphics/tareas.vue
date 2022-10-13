@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div mb-10" outlined>
+    <v-card class="pa-4 rounded-box-div mb-10">
       <span class="nunito-bold-bright-gray-18px">Mis tareas</span>
       <v-row class="mt-4">
           <v-col

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div" outlined>
+    <v-card class="pa-4 rounded-box-div">
       <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
       <selectGraphic />
       <Bar
