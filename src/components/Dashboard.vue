@@ -16,7 +16,7 @@
           </v-col>
         </v-row>
 
-        <v-row style="padding-top: 20px">
+        <v-row>
           <v-col
             cols="2"
             v-for="item in indicadores"

@@ -136,7 +136,7 @@ export default {
       },
       chartOptions: {
         categoryPercentage: 0.8, // here
-        barPercentage: 0.98, // here
+        barPercentage: 0.9, // here
         plugins: {
           legend: {
             labels: {

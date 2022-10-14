@@ -5,19 +5,17 @@
 
       <selectGraphic />
 
-      <div style="display: block">
-        <Pie
-          :chart-options="chartOptions"
-          :chart-data="chartData"
-          :chart-id="chartId"
-          :dataset-id-key="datasetIdKey"
-          :plugins="plugins"
-          :css-classes="cssClasses"
-          :styles="styles"
-          :width="300"
-          :height="300"
-        />
-      </div>
+      <Pie
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :width="300"
+        :height="300"
+      />
     </v-card>
   </div>
 </template>
@@ -88,6 +86,13 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          labels: [
+            {
+              render: "percentage",
+            },
+          ],
+        },
       },
     };
   },
@@ -95,5 +100,4 @@ export default {
 </script>
 
 <style>
-
 </style>
