@@ -1,45 +1,7 @@
 <template>
   <div>
-    <v-card
-      class="pa-4 rounded-box-div"
-      :min-width="
-        imagen == 'sm' || imagen == 'md'
-          ? '600'
-          : imagen == 'lg'
-          ? '800'
-          : imagen == 'xl'
-          ? '1200'
-          : imagen == 'xs'
-          ? ''
-          : ''
-      "
-      :min-height="
-        imagen == 'sm' || imagen == 'md'
-          ? '810'
-          : imagen == 'lg'
-          ? '670'
-          : imagen == 'xl'
-          ? '680'
-          : imagen == 'xs'
-          ? ''
-          : ''
-      "
-
-      :max-height="
-        imagen == 'sm' || imagen == 'md'
-          ? '810'
-          : imagen == 'lg'
-          ? '670'
-          : imagen == 'xl'
-          ? '680'
-          : imagen == 'xs'
-          ? ''
-          : ''
-      "
-    >
-      <span class="nunito-bold-bright-gray-18px"
-        >Ventas por mes comparativo</span
-      >
+    <v-card class="pa-4 rounded-box-div" min-height="550">
+      <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
       <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
         <div class="btn-graphic-div">
           <span class="nunito-semi-bold-santas-gray-10px">1H</span>
@@ -73,8 +35,8 @@
         :plugins="plugins"
         :css-classes="cssClasses"
         :styles="styles"
-        :height="maxHeight"
-        :width="max_width"
+        :height="height"
+        :width="width"
       />
     </v-card>
   </div>
@@ -129,9 +91,7 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {
-        'min-height: 200px'
-      },
+      default: () => {},
     },
     plugins: {
       type: Object,
@@ -140,7 +100,6 @@ export default {
   },
   data() {
     return {
-      max_width: 400,
       chartData: {
         labels: [
           "Enero",
@@ -176,7 +135,6 @@ export default {
         ],
       },
       chartOptions: {
-        responsive: true,
         categoryPercentage: 0.8, // here
         barPercentage: 0.9, // here
         plugins: {
@@ -212,39 +170,6 @@ export default {
         },
       },
     };
-  },
-
-  computed: {
-    imagen() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return "xs";
-        case "sm":
-          return "sm";
-        case "md":
-          return "md";
-        case "lg":
-          return "lg";
-        case "xl":
-          return "xl";
-      }
-    },
-
-    maxHeight() {
-      debugger
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return "xs";
-        case "sm":
-          return "sm";
-        case "md":
-          return 450;
-        case "lg":
-          return 220;
-        case "xl":
-          return 140;
-      }
-    },
   },
 };
 </script>
