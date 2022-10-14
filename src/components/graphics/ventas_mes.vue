@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div" min-height="550">
+    <v-card class="pa-4 rounded-box-div" max-height="655">
       <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
       <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
         <div class="btn-graphic-div">
@@ -83,7 +83,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 400,
+      default: 215,
     },
     cssClasses: {
       default: "",
@@ -91,7 +91,9 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {},
+      default: () => {
+        'min-height: 200px!important;'
+      },
     },
     plugins: {
       type: Object,

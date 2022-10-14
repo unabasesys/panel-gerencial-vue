@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div" max-width="900">
+    <v-card class="pa-4 rounded-box-div" max-width="900" max-height="400">
       <span class="nunito-bold-bright-gray-18px">Rentabilidad</span>
 
       <selectGraphic />
@@ -14,7 +14,7 @@
         :css-classes="cssClasses"
         :styles="styles"
         :width="300"
-        :height="300"
+        :height="200"
       />
     </v-card>
   </div>

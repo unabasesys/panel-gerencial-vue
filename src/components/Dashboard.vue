@@ -82,7 +82,7 @@
           </v-col>
           <v-col cols="6" md="4">
             <Rentabilidad />
-            <Tareas/>
+            
           </v-col>
 
           <v-col cols="12" md="8">
@@ -90,7 +90,7 @@
           </v-col>
 
           <v-col cols="6" md="4">
-            
+            <Tareas/>
             <VentasCompras/>
           </v-col>
         </v-row>
