@@ -56,11 +56,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 600,
+      default: 500,
     },
     height: {
       type: Number,
-      default: 350,
+      default: 200,
     },
     cssClasses: {
       default: "",
