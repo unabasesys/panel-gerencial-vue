@@ -2,7 +2,7 @@
   <div>
     <v-card class="pa-4 rounded-box-div mb-10">
       <span class="nunito-bold-bright-gray-18px">Mis tareas</span>
-      <v-row class="mt-4">
+      <v-row class="mt-1">
           <v-col
             cols="5"
             v-for="item in indicadores"
