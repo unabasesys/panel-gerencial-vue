@@ -28,7 +28,8 @@
               width="210"
               height="120"
               color="#ffffff"
-              outlined>
+              outlined
+            >
               <div class="row mt-1 ml-2">
                 <div cols="6" style="min-width: 180px">
                   <span class="nunito-semi-bold-santas-gray-12px">{{
@@ -72,35 +73,23 @@
             </v-card>
           </v-col>
         </v-row>
-
-
-
-
         <v-row class="mr-2">
           <v-col cols="12" md="8">
             <Ventas />
           </v-col>
           <v-col cols="6" md="4">
             <Rentabilidad />
-            
           </v-col>
 
           <v-col cols="12" md="8">
-            <VentasCliente/>
+            <VentasCliente />
           </v-col>
 
           <v-col cols="6" md="4">
-            <Tareas/>
-            <VentasCompras/>
+            <Tareas />
+            <VentasCompras />
           </v-col>
         </v-row>
-
-        <!-- Columns are always 50% wide, on mobile and desktop -->
-        <!-- <v-row class="mr-2">
-          <v-col v-for="n in 2" :key="n" cols="6">
-            <v-card class="pa-2" outlined tile> .col-6 </v-card>
-          </v-col>
-        </v-row> -->
       </div>
     </div>
   </div>
@@ -123,7 +112,7 @@ export default {
     Rentabilidad,
     Tareas,
     VentasCliente,
-    VentasCompras
+    VentasCompras,
   },
   data() {
     return {
