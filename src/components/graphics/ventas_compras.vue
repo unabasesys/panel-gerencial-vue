@@ -91,7 +91,7 @@ export default {
         datasets: [
           {
             label: "Compras",
-            backgroundColor: "#20A789",
+            backgroundColor: "#F47975",
             data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
           },
           {
