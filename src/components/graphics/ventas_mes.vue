@@ -129,14 +129,14 @@ export default {
             data: [20, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
           },
           {
-            label: "2018",
+            label: "2021",
             backgroundColor: "#6871EC",
             data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
           },
           {
-            label: "2019",
+            label: "2022",
             backgroundColor: "#A8BAF9",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [],
           },
         ],
       },
@@ -180,52 +180,42 @@ export default {
 
   methods: {
     async fethData() {
-      let url = this.$route.params
+      let url = this.$route.params.web;
 
+      const headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
+      };
 
       let config = {
-        method: "get",
-        url: url_,
-        timeout: 8000,
         headers: {
-          Authorization: `Bearer ${this.tokens.chile}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-mes",
+        data: {
+          hostname: "https://"+ url,
         },
       };
 
-      let mov_cl = () => {
-        return new Promise((resolve, reject) => {
-          axios(config_cl)
-            .then((r) => {
-              resolve(r.data);
-            })
-            .catch((err) => {
-              reject();
-            });
-        });
-      };
-      //asdadsdsasda
-
-      this.desserts = [];
-      Promise.all([mov_cl()])
-        .then((respuestas) => {
-          let dt = [];
-          try {
-            if (respuestas != undefined) {
-              respuestas.forEach((e) => {});
-            }
-          } catch (error) {
-            console.log(error);
-          }
+      axios(config).then((respuestas) => {
+        respuestas.data[0].forEach(val => {
+          debugger
+          this.chartData.datasets[2].data.push(val[1])
         })
-        .catch((error) => {
-          console.log(errror);
-        });
+        
+      });
+
+      
+
     },
   },
 
-  mounted(){
-    this.fethData()
-  }
+  mounted() {
+    this.fethData();
+  },
 };
 </script>
 
