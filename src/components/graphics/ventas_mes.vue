@@ -181,7 +181,6 @@ export default {
   methods: {
     async fethData() {
       let url = this.$route.params
-      debugger
 
 
       let config = {

@@ -24,7 +24,7 @@ const routes = [{
         import( /* webpackChunkName: "about" */ '../views/Dashboard.vue')
 },
 {
-    path: '/dashboard/:param',
+    path: '/dashboard/:from/:user/:web',
     name: 'Dashboard',
     props: true,
     meta: {
