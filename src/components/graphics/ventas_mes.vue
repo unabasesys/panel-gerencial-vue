@@ -131,7 +131,7 @@ export default {
           {
             label: "2021",
             backgroundColor: "#6871EC",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [],
           },
           {
             label: "2022",
@@ -179,14 +179,19 @@ export default {
   },
 
   methods: {
-    async fethData() {
+    init() {
+      this.fethData(2021);
+
+      let date = new Date();
+      let currentYear = date.getFullYear();
+      this.fethData(currentYear);
+    },
+    async fethData(year) {
       let url = this.$route.params.web;
 
-      const headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
-      };
+      let date = new Date();
+      let currentYear = date.getFullYear();
+      let prevYear = currentYear - 1;
 
       let config = {
         headers: {
@@ -196,25 +201,26 @@ export default {
         method: "POST",
         url: "https://" + url + "/node/get-ventas-mes",
         data: {
-          hostname: "https://"+ url,
+          hostname: "https://" + url,
+          year,
         },
       };
 
       axios(config).then((respuestas) => {
-        respuestas.data[0].forEach(val => {
-          debugger
-          this.chartData.datasets[2].data.push(val[1])
-        })
-        
+        respuestas.data[0].forEach((val) => {
+          if (year == prevYear) {
+            this.chartData.datasets[1].data.push(val[1]);
+          }
+          if (year == currentYear) {
+            this.chartData.datasets[2].data.push(val[1]);
+          }
+        });
       });
-
-      
-
     },
   },
 
   mounted() {
-    this.fethData();
+    this.init()
   },
 };
 </script>
