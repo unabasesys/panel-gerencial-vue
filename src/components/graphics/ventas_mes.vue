@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-card class="pa-4 rounded-box-div" max-height="655">
-      <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
+      <span class="nunito-bold-bright-gray-18px"
+        >Ventas por mes comparativo</span
+      >
       <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
         <div class="btn-graphic-div">
           <span class="nunito-semi-bold-santas-gray-10px">1H</span>
@@ -44,7 +46,9 @@
 
 <script>
 import { Bar } from "vue-chartjs/legacy";
+import axios from "axios";
 import { Chart, registerables } from "chart.js";
+
 import {
   Chart as ChartJS,
   Title,
@@ -92,7 +96,7 @@ export default {
     styles: {
       type: Object,
       default: () => {
-        'min-height: 200px!important;'
+        "min-height: 200px!important;";
       },
     },
     plugins: {
@@ -173,6 +177,56 @@ export default {
       },
     };
   },
+
+  methods: {
+    async fethData() {
+      let url = this.$route.params
+      debugger
+
+
+      let config = {
+        method: "get",
+        url: url_,
+        timeout: 8000,
+        headers: {
+          Authorization: `Bearer ${this.tokens.chile}`,
+        },
+      };
+
+      let mov_cl = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_cl)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+      //asdadsdsasda
+
+      this.desserts = [];
+      Promise.all([mov_cl()])
+        .then((respuestas) => {
+          let dt = [];
+          try {
+            if (respuestas != undefined) {
+              respuestas.forEach((e) => {});
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        })
+        .catch((error) => {
+          console.log(errror);
+        });
+    },
+  },
+
+  mounted(){
+    this.fethData()
+  }
 };
 </script>
 
