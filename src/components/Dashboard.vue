@@ -103,6 +103,7 @@ import Rentabilidad from "../components/graphics/rentabilidad.vue";
 import Tareas from "../components/graphics/tareas.vue";
 import VentasCliente from "../components/graphics/ventas_cliente.vue";
 import VentasCompras from "../components/graphics/ventas_compras.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -136,13 +137,13 @@ export default {
         },
         {
           name: "Negocios por facturar",
-          nValue: this.randomNum(),
+          nValue: 0,
           icon: "ub-neg_por_facturar",
           percent: 0,
         },
         {
           name: "Por cobrar",
-          nValue: this.randomNum(),
+          nValue: 0,
           icon: "ub-por_cobrar",
           percent: 35,
         },
@@ -169,6 +170,36 @@ export default {
         )
       );
     },
+
+    async fethData() {
+      let url = this.$route.params.web;
+
+      let date = new Date();
+      let dateTo =
+        date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+      //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-indicadores",
+        data: {
+          hostname: "https://" + url,
+          date_from: 2022,
+          date_to: dateTo,
+        },
+      };
+      
+
+      axios(config).then((respuestas) => {
+        respuestas.data[0].rows.forEach((val) => {
+          this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
+          this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
+        });
+      });
+    },
   },
 
   mounted() {
@@ -180,6 +211,7 @@ export default {
       document
         .getElementsByClassName("no-collapsed")[0]
         .classList.remove("no-collapsed");
+      this.fethData();
     }
   },
 };

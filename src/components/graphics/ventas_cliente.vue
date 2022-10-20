@@ -161,11 +161,7 @@ export default {
         var items = respuestas.data[0].clientes.slice(0, size).map((i) => {
           return i;
         });
-
-
-        debugger
         items.forEach((val) => {
-          debugger;
           this.chartData.labels.push(cutName(val.nombre));
           this.chartData.datasets[0].data.push(val.neto);
         });
