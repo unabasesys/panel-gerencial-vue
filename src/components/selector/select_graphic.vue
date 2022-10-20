@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style>
-.v-input__control {
+.customSelect > .v-input__control {
   max-width: 90px;
 }
 

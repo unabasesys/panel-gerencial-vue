@@ -176,7 +176,7 @@
                       <span>Seleccione rango de fecha</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="2">
                     <v-tooltip top>
                       <template #activator="{ on }">
                         <div multiple v-on="on">
@@ -184,7 +184,6 @@
                             menu-props="auto"
                             outlined
                             rounded
-                            class="nunito-semi-bold-santas-gray-16px"
                             label="Tipo de cambio"
                             hide-details
                             append-icon="fas fa-dollar-sign"
@@ -198,7 +197,7 @@
                       <span>Seleccione tipo de cambio</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="2">
                     <v-tooltip top>
                       <template #activator="{ on }">
                         <div multiple v-on="on">
