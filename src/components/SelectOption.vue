@@ -1,14 +1,13 @@
 <template>
   <div>
-    <v-autocomplete
+    <v-select
       v-model="value"
       :items="items"
-      dense
-      filled
       @change="getNegocios(value)"
       label="Seleccione empresa"
-    ></v-autocomplete>
-
+      dense
+      solo
+    ></v-select>
   </div>
 </template>
 
@@ -29,11 +28,12 @@ export default {
   }),
   methods: {
     getNegocios() {
-      this.$emit('getEmpresaSelect',this.value);
+      this.$emit("getEmpresaSelect", this.value);
     },
   },
 };
 </script>
 
 <style>
+
 </style>
