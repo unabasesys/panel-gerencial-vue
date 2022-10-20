@@ -22,6 +22,8 @@
 import { Bar } from "vue-chartjs/legacy";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
+import axios from "axios";
+
 import {
   Chart as ChartJS,
   Title,
@@ -78,23 +80,12 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [
-          "Porta",
-          "La farmacia",
-          "Chelo",
-          "Centralizado",
-          "Gepento",
-          "Rayado",
-          "Bombera",
-          "Wunder",
-          "Disney",
-          "HBO",
-        ],
+        labels: [],
         datasets: [
           {
             label: "Ventas",
             backgroundColor: "#69DFC0",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [],
           },
         ],
       },
@@ -134,6 +125,56 @@ export default {
         },
       },
     };
+  },
+
+  methods: {
+    async fethData() {
+      let url = this.$route.params.web;
+
+      let date = new Date();
+      let currentYear = date.getFullYear();
+      let prevYear = currentYear - 1;
+      //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-cliente",
+        data: {
+          hostname: "https://" + url,
+          fecha_asignacion: true,
+          estado_en_proceso: true,
+          estado_cerrado: true,
+          date_from: 2022,
+          date_to: 2022,
+        },
+      };
+
+      const cutName = (name) => {
+        return name.length > 5 ? name.substring(0, 12) + '...' : name
+      }
+
+      axios(config).then((respuestas) => {
+        var size = 10;
+        var items = respuestas.data[0].clientes.slice(0, size).map((i) => {
+          return i;
+        });
+
+
+        debugger
+        items.forEach((val) => {
+          debugger;
+          this.chartData.labels.push(cutName(val.nombre));
+          this.chartData.datasets[0].data.push(val.neto);
+        });
+      });
+    },
+  },
+
+  mounted() {
+    this.fethData();
   },
 };
 </script>
