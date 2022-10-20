@@ -10,8 +10,8 @@
       <Navbar />
       <div id="container" class="content no-collapsed">
         <v-row>
-          <v-col cols="3">
-            <SelectOption @getEmpresaSelect="getNegocios" ref="selectOption"/>
+          <v-col cols="4">
+            <SelectOption @getEmpresaSelect="getNegocios" ref="selectOption" />
           </v-col>
         </v-row>
 
@@ -39,7 +39,7 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <div class="text-overline mb-4">Total ventas</div>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Total ventas</span>
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_ventas }}
                   </v-list-item-title>
@@ -71,7 +71,7 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <div class="text-overline mb-4">Total costos</div>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Total costos</span>
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_costos }}
                   </v-list-item-title>
@@ -103,7 +103,7 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <div class="text-overline mb-4">Utilidades</div>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Utilidades</span>
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_utilidades }}
                   </v-list-item-title>
@@ -124,7 +124,7 @@
             <v-card style="margin-right: 20px" class="main-data-table">
               <v-card-title>
                 <v-row>
-                  <v-col cols="2">
+                  <v-col cols="3">
                     <v-tooltip top>
                       <template #activator="{ on }">
                         <div multiple v-on="on">
@@ -141,9 +141,12 @@
                               <v-text-field
                                 v-model="date"
                                 label="Seleccione fecha"
-                                prepend-icon="mdi-calendar"
                                 v-bind="attrs"
                                 v-on="on"
+                                outlined
+                                rounded
+                                class="nunito-semi-bold-santas-gray-16px"
+                                append-icon="mdi-calendar"
                               ></v-text-field>
                             </template>
 
@@ -173,15 +176,18 @@
                       <span>Seleccione rango de fecha</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="2">
+                  <v-col cols="3">
                     <v-tooltip top>
                       <template #activator="{ on }">
                         <div multiple v-on="on">
                           <v-select
                             menu-props="auto"
+                            outlined
+                            rounded
+                            class="nunito-semi-bold-santas-gray-16px"
                             label="Tipo de cambio"
                             hide-details
-                            prepend-icon="fas fa-dollar-sign"
+                            append-icon="fas fa-dollar-sign"
                             single-line
                             :items="tipo_cambio"
                             v-model="tipo_cambio_v"
@@ -192,15 +198,18 @@
                       <span>Seleccione tipo de cambio</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="2">
+                  <v-col cols="3">
                     <v-tooltip top>
                       <template #activator="{ on }">
                         <div multiple v-on="on">
                           <v-select
                             menu-props="auto"
+                            outlined
+                            rounded
+                            class="nunito-semi-bold-santas-gray-16px"
                             label="Cierre de compras"
                             hide-details
-                            prepend-icon="fas fa-lock"
+                            append-icon="fas fa-lock"
                             single-line
                             :items="cierre_compras"
                             v-model="cierre_compras_v"
@@ -214,11 +223,14 @@
                   </v-col>
 
                   <v-spacer></v-spacer>
-                  <v-col cols="2">
+                  <v-col cols="3">
                     <div style="display: flex; justify-content: flex-end">
                       <v-text-field
                         v-model="search"
                         append-icon="mdi-magnify"
+                        outlined
+                        rounded
+                        class="nunito-semi-bold-santas-gray-16px"
                         label="Buscador"
                         single-line
                         hide-details
@@ -287,9 +299,17 @@ export default {
           value: "fecha_asignacion",
           class: "headertable white--text",
         },
-        { text: "REFERENCIA", value: "referencia", class: "headertable white--text" },
+        {
+          text: "REFERENCIA",
+          value: "referencia",
+          class: "headertable white--text",
+        },
         { text: "CLIENTE", value: "cliente", class: "headertable white--text" },
-        { text: "TOTAL VENTA", value: "total_venta", class: "headertable white--text" },
+        {
+          text: "TOTAL VENTA",
+          value: "total_venta",
+          class: "headertable white--text",
+        },
         { text: "GASTO P", value: "gasto_p", class: "headertable white--text" },
         { text: "GASTO R", value: "gasto_r", class: "headertable white--text" },
         {
@@ -297,14 +317,26 @@ export default {
           value: "utilidad_final",
           class: "headertable white--text",
         },
-        { text: "FACTURADO", value: "facturado", class: "headertable white--text" },
-        { text: "POR FACTURAR", value: "por_facturar", class: "headertable white--text" },
+        {
+          text: "FACTURADO",
+          value: "facturado",
+          class: "headertable white--text",
+        },
+        {
+          text: "POR FACTURAR",
+          value: "por_facturar",
+          class: "headertable white--text",
+        },
         {
           text: "GASTOS OFICINA",
           value: "gasto_oficina",
           class: "headertable white--text",
         },
-        { text: "IMPUESTOS", value: "impuestos", class: "headertable white--text" },
+        {
+          text: "IMPUESTOS",
+          value: "impuestos",
+          class: "headertable white--text",
+        },
       ],
       desserts: [],
       token: "",
@@ -444,7 +476,7 @@ export default {
         this.ocultarLoading(100);
       };
 
-      let tipo_cambio = '';
+      let tipo_cambio = "";
 
       this.getTipoCambioStore.forEach((response) => {
         switch (value) {
@@ -459,8 +491,8 @@ export default {
         }
       });
 
-      if (tipo_cambio != '') {
-        calculateCambio(Number.parseFloat(tipo_cambio.replace(',','.')));
+      if (tipo_cambio != "") {
+        calculateCambio(Number.parseFloat(tipo_cambio.replace(",", ".")));
       } else {
         this.getNegocios(this.select_empresa);
       }
@@ -747,9 +779,6 @@ export default {
           color: "#03D6F9",
           percent: 0,
         });
-
-        console.log("FECHA START: ", date_start);
-        console.log("FECHA END: ", date_end);
         //Si viene filtro de fecha
         config = {
           method: "get",
@@ -808,7 +837,7 @@ export default {
             this.addNegocio(this.desserts);
             this.setCards();
             this.$refs.tipoCambio.setTipoCambio(value);
-            this.tipo_cambio_v = null
+            this.tipo_cambio_v = null;
           } catch (error) {
             this.ocultarLoading(100);
             this.desserts = [];
@@ -871,16 +900,6 @@ export default {
         }
       }
     },
-
-    verifyTokens(){
-      let config = {
-        url: "http://3.213.187.157:3513/generar-api-key-v3",
-      };
-
-      axios(config).then((respuestas) => {
-        debugger
-      });
-    }
   },
   created: function () {
     this.init();
@@ -937,7 +956,6 @@ export default {
 
 .headertable {
   background-color: #34cc02;
-  
 }
 
 .content {
@@ -971,5 +989,4 @@ export default {
   border-radius: 25px !important;
   margin-left: 20px !important;
 }
-
 </style>
