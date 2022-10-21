@@ -74,20 +74,20 @@
           </v-col>
         </v-row>
         <v-row class="mr-2">
-          <v-col cols="8" class="d-flex" style="flex-direction: column">
+          <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1"> <Ventas /> </v-card>
           </v-col>
-          <v-col cols="4" class="d-flex" style="flex-direction: column">
+          <v-col cols="5" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <Rentabilidad /> </v-card>
-            <v-card class="pa-5 rounded-box-div mb-1 mt-1 flex-grow-1"> <Tareas /> </v-card>
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <Tareas /> </v-card>
           </v-col>
         </v-row>
 
         <v-row class="mr-2">
-          <v-col cols="8" class="d-flex" style="flex-direction: column">
+          <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCliente /> </v-card>
           </v-col>
-          <v-col cols="4" class="d-flex" style="flex-direction: column">
+          <v-col cols="5" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <VentasCompras /> </v-card>
           </v-col>
         </v-row>

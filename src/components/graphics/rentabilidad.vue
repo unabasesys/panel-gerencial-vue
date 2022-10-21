@@ -12,8 +12,8 @@
         :plugins="plugins"
         :css-classes="cssClasses"
         :styles="styles"
-        :width="300"
-        :height="150"
+        :width="400"
+        :height="250"
       />
   </div>
 </template>

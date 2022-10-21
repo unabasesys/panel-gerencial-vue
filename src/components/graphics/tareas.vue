@@ -3,10 +3,10 @@
       <span class="nunito-bold-bright-gray-18px">Mis tareas</span>
       <v-row class="mt-1">
           <v-col
-            cols="5"
+            cols="4"
             v-for="item in indicadores"
             :key="item.name"
-            style="margin-right: 30px"
+            style="margin-right: 60px"
           >
             <v-card
               class="rounded-box"

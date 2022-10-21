@@ -85,7 +85,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 215,
+      default: 400,
     },
     cssClasses: {
       default: "",
