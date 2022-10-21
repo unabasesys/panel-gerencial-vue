@@ -85,17 +85,21 @@ export default {
           "Junio",
           "Julio",
           "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre"
         ],
         datasets: [
           {
             label: "Compras",
             backgroundColor: "#F47975",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10],
           },
           {
             label: "Ventas",
             backgroundColor: "#69DFC0",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10],
           },
         ],
       },
