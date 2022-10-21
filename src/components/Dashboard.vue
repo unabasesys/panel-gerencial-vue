@@ -88,7 +88,7 @@
             <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCliente /> </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <VentasCompras /> </v-card>
+            <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCompras /> </v-card>
           </v-col>
         </v-row>
       </div>
