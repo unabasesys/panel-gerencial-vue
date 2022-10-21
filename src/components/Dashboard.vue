@@ -74,20 +74,21 @@
           </v-col>
         </v-row>
         <v-row class="mr-2">
-          <v-col cols="12" md="8">
-            <Ventas />
+          <v-col cols="8" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div flex-grow-1"> <Ventas /> </v-card>
           </v-col>
-          <v-col cols="6" md="4">
-            <Rentabilidad />
+          <v-col cols="4" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <Rentabilidad /> </v-card>
+            <v-card class="pa-5 rounded-box-div mb-1 mt-1 flex-grow-1"> <Tareas /> </v-card>
           </v-col>
+        </v-row>
 
-          <v-col cols="12" md="8">
-            <VentasCliente />
+        <v-row class="mr-2">
+          <v-col cols="8" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCliente /> </v-card>
           </v-col>
-
-          <v-col cols="6" md="4">
-            <Tareas />
-            <VentasCompras />
+          <v-col cols="4" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <VentasCompras /> </v-card>
           </v-col>
         </v-row>
       </div>
@@ -176,7 +177,7 @@ export default {
 
       let date = new Date();
       let dateTo =
-        date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
       //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
       let config = {
         headers: {
@@ -191,7 +192,6 @@ export default {
           date_to: dateTo,
         },
       };
-      
 
       axios(config).then((respuestas) => {
         respuestas.data[0].rows.forEach((val) => {

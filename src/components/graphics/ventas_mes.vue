@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-card class="pa-4 rounded-box-div" max-height="655">
       <span class="nunito-bold-bright-gray-18px"
         >Ventas por mes comparativo</span
       >
@@ -40,7 +39,6 @@
         :height="height"
         :width="width"
       />
-    </v-card>
   </div>
 </template>
 
