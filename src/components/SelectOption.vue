@@ -7,6 +7,8 @@
       label="Seleccione empresa"
       dense
       solo
+      outlined
+      rounded
     ></v-select>
   </div>
 </template>

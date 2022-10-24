@@ -3,7 +3,7 @@
     <v-app-bar color="white" elevation="2" class="navbar">
       <v-app-bar-nav-icon @click="setAside()"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
-      <v-btn icon to="/">
+      <v-btn icon @click="closeSession()">
         <Icon icon="subway:power-batton" color="black" />
         <i class="fa-solid fa-light-switch"></i>
       </v-btn>
@@ -36,6 +36,11 @@ export default {
         document.getElementById("navbar").className = "navbar-collapsed";
       }
     },
+
+    closeSession(){
+      this.$router.push({ path: "/" });
+      localStorage.token = ""
+    }
   },
 };
 </script>

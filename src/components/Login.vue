@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   components: {},
   data() {
@@ -61,16 +63,36 @@ export default {
   },
 
   methods: {
-    login() {
+    async login() {
       if (this.password && this.user) {
-        if (this.password == "primo2022" && this.user == "primo") {
-          this.$router.push({name: 'Panel'})
-          this.tag = "success";
-        } else {
-          this.alert = true;
-          this.enable = "Error en las credenciales";
-          this.tag = "error";
-        }
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://dev3.unabase.com/node/login-panel-gerencial",
+          //timeout: 5000,
+          data: {
+            hostname: "https://dev3.unabase.com",
+            user: this.user,
+            password: this.password,
+          },
+        };
+
+        console.log("DATA: ", config.data);
+
+        await axios(config).then((respuestas) => {
+          if (respuestas.data[0].success) {
+            localStorage.token = respuestas.data[0].token
+            this.$router.push({ name: "Panel", params: {username: this.user}});
+            this.tag = "success";
+          } else {
+            this.alert = true;
+            this.enable = "Error en las credenciales";
+            this.tag = "error";
+          }
+        });
       } else {
         this.alert = true;
         this.enable = "Ingrese usuario y contraseña";

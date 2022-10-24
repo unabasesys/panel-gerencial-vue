@@ -29,14 +29,14 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item link to="/dashboard" color="#03D6F9" hover="#03D6F9">
+        <v-list-item link @click="toRoute('Dashboard')" color="#03D6F9" hover="#03D6F9">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link to="/panel" color="#03D6F9" hover="#03D6F9">
+        <v-list-item link @click="toRoute('Panel')" color="#03D6F9" hover="#03D6F9">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
@@ -63,7 +63,18 @@ export default {
   },
   computed: {
     ...mapState(["aside"]),
+    currentRouteName() {
+      return this.$route.name
+    },
   },
+
+  methods:{
+    toRoute(item){
+      if(this.currentRouteName !== item){
+        this.$router.push({ name: item, params: {username: this.username}});
+      }
+    }
+  }
 };
 </script>
 

@@ -10,7 +10,7 @@
       <Navbar />
       <div id="container" class="content no-collapsed">
         <v-row>
-          <v-col cols="4">
+          <v-col cols="3">
             <SelectOption @getEmpresaSelect="getNegocios" ref="selectOption" />
           </v-col>
         </v-row>
@@ -39,7 +39,9 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Total ventas</span>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4"
+                    >Total ventas</span
+                  >
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_ventas }}
                   </v-list-item-title>
@@ -71,7 +73,9 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Total costos</span>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4"
+                    >Total costos</span
+                  >
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_costos }}
                   </v-list-item-title>
@@ -103,7 +107,9 @@
                 </v-tooltip>
 
                 <v-list-item-content class="pl-6">
-                  <span class="nunito-semi-bold-santas-gray-16px mb-4">Utilidades</span>
+                  <span class="nunito-semi-bold-santas-gray-16px mb-4"
+                    >Utilidades</span
+                  >
                   <v-list-item-title class="text-h5 mb-1">
                     $ {{ total_utilidades }}
                   </v-list-item-title>
@@ -362,9 +368,42 @@ export default {
       this.snackbar = true;
       this.snackbar_message = message;
     },
-    init() {
-      console.log("INIT");
-      this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
+    async init() {
+      if (this.checkSession()) {
+        this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
+      }
+    },
+    async checkSession() {
+      let success = false;
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://dev3.unabase.com/node/get-token-user",
+        //timeout: 5000,
+        data: {
+          hostname: "https://dev3.unabase.com",
+          user: this.$route.params.username,
+        },
+      };
+
+      await axios(config).then((respuestas) => {
+        debugger;
+        if (respuestas.data[0].success) {
+          let currentToken = localStorage.getItem("token");
+          if (currentToken === respuestas.data[0].token) {
+            success = true;
+          } else {
+            this.$router.push({ path: "/" });
+          }
+        } else {
+          this.$router.push({ path: "/" });
+        }
+      });
+
+      return success;
     },
     parse(num) {
       return String(
@@ -416,7 +455,6 @@ export default {
       });
 
       const calculateCambio = (tipo_cambio) => {
-        debugger;
         //data de cards desde store
         this.getCardsStore.forEach((response) => {
           this.total_ventas = this.convert(

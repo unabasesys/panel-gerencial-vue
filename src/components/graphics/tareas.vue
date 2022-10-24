@@ -63,6 +63,8 @@
 </template>
 
 <script>
+
+import axios from "axios";
 export default {
     data() {
     return {
@@ -96,6 +98,36 @@ export default {
         )
       );
     },
+
+    async fethData() {
+      let url = this.$route.params.web;
+
+      let date = new Date();
+      let currentYear = date.getFullYear();
+      let prevYear = currentYear - 1;
+
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-tareas",
+        data: {
+          date_from: 2022,
+          date_to: 2022,
+        },
+      };
+
+      debugger
+      axios(config).then((respuestas) => {
+        debugger
+      });
+    },
+  },
+
+  async mounted() {
+    this.fethData()
   },
 }
 </script>
