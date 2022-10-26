@@ -182,6 +182,7 @@ export default {
       this.fethData(currentYear);
     },
     async fethData(year) {
+      debugger
       let url = this.$route.params.web;
 
       let date = new Date();

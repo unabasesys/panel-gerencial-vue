@@ -127,6 +127,7 @@ export default {
 
   methods: {
     async fethData() {
+      debugger
       let url = this.$route.params.web;
 
       let date = new Date();
