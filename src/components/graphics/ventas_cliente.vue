@@ -139,9 +139,9 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: url + "/node/get-ventas-cliente",
+        url: "https://" + url + "/node/get-ventas-cliente",
         data: {
-          hostname: url,
+          hostname: "https://" + url,
           fecha_asignacion: true,
           estado_en_proceso: true,
           estado_cerrado: true,

@@ -183,7 +183,6 @@ export default {
     },
 
     async fethData() {
-      debugger
       let url = this.$route.params.web;
 
       let date = new Date();
@@ -196,9 +195,9 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: url + "/node/get-indicadores",
+        url: "https://" + url + "/node/get-indicadores",
         data: {
-          hostname: url,
+          hostname: "https://" + url,
           date_from: 2022,
           date_to: dateTo,
         },
@@ -238,7 +237,7 @@ export default {
       let getInfo = async () => {
         let config = {
           method: "get",
-          url: `${this.$route.params.web}/4DACTION/_light_get_server_info?sid=${sid_}`,
+          url: `https://${this.$route.params.web}/4DACTION/_light_get_server_info?sid=${sid_}`,
         };
         try {
           let res = await axios(config);
@@ -260,7 +259,7 @@ export default {
   mounted() {
     let is = this.$route.params.from;
     if (is === "v3") {
-      //this.verifySession();
+      this.verifySession();
       this.activeAside = false;
       this.activeNav = false;
       this.user = this.$route.params.user;

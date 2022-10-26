@@ -194,9 +194,9 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: url + "/node/get-ventas-mes",
+        url: "https://" + url + "/node/get-ventas-mes",
         data: {
-          hostname: url,
+          hostname: "https://" + url,
           year,
         },
       };
