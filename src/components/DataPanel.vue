@@ -297,50 +297,56 @@ export default {
           align: "start",
           sortable: false,
           value: "nro_neg",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
           text: "FECHA ASIGNACION",
           value: "fecha_asignacion",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
           text: "REFERENCIA",
           value: "referencia",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
-        { text: "CLIENTE", value: "cliente", class: "headertable white--text" },
+        { text: "CLIENTE", value: "cliente", class: "nunito-normal-12px" },
         {
+          align: "right",
           text: "TOTAL VENTA",
           value: "total_venta",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
-        { text: "GASTO P", value: "gasto_p", class: "headertable white--text" },
-        { text: "GASTO R", value: "gasto_r", class: "headertable white--text" },
+        { align: "right", text: "GASTO P", value: "gasto_p", class: "nunito-normal-12px" },
+        { align: "right", text: "GASTO R", value: "gasto_r", class: "nunito-normal-12px" },
         {
+          align: "right",
           text: "UTILIDAD FINAL",
           value: "utilidad_final",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
+          align: "right",
           text: "FACTURADO",
           value: "facturado",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
+          align: "right",
           text: "POR FACTURAR",
           value: "por_facturar",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
+          align: "right",
           text: "GASTOS OFICINA",
           value: "gasto_oficina",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
         {
+          align: "right",
           text: "IMPUESTOS",
           value: "impuestos",
-          class: "headertable white--text",
+          class: "nunito-normal-12px",
         },
       ],
       desserts: [],
@@ -354,6 +360,7 @@ export default {
       getNegocioStore: "getNegocios",
       getCardsStore: "getDataCards",
       getTipoCambioStore: "getTipoCambio",
+      getUserStore: "getUser"
     }),
   },
   methods: {
@@ -361,6 +368,7 @@ export default {
       "mostrarLoading",
       "ocultarLoading",
       "setNegocio",
+      "setUser",
       "addNegocio",
       "addDataCards",
     ]),
@@ -375,6 +383,8 @@ export default {
     },
     async checkSession() {
       let success = false;
+      let t = localStorage.getItem('token')
+      debugger
       let config = {
         headers: {
           Accept: "application/json",
@@ -385,13 +395,14 @@ export default {
         //timeout: 5000,
         data: {
           hostname: "https://dev3.unabase.com",
-          user: this.$route.params.username,
+          token: t,
         },
       };
 
       await axios(config).then((respuestas) => {
         debugger;
         if (respuestas.data[0].success) {
+          debugger
           let currentToken = localStorage.getItem("token");
           if (currentToken === respuestas.data[0].token) {
             success = true;

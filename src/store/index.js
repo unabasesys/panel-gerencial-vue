@@ -11,6 +11,7 @@ export default new Vuex.Store({
             color: '#03D6F9',
             percent: 0,
         },
+        user: null,
 
         tipoCambio: [],
 
@@ -73,13 +74,21 @@ export default new Vuex.Store({
             state.tipoCambio = payload
         },
 
+        setUser(state, payload) {
+            state.user = payload
+        },
+
     },
     getters: {
         getNegocios: state => state.negocios,
         getDataCards: state => state.cards,
-        getTipoCambio: state => state.tipoCambio
+        getTipoCambio: state => state.tipoCambio,
+        getUser: state => state.user
+        
 
     },
-    actions: {},
+    actions: {
+
+    },
     modules: {}
 })
