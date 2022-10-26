@@ -183,8 +183,7 @@ export default {
     },
 
     async fethData() {
-      debugger
-      let url = this.$route.params.web;
+      let url = this.$route.query.url;
 
       let date = new Date();
       let dateTo =
@@ -258,7 +257,7 @@ export default {
   },
 
   mounted() {
-    let is = this.$route.params.from;
+    let is = this.$route.query.from;
     if (is === "v3") {
       this.verifySession();
       this.activeAside = false;

@@ -100,8 +100,7 @@ export default {
     },
 
     async fethData() {
-      debugger
-      let url = this.$route.params.web;
+      let url = this.$route.query.url;
 
       let date = new Date();
       let currentYear = date.getFullYear();
