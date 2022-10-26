@@ -75,20 +75,30 @@
         </v-row>
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1"> <Ventas /> </v-card>
+            <v-card class="pa-5 rounded-box-div flex-grow-1">
+              <Ventas />
+            </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <Rentabilidad /> </v-card>
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1"> <Tareas /> </v-card>
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
+              <Rentabilidad />
+            </v-card>
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
+              <Tareas />
+            </v-card>
           </v-col>
         </v-row>
 
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCliente /> </v-card>
+            <v-card class="pa-5 rounded-box-div flex-grow-1">
+              <VentasCliente />
+            </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1"> <VentasCompras /> </v-card>
+            <v-card class="pa-5 rounded-box-div flex-grow-1">
+              <VentasCompras />
+            </v-card>
           </v-col>
         </v-row>
       </div>
@@ -185,9 +195,9 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-indicadores",
+        url: url + "/node/get-indicadores",
         data: {
-          hostname: "https://" + url,
+          hostname: url,
           date_from: 2022,
           date_to: dateTo,
         },
@@ -200,11 +210,56 @@ export default {
         });
       });
     },
+
+    async verifySession() {
+
+      
+      let sid = () => {
+        // var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") {
+            c = c.substring(1);
+          }
+          // if (c.indexOf(name) == 0) {
+          if (c.match(/UNABASE/g)) {
+            return c.substring(c.indexOf("UNABASE"));
+          }
+        }
+        return "";
+      };
+
+      let sid_ = sid();
+      debugger
+
+      let getInfo = async () => {
+        let config = {
+          method: "get",
+          url: `${this.$route.params.web}/4DACTION/_light_get_server_info?sid=${sid_}`,
+        };
+        try {
+          let res = await axios(config);
+          return res;
+        } catch (err) {
+          throw err;
+        }
+      };
+
+      getInfo().then((res) => {
+        debugger
+        if (!res.data.logged_in) {
+          location.href = `${window.location.origin}`;
+        }
+      });
+    },
   },
 
   mounted() {
     let is = this.$route.params.from;
     if (is === "v3") {
+      //this.verifySession();
       this.activeAside = false;
       this.activeNav = false;
       this.user = this.$route.params.user;
