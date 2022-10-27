@@ -180,9 +180,8 @@ export default {
       );
     },
 
-    async fethData() {
+    async fethDataIndicadores() {
       let url = this.$route.query.url;
-
       let date = new Date();
       let dateTo =
         date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
@@ -211,8 +210,6 @@ export default {
     },
 
     async verifySession() {
-
-      
       let sid = () => {
         // var name = cname + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -265,7 +262,7 @@ export default {
       document
         .getElementsByClassName("no-collapsed")[0]
         .classList.remove("no-collapsed");
-      this.fethData();
+      this.fethDataIndicadores();
     }
   },
 };

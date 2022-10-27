@@ -220,7 +220,7 @@ export default {
             this.chartData.datasets[0].data.push(sum);
           }
         });
-        debugger;
+        
         respuestas.data[0].ventas.suma.months.map((val, index) => {
           //12= acumulado
           if (index != 12) {
