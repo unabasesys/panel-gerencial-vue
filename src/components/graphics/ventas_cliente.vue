@@ -21,6 +21,7 @@ import { Bar } from "vue-chartjs/legacy";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import axios from "axios";
+import numeral from "numeral";
 
 import {
   Chart as ChartJS,
@@ -109,7 +110,7 @@ export default {
             ticks: {
               // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
-                return "$ " + value + " M";
+                return numeral(value/1000).format('$ 0,0').replace(',','.') + " K";
               },
             },
           },
@@ -126,6 +127,13 @@ export default {
   },
 
   methods: {
+    parse(num) {
+      return String(
+        new Intl.NumberFormat("de-DE").format(
+          parseFloat(Math.round(String(num).replace(",", ".")))
+        )
+      );
+    },
     async fethData() {
       let url = this.$route.query.url;
 

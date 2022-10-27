@@ -70,13 +70,13 @@ export default {
     return {
       indicadores: [
         {
-          name: "OCS por aprobar",
-          nValue: this.randomNum(),
+          name: "Docs por aprobar",
+          nValue: 0,
           icon: "ub-like",
           percent: 0,
         },
         {
-          name: "Rendiciones pendientes",
+          name: "Rendiciones vencidas",
           nValue: this.randomNum(),
           icon: "ub-papel",
           percent: 15,
@@ -101,6 +101,7 @@ export default {
 
     async fethData() {
       let url = this.$route.query.url;
+      let username = this.$route.query.user
 
       let date = new Date();
       let currentYear = date.getFullYear();
@@ -116,12 +117,13 @@ export default {
         data: {
           date_from: 2022,
           date_to: 2022,
+          user: username,
+          hostname: "https://" + url,
         },
       };
 
-      debugger
       axios(config).then((respuestas) => {
-        debugger
+        this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar
       });
     },
   },

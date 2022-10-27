@@ -135,16 +135,10 @@ export default {
       justify: ["start", "center", "end", "space-around", "space-between"],
       indicadores: [
         {
-          name: "Cotizaciones por aprobar",
-          nValue: this.randomNum(),
+          name: "Cotizaciones por vencer",
+          nValue: 0,
           icon: "ub-cot_por_aprobar",
           percent: 0,
-        },
-        {
-          name: "Cotizaciones vencidas",
-          nValue: this.randomNum(),
-          icon: "ub-cot_vencidas",
-          percent: 15,
         },
         {
           name: "Negocios por facturar",
@@ -153,15 +147,20 @@ export default {
           percent: 0,
         },
         {
-          name: "Por cobrar",
+          name: "Facturas por cobrar",
           nValue: 0,
           icon: "ub-por_cobrar",
           percent: 35,
         },
-
+        {
+          name: "Por justificar",
+          nValue: 0,
+          icon: "ub-por_cobrar",
+          percent: 35,
+        },
         {
           name: "Por pagar",
-          nValue: this.randomNum(),
+          nValue: 0,
           icon: "ub-por_pagar",
           percent: 0,
         },
@@ -207,6 +206,7 @@ export default {
         respuestas.data[0].rows.forEach((val) => {
           this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
           this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
+          this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
         });
       });
     },
@@ -259,7 +259,7 @@ export default {
   mounted() {
     let is = this.$route.query.from;
     if (is === "v3") {
-      this.verifySession();
+      //this.verifySession();
       this.activeAside = false;
       this.activeNav = false;
       this.user = this.$route.params.user;

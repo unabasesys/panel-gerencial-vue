@@ -44,6 +44,7 @@
 import { Bar } from "vue-chartjs/legacy";
 import axios from "axios";
 import { Chart, registerables } from "chart.js";
+import numeral from "numeral";
 
 import {
   Chart as ChartJS,
@@ -157,7 +158,7 @@ export default {
             ticks: {
               // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
-                return value + " mil";
+                return numeral(value/1000).format('$ 0,0').replace(',','.') + " K";
               },
             },
           },
