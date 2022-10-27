@@ -13,6 +13,17 @@
       :height="height"
       :width="width"
     />
+
+    <div style="float: left">
+      <v-switch
+        v-model="switch_por_gastar"
+        label="Por gastar"
+        dense
+        solo
+        color="#F47975"
+        @change="setPorGastar()"
+      ></v-switch>
+    </div>
   </div>
 </template>
   
@@ -45,7 +56,10 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  delayed: null,
+
+  por_gastar: [],
+  gastos_generales: [],
+  costos_directos: [],
   components: { Bar, selectGraphic },
   props: {
     chartId: {
@@ -79,6 +93,7 @@ export default {
   },
   data() {
     return {
+      switch_por_gastar: true,
       chartData: {
         labels: [
           "Enero",
@@ -150,6 +165,24 @@ export default {
     };
   },
   methods: {
+    setPorGastar() {
+      this.chartData.datasets[0].data = []
+      this.costos_directos.map((val, index) => {
+        //12= acumulado
+        if (index != 12) {
+          if (this.switch_por_gastar) {
+            let sum =
+              val.value +
+              this.por_gastar[index].value +
+              this.gastos_generales[index].value;
+            this.chartData.datasets[0].data.push(sum);
+          } else {
+            let sum = val.value + this.gastos_generales[index].value;
+            this.chartData.datasets[0].data.push(sum);
+          }
+        }
+      });
+    },
     async fethData() {
       let url = this.$route.query.url;
 
@@ -173,16 +206,17 @@ export default {
       };
 
       await axios(config).then((respuestas) => {
-        let gastos_generales = respuestas.data[0].gastos_generales.suma.months;
-        let por_gastar = respuestas.data[0].por_gastar.suma.months;
+        this.gastos_generales = respuestas.data[0].gastos_generales.suma.months;
+        this.por_gastar = respuestas.data[0].por_gastar.suma.months;
+        this.costos_directos = respuestas.data[0].costos_directos.suma.months;
 
-        respuestas.data[0].costos_directos.suma.months.map((val, index) => {
+        this.costos_directos.map((val, index) => {
           //12= acumulado
           if (index != 12) {
             let sum =
               val.value +
-              por_gastar[index].value +
-              gastos_generales[index].value;
+              this.por_gastar[index].value +
+              this.gastos_generales[index].value;
             this.chartData.datasets[0].data.push(sum);
           }
         });
