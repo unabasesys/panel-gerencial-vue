@@ -11,8 +11,7 @@
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
             <span class="nunito-semi-bold-bright-gray-24px"
-              >Buen día, {{ username }}!</span
-            >
+              >Buen día, {{ username }}!</span>
           </v-col>
         </v-row>
 

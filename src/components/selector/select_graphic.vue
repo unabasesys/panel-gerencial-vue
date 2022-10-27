@@ -29,7 +29,7 @@ export default {
   font-size: 12px;
 }
 
-.v-input__slot {
+.customSelect > .v-input__control > .v-input__slot {
   background-color: #f6f7f8!important;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px!important;
 }
