@@ -1,25 +1,28 @@
 <template>
   <div>
-      <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
-      <selectGraphic />
-      <Bar
-        :chart-options="chartOptions"
-        :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
-        :css-classes="cssClasses"
-        :styles="styles"
-        :height="height"
-        :width="width"
-      />
+    <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
+    <selectGraphic />
+    <Bar
+      :chart-options="chartOptions"
+      :chart-data="chartData"
+      :chart-id="chartId"
+      :dataset-id-key="datasetIdKey"
+      :plugins="plugins"
+      :css-classes="cssClasses"
+      :styles="styles"
+      :height="height"
+      :width="width"
+    />
   </div>
 </template>
   
   <script>
 import { Bar } from "vue-chartjs/legacy";
+import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
+import numeral from "numeral";
+
 import {
   Chart as ChartJS,
   Title,
@@ -42,6 +45,7 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
+  delayed: null,
   components: { Bar, selectGraphic },
   props: {
     chartId: {
@@ -88,24 +92,24 @@ export default {
           "Septiembre",
           "Octubre",
           "Noviembre",
-          "Diciembre"
+          "Diciembre",
         ],
         datasets: [
           {
             label: "Compras",
             backgroundColor: "#F47975",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10],
+            data: [],
           },
           {
             label: "Ventas",
             backgroundColor: "#69DFC0",
-            data: [40, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10],
+            data: [],
           },
         ],
       },
       chartOptions: {
         categoryPercentage: 0.8, // here
-        barPercentage: 0.98, // here
+        barPercentage: 0.9, // here
         plugins: {
           legend: {
             labels: {
@@ -123,9 +127,14 @@ export default {
         scales: {
           y: {
             ticks: {
+              beginAtZero: true,
               // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
-                return value + " %";
+                return (
+                  numeral(value / 1000)
+                    .format("$ 0,0")
+                    .replaceAll(",", ".") + " K"
+                );
               },
             },
           },
@@ -139,6 +148,57 @@ export default {
         },
       },
     };
+  },
+  methods: {
+    async fethData() {
+      let url = this.$route.query.url;
+
+      let date = new Date();
+
+      let c_date =
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-compras",
+        data: {
+          hostname: "https://" + url,
+          date_from: date.getFullYear(),
+          por_gastar: true,
+        },
+      };
+
+      await axios(config).then((respuestas) => {
+        let gastos_generales = respuestas.data[0].gastos_generales.suma.months;
+        let por_gastar = respuestas.data[0].por_gastar.suma.months;
+
+        respuestas.data[0].costos_directos.suma.months.map((val, index) => {
+          //12= acumulado
+          if (index != 12) {
+            let sum =
+              val.value +
+              por_gastar[index].value +
+              gastos_generales[index].value;
+            this.chartData.datasets[0].data.push(sum);
+          }
+        });
+        debugger;
+        respuestas.data[0].ventas.suma.months.map((val, index) => {
+          //12= acumulado
+          if (index != 12) {
+            this.chartData.datasets[1].data.push(val.value);
+          }
+        });
+      });
+    },
+  },
+
+  mounted() {
+    this.fethData();
   },
 };
 </script>

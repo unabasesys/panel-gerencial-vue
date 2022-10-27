@@ -11,7 +11,7 @@
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
             <span class="nunito-semi-bold-bright-gray-24px"
-              >Buen día, {{ user }}!</span
+              >Buen día, {{ username }}!</span
             >
           </v-col>
         </v-row>
@@ -128,7 +128,7 @@ export default {
   },
   data() {
     return {
-      username: this.$route.params.username,
+      username: this.$route.query.user,
       user: "",
       activeAside: true,
       activeNav: true,

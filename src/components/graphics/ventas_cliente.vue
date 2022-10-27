@@ -1,18 +1,18 @@
 <template>
   <div>
-      <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
-      <selectGraphic />
-      <Bar
-        :chart-options="chartOptions"
-        :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
-        :css-classes="cssClasses"
-        :styles="styles"
-        :height="height"
-        :width="width"
-      />
+    <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
+    <selectGraphic />
+    <Bar
+      :chart-options="chartOptions"
+      :chart-data="chartData"
+      :chart-id="chartId"
+      :dataset-id-key="datasetIdKey"
+      :plugins="plugins"
+      :css-classes="cssClasses"
+      :styles="styles"
+      :height="height"
+      :width="width"
+    />
   </div>
 </template>
   
@@ -110,7 +110,11 @@ export default {
             ticks: {
               // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
-                return numeral(value/1000).format('$ 0,0').replace(',','.') + " K";
+                return (
+                  numeral(value / 1000)
+                    .format("$ 0,0")
+                    .replaceAll(",", ".") + " K"
+                );
               },
             },
           },
@@ -127,13 +131,6 @@ export default {
   },
 
   methods: {
-    parse(num) {
-      return String(
-        new Intl.NumberFormat("de-DE").format(
-          parseFloat(Math.round(String(num).replace(",", ".")))
-        )
-      );
-    },
     async fethData() {
       let url = this.$route.query.url;
 
@@ -159,8 +156,8 @@ export default {
       };
 
       const cutName = (name) => {
-        return name.length > 5 ? name.substring(0, 12) + '...' : name
-      }
+        return name.length > 5 ? name.substring(0, 12) + "..." : name;
+      };
 
       axios(config).then((respuestas) => {
         var size = 10;
