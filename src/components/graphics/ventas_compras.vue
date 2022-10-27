@@ -1,7 +1,6 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
-    <selectGraphic />
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -12,6 +11,7 @@
       :styles="styles"
       :height="height"
       :width="width"
+      class="mt-6"
     />
 
     <div style="float: left">

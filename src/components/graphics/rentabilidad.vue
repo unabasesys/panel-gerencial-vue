@@ -2,7 +2,23 @@
   <div>
     <span class="nunito-bold-bright-gray-18px">Rentabilidad año en curso</span>
 
-    <selectGraphic />
+    <v-row class="mr-2">
+      <v-col cols="12" md="12">
+        <v-select
+          :items="items"
+          v-model="periodoSelect"
+          label="Periodo"
+          class="customSelect"
+          solo
+          dense
+          @change="setRentabilidadPeriodo()"
+        >
+          <template slot="append">
+            <v-icon size="5">ub-arrow_down</v-icon>
+          </template>
+        </v-select>
+      </v-col>
+    </v-row>
 
     <Pie
       :chart-options="chartOptions"
@@ -72,7 +88,8 @@ export default {
   },
   data() {
     return {
-      items: ["Foo", "Bar", "Fizz", "Buzz"],
+      items: ["2021", "2022"],
+      periodoSelect: "",
       chartData: {
         labels: ["Total venta", "Rentabilidad"],
         datasets: [
@@ -86,17 +103,29 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          labels: [
-            {
-              render: "percentage",
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              labels: (ttItem) => {
+                
+                return ttItem;
+              },
             },
-          ],
-        },
-        tooltips: {
-          callbacks: {
-            label: function (tooltipItem, data) {
-              return 0
+          },
+          /** Imported from a question linked above. 
+          Apparently Works for ChartJS V2 **/
+          datalabels: {
+            formatter: (value, dnct1) => {
+              let sum = 0;
+              let dataArr = dnct1.chart.data.datasets[0].data;
+              dataArr.map((data) => {
+                sum += Number(data);
+              });
+
+              let percentage = ((value * 100) / sum).toFixed(2) + "%";
+              return percentage;
             },
+            color: "#ff3",
           },
         },
       },
@@ -104,13 +133,16 @@ export default {
   },
 
   methods: {
-    async fethData() {
+    async setRentabilidadPeriodo() {
+      this.fethData(this.periodoSelect);
+    },
+    async fethData(year = "") {
       let url = this.$route.query.url;
-
+      this.chartData.datasets[0].data = [];
       let date = new Date();
-
       let c_date =
         date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+      const year_ = year != "" ? year : date.getFullYear();
 
       let config = {
         headers: {
@@ -121,7 +153,7 @@ export default {
         url: "https://" + url + "/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
-          date_from: date.getFullYear(),
+          date_from: year_,
           por_gastar: true,
         },
       };

@@ -1,7 +1,7 @@
 <template>
   <v-row class="mr-2">
     <v-col cols="12" md="12">
-      <v-select :items="items" label="Mensual" class="customSelect" solo dense>
+      <v-select :items="items" label="Periodo" class="customSelect" solo dense>
         <template slot="append">
           <v-icon size="5">ub-arrow_down</v-icon>
         </template>
@@ -14,7 +14,7 @@
 export default {
   data() {
     return {
-      items: ["Foo", "Bar", "Fizz", "Buzz"],
+      items: ["2021", "2022"],
     };
   },
 };
