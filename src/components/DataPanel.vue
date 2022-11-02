@@ -268,7 +268,7 @@ import TipoCambio from "../components/TipoCambio.vue";
 import axios from "axios";
 import { mapMutations, mapState, mapGetters } from "vuex";
 import SelectOption from "./SelectOption.vue";
-
+import draggable from "vuedraggable";
 export default {
   components: {
     Panel,
@@ -276,6 +276,7 @@ export default {
     SelectOption,
     Aside,
     TipoCambio,
+    draggable
   },
   data() {
     return {
