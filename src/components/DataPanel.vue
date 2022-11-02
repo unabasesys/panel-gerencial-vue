@@ -5,7 +5,7 @@
       <v-btn text color="white" @click="snackbar = false"> Cerrar </v-btn>
     </v-snackbar>
     <div>
-      <Aside :username="username" />
+      <!-- <Aside :username="username" /> -->
 
       <Navbar />
       <div id="container" class="content no-collapsed">
@@ -1012,8 +1012,7 @@ export default {
 }
 
 .no-collapsed {
-  margin-left: 220px;
-  margin-top: 30px;
+  padding: 50px;
 }
 
 .collapsed {

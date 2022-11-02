@@ -29,12 +29,7 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item link @click="toRoute('Dashboard')" color="#03D6F9" hover="#03D6F9">
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Home</v-list-item-title>
-        </v-list-item>
+       
 
         <v-list-item link @click="toRoute('Panel')" color="#03D6F9" hover="#03D6F9">
           <v-list-item-icon>
@@ -43,12 +38,7 @@
           <v-list-item-title>Panel</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link color="#03D6F9">
-          <v-list-item-icon>
-            <v-icon>mdi-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Configuración</v-list-item-title>
-        </v-list-item>
+        
       </v-list>
     </v-navigation-drawer>
   </div>

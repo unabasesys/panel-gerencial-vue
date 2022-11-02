@@ -1,7 +1,7 @@
 <template>
   <div id="navbar">
     <v-app-bar color="white" elevation="2" class="navbar">
-      <v-app-bar-nav-icon @click="setAside()"></v-app-bar-nav-icon>
+      <!-- <v-app-bar-nav-icon @click="setAside()"></v-app-bar-nav-icon> -->
       <v-spacer></v-spacer>
       <v-btn icon @click="closeSession()">
         <Icon icon="subway:power-batton" color="black" />
@@ -49,7 +49,6 @@ export default {
 .navbar {
   position: fixed;
   z-index: 2;
-  margin-left: 200px;
 }
 
 .navbar-collapsed{
