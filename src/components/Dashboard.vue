@@ -11,7 +11,8 @@
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
             <span class="nunito-semi-bold-bright-gray-24px"
-              >Buen día, {{ username }}!</span>
+              >Buen día, {{ username }}!</span
+            >
           </v-col>
         </v-row>
 
@@ -114,6 +115,7 @@ import Tareas from "../components/graphics/tareas.vue";
 import VentasCliente from "../components/graphics/ventas_cliente.vue";
 import VentasCompras from "../components/graphics/ventas_compras.vue";
 import axios from "axios";
+import rentabilidadVue from "../components/graphics/rentabilidad.vue";
 
 export default {
   components: {
@@ -164,6 +166,13 @@ export default {
           percent: 0,
         },
       ],
+      //Rentabilidad
+      acumulado: [],
+      final: [],
+
+      //Ventas compras
+      ventas: [],
+      compras: [],
     };
   },
 
@@ -185,7 +194,19 @@ export default {
       let date = new Date();
       let dateTo =
         date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+
+      let date_ = new Date(date.getFullYear(), date.getMonth(), 1);
+      let dateFrom =
+        date_.getDate() +
+        "-" +
+        (date_.getMonth() + 1) +
+        "-" +
+        date_.getFullYear();
+
+
+      debugger
       //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
+
       let config = {
         headers: {
           Accept: "application/json",
@@ -195,17 +216,29 @@ export default {
         url: "https://" + url + "/node/get-indicadores",
         data: {
           hostname: "https://" + url,
-          date_from: 2022,
+          date_from: dateFrom,
           date_to: dateTo,
         },
       };
 
       axios(config).then((respuestas) => {
-        respuestas.data[0].rows.forEach((val) => {
-          this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
-          this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
-          this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
-        });
+        debugger;
+
+        this.indicadores[0].nValue = this.formatNumber(
+          respuestas.data[0].por_vencer
+        );
+        this.indicadores[1].nValue = this.formatNumber(
+          respuestas.data[0].por_facturar
+        );
+        this.indicadores[2].nValue = this.formatNumber(
+          respuestas.data[0].por_cobrar
+        );
+        this.indicadores[3].nValue = this.formatNumber(
+          respuestas.data[0].por_justificar
+        );
+        this.indicadores[4].nValue = this.formatNumber(
+          respuestas.data[0].por_pagar
+        );
       });
     },
 
@@ -228,7 +261,6 @@ export default {
       };
 
       let sid_ = sid();
-      debugger
 
       let getInfo = async () => {
         let config = {
@@ -244,15 +276,97 @@ export default {
       };
 
       getInfo().then((res) => {
-        debugger
         if (!res.data.logged_in) {
           location.href = `${window.location.origin}`;
         }
       });
     },
+
+    async fetchData() {
+      const url = this.$route.query.url;
+      let date = new Date();
+      let dateTo =
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+
+      let date_ = new Date(date.getFullYear(), date.getMonth(), 0);
+      let dateFrom =
+        date_.getDate() +
+        "-" +
+        (date_.getMonth() + 1) +
+        "-" +
+        date_.getFullYear();
+
+      let config_indicadores = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-indicadores",
+        data: {
+          hostname: "https://" + url,
+          date_from: dateFrom,
+          date_to: dateTo,
+        },
+      };
+
+      let config_ventas_compras = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-compras",
+        data: {
+          hostname: "https://" + url,
+          date_from: date_.getFullYear(),
+          por_gastar: true,
+        },
+      };
+
+      let data_indicadores = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_indicadores)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
+      let data_ventas_compras = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_ventas_compras)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
+      Promise.all([data_indicadores(), data_ventas_compras()]).then(
+        (respuestas) => {
+          respuestas[0][0].rows.forEach((val) => {
+            this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
+            this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
+            this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
+          });
+
+          try {
+          } catch (error) {
+            console.log(error);
+          } finally {
+          }
+        }
+      );
+    },
   },
 
-  mounted() {
+  async mounted() {
     let is = this.$route.query.from;
     if (is === "v3") {
       //this.verifySession();
@@ -263,6 +377,7 @@ export default {
         .getElementsByClassName("no-collapsed")[0]
         .classList.remove("no-collapsed");
       this.fethDataIndicadores();
+      //this.fetchData();
     }
   },
 };
