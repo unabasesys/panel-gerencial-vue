@@ -188,6 +188,7 @@ export default {
     async fethDataIndicadores() {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
+      debugger
       if (sid != undefined && sid != "" && url != undefined && url != "") {
         let date = new Date();
         let dateTo =
