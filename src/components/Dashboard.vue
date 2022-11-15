@@ -186,57 +186,63 @@ export default {
     },
 
     async fethDataIndicadores() {
-      let url = this.$route.query.url;
-      let date = new Date();
-      let dateTo =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      if (sid != undefined && sid != "" && url != undefined && url != "") {
+        let date = new Date();
+        let dateTo =
+          date.getDate() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getFullYear();
 
-      let date_ = new Date(date.getFullYear(), date.getMonth(), 1);
-      let dateFrom =
-        date_.getDate() +
-        "-" +
-        (date_.getMonth() + 1) +
-        "-" +
-        date_.getFullYear();
+        let date_ = new Date(date.getFullYear(), date.getMonth(), 1);
+        let dateFrom =
+          date_.getDate() +
+          "-" +
+          (date_.getMonth() + 1) +
+          "-" +
+          date_.getFullYear();
 
-
-      debugger
-      //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
-
-      let config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        url: "https://" + url + "/node/get-indicadores",
-        data: {
-          hostname: "https://" + url,
-          date_from: dateFrom,
-          date_to: dateTo,
-          sid: "UNABASE_AQIArVHmO18n*E2zwmyfI1thON01tjRhpYWUGqp2zaf5Rf9HiunfDaS7R7NujNcS-TMLlTAXNxXxj4O04mRCjOLRwg__",
-        },
-      };
-
-      axios(config).then((respuestas) => {
         debugger;
+        //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
 
-        this.indicadores[0].nValue = this.formatNumber(
-          respuestas.data[0].por_vencer
-        );
-        this.indicadores[1].nValue = this.formatNumber(
-          respuestas.data[0].por_facturar
-        );
-        this.indicadores[2].nValue = this.formatNumber(
-          respuestas.data[0].por_cobrar
-        );
-        this.indicadores[3].nValue = this.formatNumber(
-          respuestas.data[0].por_justificar
-        );
-        this.indicadores[4].nValue = this.formatNumber(
-          respuestas.data[0].por_pagar
-        );
-      });
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://" + url + "/node/get-indicadores",
+          data: {
+            hostname: "https://" + url,
+            date_from: dateFrom,
+            date_to: dateTo,
+            sid,
+          },
+        };
+
+        axios(config).then((respuestas) => {
+          debugger;
+
+          this.indicadores[0].nValue = this.formatNumber(
+            respuestas.data[0].por_vencer
+          );
+          this.indicadores[1].nValue = this.formatNumber(
+            respuestas.data[0].por_facturar
+          );
+          this.indicadores[2].nValue = this.formatNumber(
+            respuestas.data[0].por_cobrar
+          );
+          this.indicadores[3].nValue = this.formatNumber(
+            respuestas.data[0].por_justificar
+          );
+          this.indicadores[4].nValue = this.formatNumber(
+            respuestas.data[0].por_pagar
+          );
+        });
+      }
     },
 
     async verifySession() {

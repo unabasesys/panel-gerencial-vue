@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     setPorGastar() {
-      this.chartData.datasets[0].data = []
+      this.chartData.datasets[0].data = [];
       this.costos_directos.map((val, index) => {
         //12= acumulado
         if (index != 12) {
@@ -184,50 +184,57 @@ export default {
       });
     },
     async fethData() {
-      let url = this.$route.query.url;
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      if (sid != undefined && sid != "" && url != undefined && url != "") {
+        let date = new Date();
+        let c_date =
+          date.getDate() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getFullYear();
 
-      let date = new Date();
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://" + url + "/node/get-ventas-compras",
+          data: {
+            hostname: "https://" + url,
+            date_from: date.getFullYear(),
+            por_gastar: true,
+            sid,
+          },
+        };
 
-      let c_date =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+        await axios(config).then((respuestas) => {
+          this.gastos_generales =
+            respuestas.data[0].gastos_generales.suma.months;
+          this.por_gastar = respuestas.data[0].por_gastar.suma.months;
+          this.costos_directos = respuestas.data[0].costos_directos.suma.months;
 
-      let config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        url: "https://" + url + "/node/get-ventas-compras",
-        data: {
-          hostname: "https://" + url,
-          date_from: date.getFullYear(),
-          por_gastar: true,
-        },
-      };
+          this.costos_directos.map((val, index) => {
+            //12= acumulado
+            if (index != 12) {
+              let sum =
+                val.value +
+                this.por_gastar[index].value +
+                this.gastos_generales[index].value;
+              this.chartData.datasets[0].data.push(sum);
+            }
+          });
 
-      await axios(config).then((respuestas) => {
-        this.gastos_generales = respuestas.data[0].gastos_generales.suma.months;
-        this.por_gastar = respuestas.data[0].por_gastar.suma.months;
-        this.costos_directos = respuestas.data[0].costos_directos.suma.months;
-
-        this.costos_directos.map((val, index) => {
-          //12= acumulado
-          if (index != 12) {
-            let sum =
-              val.value +
-              this.por_gastar[index].value +
-              this.gastos_generales[index].value;
-            this.chartData.datasets[0].data.push(sum);
-          }
+          respuestas.data[0].ventas.suma.months.map((val, index) => {
+            //12= acumulado
+            if (index != 12) {
+              this.chartData.datasets[1].data.push(val.value);
+            }
+          });
         });
-        
-        respuestas.data[0].ventas.suma.months.map((val, index) => {
-          //12= acumulado
-          if (index != 12) {
-            this.chartData.datasets[1].data.push(val.value);
-          }
-        });
-      });
+      }
     },
   },
 

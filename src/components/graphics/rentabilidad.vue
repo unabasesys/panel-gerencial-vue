@@ -107,7 +107,6 @@ export default {
             enabled: true,
             callbacks: {
               labels: (ttItem) => {
-                
                 return ttItem;
               },
             },
@@ -137,33 +136,43 @@ export default {
       this.fethData(this.periodoSelect);
     },
     async fethData(year = "") {
-      let url = this.$route.query.url;
-      this.chartData.datasets[0].data = [];
-      let date = new Date();
-      let c_date =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-      const year_ = year != "" ? year : date.getFullYear();
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      if (sid != undefined && sid != "" && url != undefined && url != "") {
+        this.chartData.datasets[0].data = [];
+        let date = new Date();
+        let c_date =
+          date.getDate() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getFullYear();
+        const year_ = year != "" ? year : date.getFullYear();
 
-      let config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        url: "https://" + url + "/node/get-ventas-compras",
-        data: {
-          hostname: "https://" + url,
-          date_from: year_,
-          por_gastar: true,
-        },
-      };
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://" + url + "/node/get-ventas-compras",
+          data: {
+            hostname: "https://" + url,
+            date_from: year_,
+            por_gastar: true,
+            sid,
+          },
+        };
 
-      await axios(config).then((respuestas) => {
-        let acumulado_ventas = respuestas.data[0].ventas.suma.months[12].value;
-        let rentabilidad_final = respuestas.data[0].resultado.months[12].value;
-        this.chartData.datasets[0].data.push(acumulado_ventas);
-        this.chartData.datasets[0].data.push(rentabilidad_final);
-      });
+        await axios(config).then((respuestas) => {
+          let acumulado_ventas =
+            respuestas.data[0].ventas.suma.months[12].value;
+          let rentabilidad_final =
+            respuestas.data[0].resultado.months[12].value;
+          this.chartData.datasets[0].data.push(acumulado_ventas);
+          this.chartData.datasets[0].data.push(rentabilidad_final);
+        });
+      }
     },
   },
 

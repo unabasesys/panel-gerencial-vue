@@ -104,33 +104,44 @@ export default {
     },
 
     async fethData() {
-      let url = this.$route.query.url;
-      let username = this.$route.query.user;
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      const username = this.$route.query.user;
 
-      let date = new Date();
-      let currentYear = date.getFullYear();
-      let prevYear = currentYear - 1;
+      if (
+        sid != undefined &&
+        sid != "" &&
+        url != undefined &&
+        url != "" &&
+        username != undefined &&
+        username != ""
+      ) {
+        let date = new Date();
+        let currentYear = date.getFullYear();
+        let prevYear = currentYear - 1;
 
-      let config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        url: "https://" + url + "/node/get-tareas",
-        data: {
-          date_from: 2022,
-          date_to: 2022,
-          user: username,
-          hostname: "https://" + url,
-          sid: "UNABASE_AQIArVHmO18n*E2zwmyfI1thON01tjRhpYWUGqp2zaf5Rf9HiunfDaS7R7NujNcS-TMLlTAXNxXxj4O04mRCjOLRwg__",
-        },
-      };
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://" + url + "/node/get-tareas",
+          data: {
+            date_from: 2022,
+            date_to: 2022,
+            user: username,
+            hostname: "https://" + url,
+            sid,
+          },
+        };
 
-      axios(config).then((respuestas) => {
-        this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar;
-        this.indicadores[1].nValue = respuestas.data[0].total_rendiciones_vencidas;
-      });
+        axios(config).then((respuestas) => {
+          this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar;
+          this.indicadores[1].nValue =
+            respuestas.data[0].total_rendiciones_vencidas;
+        });
+      }
     },
   },
 

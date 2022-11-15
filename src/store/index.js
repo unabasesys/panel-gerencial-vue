@@ -24,6 +24,8 @@ export default new Vuex.Store({
             brasil: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjQ0LjE5OS4xNjEuMTUxIiwicG9ydCI6Ijg0NTAiLCJuYW1lIjoiUFJJTU9DT05URU5UQlJBU0lMIiwiaWQiOiIzMjIwNiIsImlhdCI6MTY1ODc2NDQ3MCwiZXhwIjoxNjkwMzAwNDcwfQ.TGu24h8E35ZPR6Zbqjk5k8sW_HhdNtE5pgX4eF5eFwc'
         },
 
+        sid: '',
+
         aside: {
             estado: false,
         },
