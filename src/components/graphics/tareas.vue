@@ -45,7 +45,7 @@
           <div class="row" style="margin-top: -10px">
             <div cols="6" style="min-width: 115px">
               <span class="nunito-semi-bold-santas-gray-10px ml-6"
-                >Information text</span
+                >Año en curso</span
               >
             </div>
 
@@ -79,7 +79,7 @@ export default {
           name: "Rendiciones vencidas",
           nValue: 0,
           icon: "ub-papel",
-          percent: 15,
+          percent: 0,
         },
       ],
     };
@@ -94,10 +94,6 @@ export default {
           "_blank" // <- This is what makes it open in a new window.
         );
       }
-    },
-    randomNum() {
-      let res = parseInt(Math.random() * 20);
-      return this.formatNumber(res);
     },
     formatNumber(num) {
       return String(
@@ -127,6 +123,7 @@ export default {
           date_to: 2022,
           user: username,
           hostname: "https://" + url,
+          sid: "UNABASE_AQIArVHmO18n*E2zwmyfI1thON01tjRhpYWUGqp2zaf5Rf9HiunfDaS7R7NujNcS-TMLlTAXNxXxj4O04mRCjOLRwg__",
         },
       };
 

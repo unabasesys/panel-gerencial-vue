@@ -58,7 +58,7 @@
               <div class="row">
                 <div cols="6" style="min-width: 150px">
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
-                    >Information text</span
+                    >Año en curso</span
                   >
                 </div>
 
@@ -151,13 +151,13 @@ export default {
           name: "Facturas por cobrar",
           nValue: 0,
           icon: "ub-por_cobrar",
-          percent: 35,
+          percent: 0,
         },
         {
           name: "Por justificar",
           nValue: 0,
           icon: "ub-por_cobrar",
-          percent: 35,
+          percent: 0,
         },
         {
           name: "Por pagar",
@@ -177,10 +177,6 @@ export default {
   },
 
   methods: {
-    randomNum() {
-      let res = parseInt(Math.random() * (20000000 - 1000));
-      return this.formatNumber(res);
-    },
     formatNumber(num) {
       return String(
         new Intl.NumberFormat("de-DE").format(
@@ -218,6 +214,7 @@ export default {
           hostname: "https://" + url,
           date_from: dateFrom,
           date_to: dateTo,
+          sid: "UNABASE_AQIArVHmO18n*E2zwmyfI1thON01tjRhpYWUGqp2zaf5Rf9HiunfDaS7R7NujNcS-TMLlTAXNxXxj4O04mRCjOLRwg__",
         },
       };
 
