@@ -153,6 +153,7 @@ export default {
             estado_cerrado: true,
             date_from: 2022,
             date_to: 2022,
+            sid
           },
         };
 

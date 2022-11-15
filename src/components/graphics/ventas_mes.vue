@@ -1,42 +1,42 @@
 <template>
   <div>
-      <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
-      <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1H</span>
-        </div>
-
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">3H</span>
-        </div>
-
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">5H</span>
-        </div>
-
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1D</span>
-        </div>
-
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1W</span>
-        </div>
-
-        <div class="btn-graphic-div">
-          <span class="nunito-semi-bold-santas-gray-10px">1M</span>
-        </div>
+    <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
+    <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">1H</span>
       </div>
-      <Bar
-        :chart-options="chartOptions"
-        :chart-data="chartData"
-        :chart-id="chartId"
-        :dataset-id-key="datasetIdKey"
-        :plugins="plugins"
-        :css-classes="cssClasses"
-        :styles="styles"
-        :height="height"
-        :width="width"
-      />
+
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">3H</span>
+      </div>
+
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">5H</span>
+      </div>
+
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">1D</span>
+      </div>
+
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">1W</span>
+      </div>
+
+      <div class="btn-graphic-div">
+        <span class="nunito-semi-bold-santas-gray-10px">1M</span>
+      </div>
+    </div>
+    <Bar
+      :chart-options="chartOptions"
+      :chart-data="chartData"
+      :chart-id="chartId"
+      :dataset-id-key="datasetIdKey"
+      :plugins="plugins"
+      :css-classes="cssClasses"
+      :styles="styles"
+      :height="height"
+      :width="width"
+    />
   </div>
 </template>
 
@@ -92,8 +92,7 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     plugins: {
       type: Object,
@@ -158,7 +157,11 @@ export default {
             ticks: {
               // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
-                return numeral(value/1000).format('$ 0,0').replace(',','.') + " K";
+                return (
+                  numeral(value / 1000)
+                    .format("$ 0,0")
+                    .replace(",", ".") + " K"
+                );
               },
             },
           },
@@ -183,40 +186,43 @@ export default {
       this.fethData(currentYear);
     },
     async fethData(year) {
-      let url = this.$route.query.url;
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      if (sid != undefined && sid != "" && url != undefined && url != "") {
+        let date = new Date();
+        let currentYear = date.getFullYear();
+        let prevYear = currentYear - 1;
 
-      let date = new Date();
-      let currentYear = date.getFullYear();
-      let prevYear = currentYear - 1;
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://" + url + "/node/get-ventas-mes",
+          data: {
+            hostname: "https://" + url,
+            year,
+            sid
+          },
+        };
 
-      let config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        url: "https://" + url + "/node/get-ventas-mes",
-        data: {
-          hostname: "https://" + url,
-          year,
-        },
-      };
-
-      axios(config).then((respuestas) => {
-        respuestas.data[0].forEach((val) => {
-          if (year == prevYear) {
-            this.chartData.datasets[1].data.push(val[1]);
-          }
-          if (year == currentYear) {
-            this.chartData.datasets[2].data.push(val[1]);
-          }
+        axios(config).then((respuestas) => {
+          respuestas.data[0].forEach((val) => {
+            if (year == prevYear) {
+              this.chartData.datasets[1].data.push(val[1]);
+            }
+            if (year == currentYear) {
+              this.chartData.datasets[2].data.push(val[1]);
+            }
+          });
         });
-      });
+      }
     },
   },
 
   mounted() {
-    this.init()
+    this.init();
   },
 };
 </script>
