@@ -1,8 +1,5 @@
 <template>
   <div class="background-general">
-    <Aside :username="username" v-if="activeAside" />
-    <Navbar v-if="activeNav" />
-
     <div id="container" class="content no-collapsed">
       <div class="ml-5">
         <v-row>
