@@ -378,9 +378,7 @@ export default {
       this.snackbar_message = message;
     },
     async init() {
-      if (this.checkSession()) {
         this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
-      }
     },
     async checkSession() {
       let success = false;
