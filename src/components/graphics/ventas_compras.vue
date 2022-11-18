@@ -165,21 +165,24 @@ export default {
     };
   },
   methods: {
+    loadGraph(data) {
+      data.forEach((val) => {
+        this.chartData.datasets[0].data.push(val.compras);
+        this.chartData.datasets[1].data.push(val.ventas);
+      });
+
+      this.costos_directos = data;
+    },
+
     setPorGastar() {
       this.chartData.datasets[0].data = [];
       this.costos_directos.map((val, index) => {
-        //12= acumulado
-        if (index != 12) {
-          if (this.switch_por_gastar) {
-            let sum =
-              val.value +
-              this.por_gastar[index].value +
-              this.gastos_generales[index].value;
-            this.chartData.datasets[0].data.push(sum);
-          } else {
-            let sum = val.value + this.gastos_generales[index].value;
-            this.chartData.datasets[0].data.push(sum);
-          }
+        if (this.switch_por_gastar) {
+          let sum = val.compras + val.por_gastar;
+          this.chartData.datasets[0].data.push(sum);
+        } else {
+          let sum = val.compras;
+          this.chartData.datasets[0].data.push(sum);
         }
       });
     },
@@ -236,10 +239,6 @@ export default {
         });
       }
     },
-  },
-
-  mounted() {
-    this.fethData();
   },
 };
 </script>

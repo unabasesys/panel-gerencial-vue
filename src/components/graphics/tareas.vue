@@ -86,6 +86,10 @@ export default {
   },
 
   methods: {
+    loadGraph(data) {
+      this.indicadores[0].nValue = data[0].docs_aprobar;
+      this.indicadores[1].nValue = data[0].total_rendiciones;
+    },
     toRendiciones() {
       let url = this.$route.query.url;
       if (url != undefined) {
@@ -137,16 +141,13 @@ export default {
         };
 
         axios(config).then((respuestas) => {
+          debugger;
           this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar;
           this.indicadores[1].nValue =
             respuestas.data[0].total_rendiciones_vencidas;
         });
       }
     },
-  },
-
-  async mounted() {
-    this.fethData();
   },
 };
 </script>

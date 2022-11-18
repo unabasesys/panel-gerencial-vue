@@ -178,6 +178,12 @@ export default {
   },
 
   methods: {
+
+    loadGraph(data) {
+      this.init()
+    },
+
+
     init() {
       this.fethData(2021);
 
@@ -221,9 +227,6 @@ export default {
     },
   },
 
-  mounted() {
-    this.init();
-  },
 };
 </script>
 

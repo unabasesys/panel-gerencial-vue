@@ -130,7 +130,19 @@ export default {
     };
   },
 
+  computed: {},
+
   methods: {
+    loadGraph(data) {
+      const cutName = (name) => {
+        return name.length > 5 ? name.substring(0, 12) + "..." : name;
+      };
+
+      data.forEach((val) => {
+        this.chartData.labels.push(cutName(val.name));
+        this.chartData.datasets[0].data.push(val.data);
+      });
+    },
     async fethData() {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
@@ -153,7 +165,7 @@ export default {
             estado_cerrado: true,
             date_from: 2022,
             date_to: 2022,
-            sid
+            sid,
           },
         };
 
@@ -173,10 +185,6 @@ export default {
         });
       }
     },
-  },
-
-  mounted() {
-    this.fethData();
   },
 };
 </script>

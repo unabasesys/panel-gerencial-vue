@@ -132,6 +132,10 @@ export default {
   },
 
   methods: {
+    loadGraph(data) {
+      this.chartData.datasets[0].data.push(data[0].acumulado);
+      this.chartData.datasets[0].data.push(data[0].rentabilidad);
+    },
     async setRentabilidadPeriodo() {
       this.fethData(this.periodoSelect);
     },
@@ -174,10 +178,6 @@ export default {
         });
       }
     },
-  },
-
-  mounted() {
-    this.fethData();
   },
 };
 </script>

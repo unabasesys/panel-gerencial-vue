@@ -73,15 +73,15 @@
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <Ventas />
+              <Ventas ref="ventasMes" />
             </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
-              <Rentabilidad />
+              <Rentabilidad ref="rentabilidad" />
             </v-card>
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
-              <Tareas />
+              <Tareas ref="tareas" />
             </v-card>
           </v-col>
         </v-row>
@@ -89,12 +89,12 @@
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCliente />
+              <VentasCliente ref="ventasClienteGraph" />
             </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCompras />
+              <VentasCompras ref="ventasCompras" />
             </v-card>
           </v-col>
         </v-row>
@@ -168,8 +168,18 @@ export default {
       final: [],
 
       //Ventas compras
-      ventas: [],
+      ventas_compras: [],
       compras: [],
+
+      //Ventas cliente
+      ventas_cliente: [],
+      compras: [],
+
+      //Rentabilidad
+      rentabilidad: [],
+
+      //Tareas
+      tareas: [],
     };
   },
 
@@ -185,7 +195,7 @@ export default {
     async fethDataIndicadores() {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
-      debugger
+
       if (sid != undefined && sid != "" && url != undefined && url != "") {
         let date = new Date();
         let dateTo =
@@ -203,7 +213,6 @@ export default {
           "-" +
           date_.getFullYear();
 
-        debugger;
         //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
 
         let config = {
@@ -222,8 +231,6 @@ export default {
         };
 
         axios(config).then((respuestas) => {
-          debugger;
-
           this.indicadores[0].nValue = this.formatNumber(
             respuestas.data[0].por_vencer
           );
@@ -285,17 +292,36 @@ export default {
 
     async fetchData() {
       const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      const username = this.$route.query.user;
+
       let date = new Date();
       let dateTo =
         date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
 
-      let date_ = new Date(date.getFullYear(), date.getMonth(), 0);
+      let date_ = new Date(date.getFullYear(), date.getMonth(), 1);
       let dateFrom =
         date_.getDate() +
         "-" +
         (date_.getMonth() + 1) +
         "-" +
         date_.getFullYear();
+
+      let config_tareas = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-tareas",
+        data: {
+          date_from: 2022,
+          date_to: 2022,
+          user: username,
+          hostname: "https://" + url,
+          sid,
+        },
+      };
 
       let config_indicadores = {
         headers: {
@@ -308,6 +334,7 @@ export default {
           hostname: "https://" + url,
           date_from: dateFrom,
           date_to: dateTo,
+          sid,
         },
       };
 
@@ -322,6 +349,40 @@ export default {
           hostname: "https://" + url,
           date_from: date_.getFullYear(),
           por_gastar: true,
+        },
+      };
+
+      let currentYear = date.getFullYear();
+
+      let config_ventas_mes = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-mes",
+        data: {
+          hostname: "https://" + url,
+          year: currentYear,
+          sid,
+        },
+      };
+
+      let config_ventas_cliente = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/get-ventas-cliente",
+        data: {
+          hostname: "https://" + url,
+          fecha_asignacion: true,
+          estado_en_proceso: true,
+          estado_cerrado: true,
+          date_from: 2022,
+          date_to: 2022,
+          sid,
         },
       };
 
@@ -349,21 +410,138 @@ export default {
         });
       };
 
-      Promise.all([data_indicadores(), data_ventas_compras()]).then(
-        (respuestas) => {
-          respuestas[0][0].rows.forEach((val) => {
+      let data_ventas_mes = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_ventas_mes)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
+      let data_ventas_cliente = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_ventas_cliente)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
+      let data_tareas = () => {
+        return new Promise((resolve, reject) => {
+          axios(config_tareas)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
+      Promise.all([
+        data_indicadores(),
+        data_ventas_compras(),
+        data_ventas_mes(),
+        data_ventas_cliente(),
+        data_tareas(),
+      ]).then((respuestas) => {
+        try {
+          respuestas[0].forEach((val) => {
+            this.indicadores[0].nValue = this.formatNumber(val.por_vencer);
+            this.indicadores[1].nValue = this.formatNumber(val.por_facturar);
             this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
             this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
             this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
           });
 
-          try {
-          } catch (error) {
-            console.log(error);
-          } finally {
-          }
+          var size = 10;
+          var items = respuestas[3][0].clientes.slice(0, size).map((i) => {
+            return i;
+          });
+          items.forEach((val) => {
+            let data = {
+              name: val.nombre,
+              data: val.neto,
+            };
+            this.ventas_cliente.push(data);
+          });
+
+          //VENTAS MES
+          // respuestas[2][0].forEach((val) => {
+          //   let data = {
+          //     mes: val[0],
+          //     value: val[1],
+          //   };
+          //   this.ventas_mes.push(data);
+          // });
+
+          //VENTAS COMPRASS
+          const gastos_generales =
+            respuestas[1][0].gastos_generales.suma.months;
+          const por_gastar = respuestas[1][0].por_gastar.suma.months;
+          const costos_directos = respuestas[1][0].costos_directos.suma.months;
+
+          let object_ventas_compras = {};
+
+          costos_directos.forEach((val, index) => {
+            //12= acumulado
+            if (index != 12) {
+              let sum =
+                val.value +
+                por_gastar[index].value +
+                gastos_generales[index].value;
+
+              object_ventas_compras = {
+                compras: sum,
+                por_gastar: por_gastar[index].value,
+                ventas: respuestas[1][0].ventas.suma.months[index].value,
+              };
+              this.ventas_compras.push(object_ventas_compras);
+            }
+          });
+
+          //Rentabilidad
+          const acumulado_ventas =
+            respuestas[1][0].ventas.suma.months[12].value;
+          const rentabilidad_final =
+            respuestas[1][0].resultado.months[12].value;
+          let obj_rentabilidad = {
+            acumulado: acumulado_ventas,
+            rentabilidad: rentabilidad_final,
+          };
+
+          this.rentabilidad.push(obj_rentabilidad);
+
+          //TAREAS
+          const docs_aprobar = respuestas[4][0].total_doc_por_aprobar;
+          const total_rendiciones = respuestas[4][0].total_rendiciones_vencidas;
+
+          let obj_tareas = {
+            docs_aprobar,
+            total_rendiciones,
+          };
+
+          this.tareas.push(obj_tareas);
+
+          //Cargar demas graficos
+          this.$refs.ventasClienteGraph.loadGraph(this.ventas_cliente);
+          this.$refs.ventasMes.loadGraph(this.ventas_compras);
+          this.$refs.ventasCompras.loadGraph(this.ventas_compras);
+          this.$refs.rentabilidad.loadGraph(this.rentabilidad);
+          this.$refs.tareas.loadGraph(this.tareas);
+        } catch (error) {
+          console.log(error);
+        } finally {
         }
-      );
+      });
     },
   },
 
@@ -374,11 +552,8 @@ export default {
       this.activeAside = false;
       this.activeNav = false;
       this.user = this.$route.params.user;
-      document
-        .getElementsByClassName("no-collapsed")[0]
-        .classList.remove("no-collapsed");
-      this.fethDataIndicadores();
-      //this.fetchData();
+      //this.fethDataIndicadores();
+      this.fetchData();
     }
   },
 };
