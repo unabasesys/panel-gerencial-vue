@@ -219,7 +219,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/is-login",
+        url: "https://frank.unabase.com/node/is-login",
         data: {
           hostname: "https://" + url,
           sid,
