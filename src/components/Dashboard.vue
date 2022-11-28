@@ -221,7 +221,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: "https://" + url + "/node/get-indicadores",
+          url: "https://frank.unabase.com/node/get-indicadores",
           data: {
             hostname: "https://" + url,
             date_from: dateFrom,
@@ -313,7 +313,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-tareas",
+        url: "https://frank.unabase.com/node/get-tareas",
         data: {
           date_from: 2022,
           date_to: 2022,
@@ -329,7 +329,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-indicadores",
+        url: "https://frank.unabase.com/node/get-indicadores",
         data: {
           hostname: "https://" + url,
           date_from: dateFrom,
@@ -344,7 +344,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-ventas-compras",
+        url: "https://frank.unabase.com/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
           date_from: date_.getFullYear(),
@@ -360,7 +360,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-ventas-mes",
+        url: "https://frank.unabase.com/node/get-ventas-mes",
         data: {
           hostname: "https://" + url,
           year: currentYear,
@@ -374,7 +374,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://" + url + "/node/get-ventas-cliente",
+        url: "https://frank.unabase.com/node/get-ventas-cliente",
         data: {
           hostname: "https://" + url,
           fecha_asignacion: true,
