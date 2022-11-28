@@ -454,11 +454,12 @@ export default {
         data_tareas(),
       ]).then((respuestas) => {
         try {
+          debugger
           respuestas[0].forEach((val) => {
             this.indicadores[0].nValue = this.formatNumber(val.por_vencer);
             this.indicadores[1].nValue = this.formatNumber(val.por_facturar);
-            this.indicadores[2].nValue = this.formatNumber(val.por_facturar);
-            this.indicadores[3].nValue = this.formatNumber(val.por_cobrar);
+            this.indicadores[2].nValue = this.formatNumber(val.por_cobrar);
+            this.indicadores[3].nValue = this.formatNumber(val.por_justificar);
             this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
           });
 
