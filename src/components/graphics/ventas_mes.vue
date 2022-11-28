@@ -205,7 +205,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: "https://" + url + "/node/get-ventas-mes",
+          url: "https://frank.unabase.com/node/get-ventas-mes",
           data: {
             hostname: "https://" + url,
             year,
