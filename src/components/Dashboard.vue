@@ -1,16 +1,15 @@
 <template>
   <div class="background-general">
     <div style="width: 100%" v-if="loaded" id="loading-screen">
-        <div id="app">
-          <semipolar-spinner
-            :animation-duration="2000"
-            :size="120"
-            color="#20A789"
-          />
-        </div>
+      <div id="app">
+        <semipolar-spinner
+          :animation-duration="2000"
+          :size="120"
+          color="#20A789"
+        />
       </div>
+    </div>
     <div id="container" class="content no-collapsed">
-      
       <div class="ml-5">
         <v-row>
           <v-col cols="12" class="mt-5">
@@ -110,6 +109,9 @@
         </v-row>
       </div>
     </div>
+    <v-snackbar v-model="snackbar" :timeout="4000" top color="error">
+      <span>{{ snackbar_message }}</span>
+    </v-snackbar>
   </div>
 </template>
 
@@ -143,7 +145,9 @@ export default {
       user: "",
       activeAside: true,
       activeNav: true,
+      snackbar: false,
       loaded: true,
+      snackbar_message: '',
       justify: ["start", "center", "end", "space-around", "space-between"],
       indicadores: [
         {
@@ -206,102 +210,28 @@ export default {
       );
     },
 
-    async fethDataIndicadores() {
+    async checkSession() {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
-
-      if (sid != undefined && sid != "" && url != undefined && url != "") {
-        let date = new Date();
-        let dateTo =
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear();
-
-        let date_ = new Date(date.getFullYear(), date.getMonth(), 1);
-        let dateFrom =
-          date_.getDate() +
-          "-" +
-          (date_.getMonth() + 1) +
-          "-" +
-          date_.getFullYear();
-
-        //https://dev3.unabase.com/4DACTION/_V3_getVentasClienteReporte?q=&q2=&fecha_asignacion=true&estado_en_proceso=true&estado_cerrado=true&date_from=2022&date_to=2022&param_1=&estado_compras=
-
-        let config = {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: "https://frank.unabase.com/node/get-indicadores",
-          data: {
-            hostname: "https://" + url,
-            date_from: dateFrom,
-            date_to: dateTo,
-            sid,
-          },
-        };
-
-        axios(config).then((respuestas) => {
-          this.indicadores[0].nValue = this.formatNumber(
-            respuestas.data[0].por_vencer
-          );
-          this.indicadores[1].nValue = this.formatNumber(
-            respuestas.data[0].por_facturar
-          );
-          this.indicadores[2].nValue = this.formatNumber(
-            respuestas.data[0].por_cobrar
-          );
-          this.indicadores[3].nValue = this.formatNumber(
-            respuestas.data[0].por_justificar
-          );
-          this.indicadores[4].nValue = this.formatNumber(
-            respuestas.data[0].por_pagar
-          );
-        });
-      }
-    },
-
-    async verifySession() {
-      let sid = () => {
-        // var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(";");
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == " ") {
-            c = c.substring(1);
-          }
-          // if (c.indexOf(name) == 0) {
-          if (c.match(/UNABASE/g)) {
-            return c.substring(c.indexOf("UNABASE"));
-          }
-        }
-        return "";
+      let config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://" + url + "/node/is-login",
+        data: {
+          hostname: "https://" + url,
+          sid,
+        },
+        //timeout: 5000,
       };
 
-      let sid_ = sid();
+      const success = await axios(config).then(
+        (respuestas) => respuestas.data.logged_in
+      );
 
-      let getInfo = async () => {
-        let config = {
-          method: "get",
-          url: `https://${this.$route.params.web}/4DACTION/_light_get_server_info?sid=${sid_}`,
-        };
-        try {
-          let res = await axios(config);
-          return res;
-        } catch (err) {
-          throw err;
-        }
-      };
-
-      getInfo().then((res) => {
-        if (!res.data.logged_in) {
-          location.href = `${window.location.origin}`;
-        }
-      });
+      return success;
     },
 
     async fetchData() {
@@ -564,12 +494,20 @@ export default {
   async mounted() {
     let is = this.$route.query.from;
     if (is === "v3") {
-      //this.verifySession();
-      this.activeAside = false;
-      this.activeNav = false;
-      this.user = this.$route.params.user;
-      //this.fethDataIndicadores();
-      this.fetchData();
+      const res = await this.checkSession();
+      debugger;
+      if (res) {
+        this.activeAside = false;
+        this.activeNav = false;
+        this.user = this.$route.params.user;
+        this.fetchData();
+      } else if(!res){
+        this.snackbar_message = 'Error al iniciar'
+        this.snackbar = true
+        this.loaded = false
+      }
+
+
     }
   },
 };
