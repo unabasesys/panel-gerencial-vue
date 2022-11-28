@@ -1,9 +1,16 @@
 <template>
   <div class="background-general">
-    <div id="container" class="content no-collapsed">
-      <div style="width: 100%" v-if="loaded">
-        <LvProgressBar mode="indeterminate" color="#20A789" />
+    <div style="width: 100%" v-if="loaded" id="loading-screen">
+        <div id="app">
+          <semipolar-spinner
+            :animation-duration="2000"
+            :size="120"
+            color="#20A789"
+          />
+        </div>
       </div>
+    <div id="container" class="content no-collapsed">
+      
       <div class="ml-5">
         <v-row>
           <v-col cols="12" class="mt-5">
@@ -116,7 +123,7 @@ import VentasCliente from "../components/graphics/ventas_cliente.vue";
 import VentasCompras from "../components/graphics/ventas_compras.vue";
 import axios from "axios";
 import rentabilidadVue from "../components/graphics/rentabilidad.vue";
-import LvProgressBar from "lightvue/progress-bar";
+import { BreedingRhombusSpinner, SemipolarSpinner } from "epic-spinners";
 
 export default {
   components: {
@@ -127,7 +134,7 @@ export default {
     Tareas,
     VentasCliente,
     VentasCompras,
-    LvProgressBar,
+    SemipolarSpinner,
   },
   data() {
     return {
@@ -301,7 +308,7 @@ export default {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
       const username = this.$route.query.user;
-      this.loaded = true
+      this.loaded = true;
 
       let date = new Date();
       let dateTo =
@@ -462,7 +469,6 @@ export default {
         data_tareas(),
       ]).then((respuestas) => {
         try {
-          debugger;
           respuestas[0].forEach((val) => {
             this.indicadores[0].nValue = this.formatNumber(val.por_vencer);
             this.indicadores[1].nValue = this.formatNumber(val.por_facturar);
@@ -594,5 +600,25 @@ export default {
 
 .background-general {
   background-color: #fafafb;
+}
+
+#loading-screen {
+  background-color: rgba(25, 25, 25, 0.7);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 9999;
+  margin-top: 0;
+  top: 0;
+  text-align: center;
+}
+
+#loading-screen > #app {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin-top: -50px;
+  margin-left: 50%;
+  top: 50%;
 }
 </style>
