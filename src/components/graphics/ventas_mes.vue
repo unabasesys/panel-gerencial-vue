@@ -2,7 +2,7 @@
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
     <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
-      <div class="btn-graphic-div">
+      <!-- <div class="btn-graphic-div">
         <span class="nunito-semi-bold-santas-gray-10px">1H</span>
       </div>
 
@@ -24,7 +24,7 @@
 
       <div class="btn-graphic-div">
         <span class="nunito-semi-bold-santas-gray-10px">1M</span>
-      </div>
+      </div> -->
     </div>
     <Bar
       :chart-options="chartOptions"
