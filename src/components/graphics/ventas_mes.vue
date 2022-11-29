@@ -150,6 +150,19 @@ export default {
               },
             },
           },
+
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: (tooltipItem, data) => {
+                let format =
+                  numeral(tooltipItem.raw)
+                    .format(" $ 0,0")
+                    .replaceAll(",", ".");
+                return format;
+              },
+            },
+          },
         },
 
         scales: {
