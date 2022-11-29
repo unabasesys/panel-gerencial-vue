@@ -20,7 +20,7 @@
               <span class="nunito-semi-bold-santas-gray-12px">{{
                 item.name
               }}</span>
-              <v-btn icon @click="toRendiciones()">
+              <v-btn icon @click="toRendiciones(item)">
                 <v-icon size="12" color="#98A2B3"
                   >fa-solid fa-square-arrow-up-right</v-icon
                 >
@@ -71,12 +71,14 @@ export default {
       indicadores: [
         {
           name: "Docs por aprobar",
+          type: 'docs',
           nValue: 0,
           icon: "ub-like",
           percent: 0,
         },
         {
           name: "Rendiciones vencidas",
+          type: 'fxr',
           nValue: 0,
           icon: "ub-papel",
           percent: 0,
@@ -90,9 +92,9 @@ export default {
       this.indicadores[0].nValue = data[0].docs_aprobar;
       this.indicadores[1].nValue = data[0].total_rendiciones;
     },
-    toRendiciones() {
+    toRendiciones(item) {
       let url = this.$route.query.url;
-      if (url != undefined) {
+      if (url != undefined && item.type != 'docs') {
         window.open(
           `https://${url}/4DACTION/info_rf_vencidas?fromDashboard=true`,
           "_blank" // <- This is what makes it open in a new window.
