@@ -495,7 +495,6 @@ export default {
     let is = this.$route.query.from;
     if (is === "v3") {
       const res = await this.checkSession();
-      debugger;
       if (res) {
         this.activeAside = false;
         this.activeNav = false;

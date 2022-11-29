@@ -106,8 +106,12 @@ export default {
           tooltip: {
             enabled: true,
             callbacks: {
-              labels: (ttItem) => {
-                return ttItem;
+              label: (tooltipItem, data) => {
+                let format =
+                  numeral(tooltipItem.raw)
+                    .format(" $ 0,0")
+                    .replaceAll(",", ".");
+                return format;
               },
             },
           },
@@ -133,6 +137,16 @@ export default {
 
   methods: {
     loadGraph(data) {
+      let acumulado =
+        numeral(data[0].acumulado / 1000)
+          .format("$ 0,0")
+          .replaceAll(",", ".") + " K";
+
+      let rentabilidad =
+        numeral(data[0].rentabilidad / 1000)
+          .format("$ 0,0")
+          .replaceAll(",", ".") + " K";
+
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
     },
