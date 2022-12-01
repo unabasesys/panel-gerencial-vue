@@ -12,7 +12,7 @@
     <div id="container" class="content no-collapsed">
       <div class="ml-5">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" style="margin-top: -20px;">
             <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
