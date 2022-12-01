@@ -189,12 +189,12 @@ export default {
 
     setPorGastar() {
       this.chartData.datasets[0].data = [];
-      this.costos_directos.map((val, index) => {
+      this.costos_directos.forEach((val, index) => {
         if (this.switch_por_gastar) {
-          let sum = val.compras + val.por_gastar;
+          let sum = val.compras;
           this.chartData.datasets[0].data.push(sum);
         } else {
-          let sum = val.compras;
+          let sum = val.compras - val.por_gastar;
           this.chartData.datasets[0].data.push(sum);
         }
       });
