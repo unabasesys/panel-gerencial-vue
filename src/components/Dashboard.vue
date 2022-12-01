@@ -12,7 +12,7 @@
     <div id="container" class="content no-collapsed">
       <div class="ml-5">
         <v-row>
-          <v-col cols="12" class="mt-5">
+          <v-col cols="12">
             <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
@@ -433,7 +433,7 @@ export default {
             respuestas[1][0].gastos_generales.suma.months;
           const por_gastar = respuestas[1][0].por_gastar.suma.months;
           const costos_directos = respuestas[1][0].costos_directos.suma.months;
-
+          debugger
           let object_ventas_compras = {};
 
           costos_directos.forEach((val, index) => {
@@ -443,6 +443,7 @@ export default {
                 val.value +
                 por_gastar[index].value +
                 gastos_generales[index].value;
+              debugger
 
               object_ventas_compras = {
                 compras: sum,
