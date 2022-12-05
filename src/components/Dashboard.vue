@@ -175,7 +175,7 @@ export default {
           percent: 0,
         },
         {
-          name: "Por pagar",
+          name: "Documentos por pagar",
           nValue: 0,
           icon: "ub-por_pagar",
           percent: 0,
@@ -415,12 +415,13 @@ export default {
           });
 
           var size = 10;
+          debugger
           var items = respuestas[3][0].clientes.slice(0, size).map((i) => {
             return i;
           });
           items.forEach((val) => {
             let data = {
-              name: val.nombre,
+              name: val.alias != undefined ? val.alias : val.nombre,
               data: val.neto,
             };
             this.ventas_cliente.push(data);
@@ -481,6 +482,7 @@ export default {
           };
 
           this.tareas.push(obj_tareas);
+
 
           //Cargar demas graficos
           this.$refs.ventasClienteGraph.loadGraph(this.ventas_cliente);
