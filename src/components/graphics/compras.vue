@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
+    <span class="nunito-bold-bright-gray-18px">Costos por mes comparativo</span>
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -18,9 +18,9 @@
   
   <script>
 import { Bar } from "vue-chartjs/legacy";
+import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
-import axios from "axios";
 import numeral from "numeral";
 
 import {
@@ -45,6 +45,10 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
+
+  por_gastar: [],
+  gastos_generales: [],
+  costos_directos: [],
   components: { Bar, selectGraphic },
   props: {
     chartId: {
@@ -78,12 +82,31 @@ export default {
   },
   data() {
     return {
+      switch_por_gastar: true,
       chartData: {
-        labels: [],
+        labels: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ],
         datasets: [
           {
-            label: "Ventas",
-            backgroundColor: "#69DFC0",
+            label: "2021",
+            backgroundColor: "#6871EC",
+            data: [],
+          },
+          {
+            label: "2022",
+            backgroundColor: "#A8BAF9",
             data: [],
           },
         ],
@@ -143,18 +166,28 @@ export default {
       },
     };
   },
-
-  computed: {},
-
   methods: {
-    loadGraph(data) {
-      const cutName = (name) => {
-        return name.length > 5 ? name.substring(0, 12) + "..." : name;
-      };
+    loadGraph(data_current_year,data_past_year) {
+      data_past_year.forEach((val) => {
+        this.chartData.datasets[0].data.push(val.compras_past);
+      });
 
-      data.forEach((val) => {
-        this.chartData.labels.push(cutName(val.name));
-        this.chartData.datasets[0].data.push(val.data);
+      data_current_year.forEach((val) => {
+        this.chartData.datasets[1].data.push(val.compras);
+      });
+
+    },
+
+    setPorGastar() {
+      this.chartData.datasets[0].data = [];
+      this.costos_directos.forEach((val, index) => {
+        if (this.switch_por_gastar) {
+          let sum = val.compras;
+          this.chartData.datasets[0].data.push(sum);
+        } else {
+          let sum = val.compras - val.por_gastar;
+          this.chartData.datasets[0].data.push(sum);
+        }
       });
     },
   },

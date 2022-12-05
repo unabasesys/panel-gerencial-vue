@@ -81,7 +81,7 @@
         </v-row>
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1">
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Ventas ref="ventasMes" />
             </v-card>
           </v-col>
@@ -96,12 +96,19 @@
         </v-row>
 
         <v-row class="mr-2">
-          <v-col cols="7" class="d-flex" style="flex-direction: column">
+          <v-col cols="4" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
               <VentasCliente ref="ventasClienteGraph" />
             </v-card>
           </v-col>
-          <v-col cols="5" class="d-flex" style="flex-direction: column">
+
+          <v-col cols="4" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div flex-grow-1">
+              <Compras ref="compras" />
+            </v-card>
+          </v-col>
+
+          <v-col cols="4" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
               <VentasCompras ref="ventasCompras" />
             </v-card>
@@ -123,6 +130,7 @@ import Rentabilidad from "../components/graphics/rentabilidad.vue";
 import Tareas from "../components/graphics/tareas.vue";
 import VentasCliente from "../components/graphics/ventas_cliente.vue";
 import VentasCompras from "../components/graphics/ventas_compras.vue";
+import Compras from "../components/graphics/compras.vue";
 import axios from "axios";
 import rentabilidadVue from "../components/graphics/rentabilidad.vue";
 import { BreedingRhombusSpinner, SemipolarSpinner } from "epic-spinners";
@@ -137,6 +145,7 @@ export default {
     VentasCliente,
     VentasCompras,
     SemipolarSpinner,
+    Compras,
   },
   data() {
     return {
@@ -272,7 +281,7 @@ export default {
       let lastDayDate =
         lastDay.getDate() +
         "-" +
-        (lastDay.getMonth() + 1)+
+        (lastDay.getMonth() + 1) +
         "-" +
         lastDay.getFullYear();
       let config_indicadores = {
@@ -300,6 +309,20 @@ export default {
         data: {
           hostname: "https://" + url,
           date_from: date_.getFullYear(),
+          por_gastar: true,
+        },
+      };
+
+      let c_compras_past_year = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        url: "https://frank.unabase.com/node/get-ventas-compras",
+        data: {
+          hostname: "https://" + url,
+          date_from: date_.getFullYear() - 1,
           por_gastar: true,
         },
       };
@@ -398,14 +421,29 @@ export default {
         });
       };
 
+      let data_compras_past_year = () => {
+        return new Promise((resolve, reject) => {
+          axios(c_compras_past_year)
+            .then((r) => {
+              resolve(r.data);
+            })
+            .catch((err) => {
+              reject();
+            });
+        });
+      };
+
       Promise.all([
         data_indicadores(),
         data_ventas_compras(),
         data_ventas_mes(),
         data_ventas_cliente(),
         data_tareas(),
+        data_compras_past_year(),
       ]).then((respuestas) => {
         try {
+          let only_costos = [];
+
           respuestas[0].forEach((val) => {
             this.indicadores[0].nValue = this.formatNumber(val.por_vencer);
             this.indicadores[1].nValue = this.formatNumber(val.por_facturar);
@@ -415,7 +453,6 @@ export default {
           });
 
           var size = 10;
-          debugger
           var items = respuestas[3][0].clientes.slice(0, size).map((i) => {
             return i;
           });
@@ -426,15 +463,6 @@ export default {
             };
             this.ventas_cliente.push(data);
           });
-
-          //VENTAS MES
-          // respuestas[2][0].forEach((val) => {
-          //   let data = {
-          //     mes: val[0],
-          //     value: val[1],
-          //   };
-          //   this.ventas_mes.push(data);
-          // });
 
           //VENTAS COMPRASS
           const gastos_generales =
@@ -483,6 +511,31 @@ export default {
 
           this.tareas.push(obj_tareas);
 
+          //Costos por mes
+
+          const gastos_generales_past =
+            respuestas[5][0].gastos_generales.suma.months;
+          const por_gastar_past = respuestas[5][0].por_gastar.suma.months;
+          const costos_directos_past =
+            respuestas[5][0].costos_directos.suma.months;
+          let object_compras = {};
+
+          costos_directos_past.forEach((val, index) => {
+            //12= acumulado
+            if (index != 12) {
+              let sum =
+                val.value +
+                por_gastar_past[index].value +
+                gastos_generales_past[index].value;
+
+              object_compras = {
+                compras_past: sum,
+                por_gastar_past: por_gastar[index].value
+              };
+
+              only_costos.push(object_compras);
+            }
+          });
 
           //Cargar demas graficos
           this.$refs.ventasClienteGraph.loadGraph(this.ventas_cliente);
@@ -490,6 +543,9 @@ export default {
           this.$refs.ventasCompras.loadGraph(this.ventas_compras);
           this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
+
+
+          this.$refs.compras.loadGraph(this.ventas_compras,only_costos);
         } catch (error) {
           console.log(error);
         } finally {
