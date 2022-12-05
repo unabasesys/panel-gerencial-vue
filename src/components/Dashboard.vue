@@ -104,13 +104,13 @@
 
           <v-col cols="4" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <Compras ref="compras" />
+              <VentasCompras ref="ventasCompras" />
             </v-card>
           </v-col>
 
           <v-col cols="4" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCompras ref="ventasCompras" />
+              <Compras ref="compras" />
             </v-card>
           </v-col>
         </v-row>
