@@ -275,7 +275,6 @@ export default {
         (lastDay.getMonth() + 1)+
         "-" +
         lastDay.getFullYear();
-      debugger;
       let config_indicadores = {
         headers: {
           Accept: "application/json",

@@ -107,10 +107,9 @@ export default {
             enabled: true,
             callbacks: {
               label: (tooltipItem, data) => {
-                let format =
-                  numeral(tooltipItem.raw)
-                    .format(" $ 0,0")
-                    .replaceAll(",", ".");
+                let format = numeral(tooltipItem.raw)
+                  .format(" $ 0,0")
+                  .replaceAll(",", ".");
                 return format;
               },
             },
@@ -137,15 +136,15 @@ export default {
 
   methods: {
     loadGraph(data) {
-      let acumulado =
-        numeral(data[0].acumulado / 1000)
-          .format("$ 0,0")
-          .replaceAll(",", ".") + " K";
-
-      let rentabilidad =
-        numeral(data[0].rentabilidad / 1000)
-          .format("$ 0,0")
-          .replaceAll(",", ".") + " K";
+      if (data[0].acumulado < 0) {
+        this.chartData.datasets[0].backgroundColor[0] = "#D83934";
+      } else if (data[0].acumulado > 0) {
+        this.chartData.datasets[0].backgroundColor[0] = "#20A789";
+      } else if(data[0].rentabilidad < 0){
+        this.chartData.datasets[0].backgroundColor[1] = "#20A789";
+      }else if(data[0].rentabilidad > 0){
+        this.chartData.datasets[0].backgroundColor[1] = "#69DFC0";
+      }
 
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
