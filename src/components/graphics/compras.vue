@@ -101,12 +101,12 @@ export default {
         datasets: [
           {
             label: "2021",
-            backgroundColor: "#D83934",
+            backgroundColor: "#F8AFAC",
             data: [],
           },
           {
             label: "2022",
-            backgroundColor: "#F8AFAC",
+            backgroundColor: "#D83934",
             data: [],
           },
         ],
