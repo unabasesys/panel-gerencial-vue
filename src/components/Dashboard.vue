@@ -12,7 +12,7 @@
     <div id="container" class="content no-collapsed">
       <div class="ml-5">
         <v-row>
-          <v-col cols="12" style="margin-top: -20px;">
+          <v-col cols="12" style="margin-top: -20px">
             <span class="nunito-semi-bold-santas-gray-12px">Dashboard</span>
           </v-col>
           <v-col cols="12" style="margin-top: -20px">
@@ -147,7 +147,7 @@ export default {
       activeNav: true,
       snackbar: false,
       loaded: true,
-      snackbar_message: '',
+      snackbar_message: "",
       justify: ["start", "center", "end", "space-around", "space-between"],
       indicadores: [
         {
@@ -268,6 +268,14 @@ export default {
         },
       };
 
+      const lastDay = new Date(date.getFullYear(), 11, 31);
+      let lastDayDate =
+        lastDay.getDate() +
+        "-" +
+        (lastDay.getMonth() + 1)+
+        "-" +
+        lastDay.getFullYear();
+      debugger;
       let config_indicadores = {
         headers: {
           Accept: "application/json",
@@ -499,13 +507,11 @@ export default {
         this.activeNav = false;
         this.user = this.$route.params.user;
         this.fetchData();
-      } else if(!res){
-        this.snackbar_message = 'Error al iniciar'
-        this.snackbar = true
-        this.loaded = false
+      } else if (!res) {
+        this.snackbar_message = "Error al iniciar";
+        this.snackbar = true;
+        this.loaded = false;
       }
-
-
     }
   },
 };
