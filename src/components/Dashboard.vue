@@ -286,7 +286,7 @@ export default {
         data: {
           hostname: "https://" + url,
           date_from: dateFrom,
-          date_to: dateTo,
+          date_to: lastDayDate,
           sid,
         },
       };
