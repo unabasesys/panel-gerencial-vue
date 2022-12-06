@@ -5,6 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        spinner: {
+            visible: false,
+        },
         loading: {
             titulo: '',
             estado: false,
@@ -40,6 +43,9 @@ export default new Vuex.Store({
 
     },
     mutations: {
+        SET_SPINNER(state, payload) {
+            state.spinner = payload
+        },
         mostrarLoading(state, payload) {
             state.loading.titulo = payload.titulo
             state.loading.estado = true
@@ -85,9 +91,8 @@ export default new Vuex.Store({
         getNegocios: state => state.negocios,
         getDataCards: state => state.cards,
         getTipoCambio: state => state.tipoCambio,
-        getUser: state => state.user
-        
-
+        getUser: state => state.user,
+        getSpinner: state => state.spinner,
     },
     actions: {
 

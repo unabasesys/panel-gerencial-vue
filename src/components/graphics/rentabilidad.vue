@@ -17,6 +17,7 @@
             <v-icon size="5">ub-arrow_down</v-icon>
           </template>
         </v-select>
+        <progressCircular />
       </v-col>
     </v-row>
 
@@ -39,6 +40,10 @@ import { Pie } from "vue-chartjs/legacy";
 import axios from "axios";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
+import progressCircular from '../progressCircular.vue'
+import { mapMutations, mapState, mapGetters } from "vuex";
+
+
 import {
   Chart as ChartJS,
   Title,
@@ -55,6 +60,7 @@ export default {
   components: {
     Pie,
     selectGraphic,
+    progressCircular
   },
   props: {
     chartId: {
@@ -100,8 +106,9 @@ export default {
         ],
       },
       chartOptions: {
-        responsive: true,
         maintainAspectRatio: false,
+        animation: { easing: "easeInCirc" },
+        responsive: true,
         plugins: {
           tooltip: {
             enabled: true,
@@ -135,19 +142,24 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setSpinner: 'SET_SPINNER',
+    }),
     loadGraph(data) {
       if (data[0].acumulado < 0) {
         this.chartData.datasets[0].backgroundColor[0] = "#D83934";
       } else if (data[0].acumulado > 0) {
         this.chartData.datasets[0].backgroundColor[0] = "#20A789";
-      } else if(data[0].rentabilidad < 0){
+      } else if (data[0].rentabilidad < 0) {
         this.chartData.datasets[0].backgroundColor[1] = "#20A789";
-      }else if(data[0].rentabilidad > 0){
+      } else if (data[0].rentabilidad > 0) {
         this.chartData.datasets[0].backgroundColor[1] = "#69DFC0";
       }
 
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
+
+      this.setSpinner(false)
     },
     async setRentabilidadPeriodo() {
       this.fethData(this.periodoSelect);
@@ -156,23 +168,17 @@ export default {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
+        this.setSpinner(true)
         this.chartData.datasets[0].data = [];
         let date = new Date();
-        let c_date =
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear();
         const year_ = year != "" ? year : date.getFullYear();
-
         let config = {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: "https://" + url + "/node/get-ventas-compras",
+          url: "https://frank.unabase.com/node/get-ventas-compras",
           data: {
             hostname: "https://" + url,
             date_from: year_,
@@ -188,6 +194,7 @@ export default {
             respuestas.data[0].resultado.months[12].value;
           this.chartData.datasets[0].data.push(acumulado_ventas);
           this.chartData.datasets[0].data.push(rentabilidad_final);
+          this.setSpinner(false)
         });
       }
     },
