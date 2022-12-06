@@ -40,9 +40,8 @@ import { Pie } from "vue-chartjs/legacy";
 import axios from "axios";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
-import progressCircular from '../progressCircular.vue'
+import progressCircular from "../progressCircular.vue";
 import { mapMutations, mapState, mapGetters } from "vuex";
-
 
 import {
   Chart as ChartJS,
@@ -60,7 +59,7 @@ export default {
   components: {
     Pie,
     selectGraphic,
-    progressCircular
+    progressCircular,
   },
   props: {
     chartId: {
@@ -143,7 +142,7 @@ export default {
 
   methods: {
     ...mapMutations({
-      setSpinner: 'SET_SPINNER',
+      setSpinner: "SET_SPINNER",
     }),
     loadGraph(data) {
       if (data[0].acumulado < 0) {
@@ -159,7 +158,7 @@ export default {
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
 
-      this.setSpinner(false)
+      this.setSpinner(false);
     },
     async setRentabilidadPeriodo() {
       this.fethData(this.periodoSelect);
@@ -168,7 +167,7 @@ export default {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
-        this.setSpinner(true)
+        this.setSpinner(true);
         this.chartData.datasets[0].data = [];
         let date = new Date();
         const year_ = year != "" ? year : date.getFullYear();
@@ -192,9 +191,23 @@ export default {
             respuestas.data[0].ventas.suma.months[12].value;
           let rentabilidad_final =
             respuestas.data[0].resultado.months[12].value;
+
+          if (acumulado_ventas < 0) {
+            this.chartData.datasets[0].backgroundColor[0] = "#D83934";
+          }
+          if (acumulado_ventas > 0) {
+            this.chartData.datasets[0].backgroundColor[0] = "#20A789";
+          }
+          if (rentabilidad_final < 0) {
+            this.chartData.datasets[0].backgroundColor[1] = "#D83934";
+          }
+          if (rentabilidad_final > 0) {
+            this.chartData.datasets[0].backgroundColor[1] = "#69DFC0";
+          }
+
           this.chartData.datasets[0].data.push(acumulado_ventas);
           this.chartData.datasets[0].data.push(rentabilidad_final);
-          this.setSpinner(false)
+          this.setSpinner(false);
         });
       }
     },
