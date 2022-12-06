@@ -50,11 +50,11 @@
             </div>
 
             <div cols="6" class="">
-              <span class="nunito-semi-bold-emerald-14px"
+              <!-- <span class="nunito-semi-bold-emerald-14px"
                 ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
                   item.percent
                 }}%</span
-              >
+              > -->
             </div>
           </div>
         </v-card>

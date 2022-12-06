@@ -57,7 +57,9 @@
                 </div>
 
                 <div cols="6" class="mt-2">
-                  <span class="nunito-normal-16px">${{ item.nValue }}</span>
+                  <span class="nunito-normal-16px"
+                    >{{ formatIndicador(item.nValue) }}</span
+                  >
                 </div>
               </div>
 
@@ -69,11 +71,11 @@
                 </div>
 
                 <div cols="6" class="">
-                  <span class="nunito-semi-bold-emerald-14px"
+                  <!-- <span class="nunito-semi-bold-emerald-14px"
                     ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
                       item.percent
                     }}%</span
-                  >
+                  > -->
                 </div>
               </div>
             </v-card>
@@ -109,7 +111,6 @@
           </v-col>
         </v-row>
 
-
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
@@ -117,7 +118,6 @@
             </v-card>
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
-            
           </v-col>
         </v-row>
       </div>
@@ -137,6 +137,7 @@ import Tareas from "../components/graphics/tareas.vue";
 import VentasCliente from "../components/graphics/ventas_cliente.vue";
 import VentasCompras from "../components/graphics/ventas_compras.vue";
 import Compras from "../components/graphics/compras.vue";
+import numeral from "numeral";
 import axios from "axios";
 import rentabilidadVue from "../components/graphics/rentabilidad.vue";
 import { BreedingRhombusSpinner, SemipolarSpinner } from "epic-spinners";
@@ -216,7 +217,16 @@ export default {
     };
   },
 
+  computed: {},
+
   methods: {
+    formatIndicador(num) {
+      debugger
+      let res = parseFloat(String(num).replaceAll(".", "")) / 1000;
+      
+      return numeral(res)
+                  .format(" $ 0,0").replaceAll(',', '.') + 'K';
+    },
     formatNumber(num) {
       return String(
         new Intl.NumberFormat("de-DE").format(
@@ -291,13 +301,13 @@ export default {
         "-" +
         lastDay.getFullYear();
 
-        let currentDate = new Date();
-        let c_date =
+      let currentDate = new Date();
+      let c_date =
         currentDate.getDate() +
-          "-" +
-          (currentDate.getMonth() + 1) +
-          "-" +
-          currentDate.getFullYear();
+        "-" +
+        (currentDate.getMonth() + 1) +
+        "-" +
+        currentDate.getFullYear();
       let config_indicadores = {
         headers: {
           Accept: "application/json",
@@ -544,7 +554,7 @@ export default {
 
               object_compras = {
                 compras_past: sum,
-                por_gastar_past: por_gastar[index].value
+                por_gastar_past: por_gastar[index].value,
               };
 
               only_costos.push(object_compras);
@@ -558,8 +568,7 @@ export default {
           this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
 
-
-          this.$refs.compras.loadGraph(this.ventas_compras,only_costos);
+          this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
         } catch (error) {
           console.log(error);
         } finally {

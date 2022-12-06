@@ -147,11 +147,14 @@ export default {
     loadGraph(data) {
       if (data[0].acumulado < 0) {
         this.chartData.datasets[0].backgroundColor[0] = "#D83934";
-      } else if (data[0].acumulado > 0) {
+      }
+      if (data[0].acumulado > 0) {
         this.chartData.datasets[0].backgroundColor[0] = "#20A789";
-      } else if (data[0].rentabilidad < 0) {
-        this.chartData.datasets[0].backgroundColor[1] = "#20A789";
-      } else if (data[0].rentabilidad > 0) {
+      }
+      if (data[0].rentabilidad < 0) {
+        this.chartData.datasets[0].backgroundColor[1] = "#D83934";
+      }
+      if (data[0].rentabilidad > 0) {
         this.chartData.datasets[0].backgroundColor[1] = "#69DFC0";
       }
 
