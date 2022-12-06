@@ -290,6 +290,14 @@ export default {
         (lastDay.getMonth() + 1) +
         "-" +
         lastDay.getFullYear();
+
+        let currentDate = new Date();
+        let c_date =
+        currentDate.getDate() +
+          "-" +
+          (currentDate.getMonth() + 1) +
+          "-" +
+          currentDate.getFullYear();
       let config_indicadores = {
         headers: {
           Accept: "application/json",
@@ -300,7 +308,7 @@ export default {
         data: {
           hostname: "https://" + url,
           date_from: dateFrom,
-          date_to: lastDayDate,
+          date_to: c_date,
           sid,
         },
       };
