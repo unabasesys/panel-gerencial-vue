@@ -13,6 +13,17 @@
       :width="width"
       class="mt-6"
     />
+
+    <div style="float: left">
+      <v-switch
+        v-model="switch_por_gastar"
+        label="Por gastar"
+        dense
+        solo
+        color="#EA4E49"
+        @change="setPorGastar()"
+      ></v-switch>
+    </div>
   </div>
 </template>
   
@@ -83,6 +94,8 @@ export default {
   data() {
     return {
       switch_por_gastar: true,
+      data_current_year: [],
+      data_past_year: [],
       chartData: {
         labels: [
           "Enero",
@@ -168,6 +181,9 @@ export default {
   },
   methods: {
     loadGraph(data_current_year,data_past_year) {
+      this.data_current_year = data_current_year
+      this.data_past_year = data_past_year
+
       data_past_year.forEach((val) => {
         this.chartData.datasets[0].data.push(val.compras_past);
       });
@@ -180,15 +196,30 @@ export default {
 
     setPorGastar() {
       this.chartData.datasets[0].data = [];
-      this.costos_directos.forEach((val, index) => {
+      this.chartData.datasets[1].data = [];
+
+
+      this.data_past_year.forEach(v => {
         if (this.switch_por_gastar) {
-          let sum = val.compras;
+          let sum = v.compras_past;
           this.chartData.datasets[0].data.push(sum);
         } else {
-          let sum = val.compras - val.por_gastar;
+          let sum = v.compras_past - v.por_gastar_past;
           this.chartData.datasets[0].data.push(sum);
         }
-      });
+      })
+
+
+      this.data_current_year.forEach(v => {
+        if (this.switch_por_gastar) {
+          let sum = v.compras;
+          this.chartData.datasets[1].data.push(sum);
+        } else {
+          let sum = v.compras - v.por_gastar;
+          this.chartData.datasets[1].data.push(sum);
+        }
+      })
+
     },
   },
 };
