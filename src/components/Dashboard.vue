@@ -96,22 +96,28 @@
         </v-row>
 
         <v-row class="mr-2">
-          <v-col cols="4" class="d-flex" style="flex-direction: column">
+          <v-col cols="6" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
               <VentasCliente ref="ventasClienteGraph" />
             </v-card>
           </v-col>
 
-          <v-col cols="4" class="d-flex" style="flex-direction: column">
+          <v-col cols="6" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
               <VentasCompras ref="ventasCompras" />
             </v-card>
           </v-col>
+        </v-row>
 
-          <v-col cols="4" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1">
+
+        <v-row class="mr-2">
+          <v-col cols="7" class="d-flex" style="flex-direction: column">
+            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Compras ref="compras" />
             </v-card>
+          </v-col>
+          <v-col cols="5" class="d-flex" style="flex-direction: column">
+            
           </v-col>
         </v-row>
       </div>
