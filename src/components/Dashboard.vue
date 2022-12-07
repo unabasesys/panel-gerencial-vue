@@ -24,7 +24,7 @@
               class="rounded-box"
               width="210"
               height="130"
-              color=""
+              color="#ffffff"
               :loading="loadComplete"
               loader-height="4"
               outlined
@@ -56,7 +56,14 @@
                 </div>
 
                 <div cols="6" class="mt-2">
-                  <span class="nunito-normal-16px">{{
+                  <v-progress-circular
+                    :size="30"
+                    color="#F6F7F8"
+                    indeterminate
+                    class="ml-10"
+                    v-if="loadComplete"
+                  ></v-progress-circular>
+                  <span class="nunito-normal-16px" v-else>{{
                     formatIndicador(item.nValue)
                   }}</span>
                 </div>
@@ -82,14 +89,10 @@
         </v-row>
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
-              <Ventas ref="ventasMes" />
-            </v-card>
+            <Ventas ref="ventasMes" />
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
-              <Rentabilidad ref="rentabilidad" />
-            </v-card>
+            <Rentabilidad ref="rentabilidad" />
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Tareas ref="tareas" />
             </v-card>
@@ -98,26 +101,20 @@
 
         <v-row class="mr-2">
           <v-col cols="6" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCliente ref="ventasClienteGraph" />
-            </v-card>
+            <VentasCliente ref="ventasClienteGraph" />
           </v-col>
 
           <v-col cols="6" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCompras
-                ref="ventasCompras"
-                @loadGraphRentabilidad="loadRentabilidad"
-              />
-            </v-card>
+            <VentasCompras
+              ref="ventasCompras"
+              @loadGraphRentabilidad="loadRentabilidad"
+            />
           </v-col>
         </v-row>
 
         <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
-            <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
-              <Compras ref="compras" />
-            </v-card>
+            <Compras ref="compras" />
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
           </v-col>
@@ -255,9 +252,7 @@ export default {
         //timeout: 5000,
       };
 
-      const success = await axios(config).then(
-        (respuestas) => respuestas.data.logged_in
-      );
+      const success = await axios(config).then((respuestas) => respuestas.data);
 
       return success;
     },
@@ -476,14 +471,6 @@ export default {
         });
       };
       console.time("START");
-
-      // data_indicadores(),
-      //   data_ventas_compras(),
-      //   data_ventas_mes(),
-      //   data_ventas_cliente(),
-      //   data_tareas(),
-      //   data_compras_past_year(),
-
       Promise.all([
         data_indicadores(),
         data_ventas_cliente(),
@@ -608,7 +595,10 @@ export default {
     let is = this.$route.query.from;
     if (is === "v3") {
       const res = await this.checkSession();
-      if (res) {
+      let currentTime = new Date();
+      let hours = currentTime.getHours();
+
+      if (res.logged_in) {
         this.activeAside = false;
         this.activeNav = false;
         this.user = this.$route.params.user;

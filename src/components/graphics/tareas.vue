@@ -13,11 +13,17 @@
           width="170"
           height="120"
           color="#F0F5FF"
+          :loading="loadComplete"
           outlined
         >
+          <template slot="progress">
+            <v-progress-linear
+              color="#69DFC0"
+              indeterminate
+            ></v-progress-linear>
+          </template>
           <div class="row mt-1 ml-2">
             <div cols="6" style="min-width: 140px">
-              <progressCircular :statusSpinner="loadComplete" />
               <span class="nunito-semi-bold-santas-gray-12px">{{
                 item.name
               }}</span>
@@ -39,7 +45,14 @@
             </div>
 
             <div cols="6" class="mt-2">
-              <span class="nunito-normal-16px">{{ item.nValue }}</span>
+              <v-progress-circular
+                :size="30"
+                color="#D6DBE0"
+                indeterminate
+                class="ml-5"
+                v-if="loadComplete"
+              ></v-progress-circular>
+              <span class="nunito-normal-16px" v-else>{{ item.nValue }}</span>
             </div>
           </div>
 
@@ -71,18 +84,18 @@ export default {
   components: { progressCircular },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       indicadores: [
         {
           name: "Docs por aprobar",
-          type: 'docs',
+          type: "docs",
           nValue: 0,
           icon: "ub-like",
           percent: 0,
         },
         {
           name: "Rendiciones vencidas",
-          type: 'fxr',
+          type: "fxr",
           nValue: 0,
           icon: "ub-papel",
           percent: 0,
@@ -95,11 +108,11 @@ export default {
     loadGraph(data) {
       this.indicadores[0].nValue = data[0].docs_aprobar;
       this.indicadores[1].nValue = data[0].total_rendiciones;
-      this.loadComplete = true
+      this.loadComplete = false;
     },
     toRendiciones(item) {
       let url = this.$route.query.url;
-      if (url != undefined && item.type != 'docs') {
+      if (url != undefined && item.type != "docs") {
         window.open(
           `https://${url}/4DACTION/info_rf_vencidas?fromDashboard=true`,
           "_blank" // <- This is what makes it open in a new window.
@@ -152,7 +165,6 @@ export default {
           this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar;
           this.indicadores[1].nValue =
             respuestas.data[0].total_rendiciones_vencidas;
-          
         });
       }
     },

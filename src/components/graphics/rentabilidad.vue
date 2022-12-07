@@ -1,38 +1,44 @@
 <template>
-  <div>
-    <span class="nunito-bold-bright-gray-18px">Rentabilidad año en curso</span>
+  <v-card class="rounded-box-div mb-1 flex-grow-1" :loading="loadComplete">
+    <template slot="progress">
+      <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
+    </template>
+    <div class="pa-5">
+      <span class="nunito-bold-bright-gray-18px"
+        >Rentabilidad año en curso</span
+      >
 
-    <v-row class="mr-2">
-      <v-col cols="12" md="12">
-        <v-select
-          :items="items"
-          v-model="periodoSelect"
-          label="Periodo"
-          class="customSelect"
-          solo
-          dense
-          @change="setRentabilidadPeriodo()"
-        >
-          <template slot="append">
-            <v-icon size="5">ub-arrow_down</v-icon>
-          </template>
-        </v-select>
-        <progressCircular :statusSpinner="loadComplete"  />
-      </v-col>
-    </v-row>
+      <v-row class="mr-2">
+        <v-col cols="12" md="12">
+          <v-select
+            :items="items"
+            v-model="periodoSelect"
+            label="Periodo"
+            class="customSelect"
+            solo
+            dense
+            @change="setRentabilidadPeriodo()"
+          >
+            <template slot="append">
+              <v-icon size="5">ub-arrow_down</v-icon>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
 
-    <Pie
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="400"
-      :height="250"
-    />
-  </div>
+      <Pie
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :width="400"
+        :height="250"
+      />
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -93,7 +99,7 @@ export default {
   },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       items: ["2021", "2022"],
       periodoSelect: "",
       chartData: {
@@ -162,7 +168,7 @@ export default {
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
 
-      this.loadComplete = true
+      this.loadComplete = false;
     },
     async setRentabilidadPeriodo() {
       this.fethData(this.periodoSelect);
@@ -171,7 +177,7 @@ export default {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
-        this.setSpinner(true);
+        this.loadComplete = true
         this.chartData.datasets[0].data = [];
         let date = new Date();
         const year_ = year != "" ? year : date.getFullYear();
@@ -211,7 +217,7 @@ export default {
 
           this.chartData.datasets[0].data.push(acumulado_ventas);
           this.chartData.datasets[0].data.push(rentabilidad_final);
-          this.setSpinner(false);
+          this.loadComplete = false
         });
       }
     },

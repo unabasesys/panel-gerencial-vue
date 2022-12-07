@@ -1,31 +1,35 @@
 <template>
-  <div>
-    <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
-    <progressCircular :statusSpinner="loadComplete"/>
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :height="height"
-      :width="width"
-      class="mt-6"
-    />
+  <v-card class="rounded-box-div flex-grow-1" :loading="loadComplete">
+    <template slot="progress">
+      <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
+    </template>
+    <div class="pa-5">
+      <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
+      <Bar
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :height="height"
+        :width="width"
+        class="mt-6"
+      />
 
-    <div style="float: left">
-      <v-switch
-        v-model="switch_por_gastar"
-        label="Por gastar"
-        dense
-        solo
-        color="#F47975"
-        @change="setPorGastar()"
-      ></v-switch>
+      <div style="float: left">
+        <v-switch
+          v-model="switch_por_gastar"
+          label="Por gastar"
+          dense
+          solo
+          color="#F47975"
+          @change="setPorGastar()"
+        ></v-switch>
+      </div>
     </div>
-  </div>
+  </v-card>
 </template>
   
   <script>
@@ -97,7 +101,7 @@ export default {
   data() {
     return {
       switch_por_gastar: true,
-      loadComplete: false,
+      loadComplete: true,
       chartData: {
         labels: [
           "Enero",
@@ -192,7 +196,7 @@ export default {
       });
 
       this.costos_directos = data;
-      this.loadComplete = true
+      this.loadComplete = false;
 
       this.$emit("loadGraphRentabilidad", dataa);
     },

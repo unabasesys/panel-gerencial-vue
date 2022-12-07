@@ -1,44 +1,50 @@
 <template>
-  <div>
-    <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
-    <progressCircular :statusSpinner="loadComplete" />
-    <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
-      <!-- <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">1H</span>
+  <v-card class="rounded-box-div mb-1 flex-grow-1" :loading="loadComplete">
+    <template slot="progress">
+      <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
+    </template>
+    <div class="pa-5">
+      <span class="nunito-bold-bright-gray-18px"
+        >Ventas por mes comparativo</span
+      >
+      <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
+        <!-- <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">1H</span>
+        </div>
+  
+        <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">3H</span>
+        </div>
+  
+        <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">5H</span>
+        </div>
+  
+        <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">1D</span>
+        </div>
+  
+        <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">1W</span>
+        </div>
+  
+        <div class="btn-graphic-div">
+          <span class="nunito-semi-bold-santas-gray-10px">1M</span>
+        </div> -->
       </div>
-
-      <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">3H</span>
-      </div>
-
-      <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">5H</span>
-      </div>
-
-      <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">1D</span>
-      </div>
-
-      <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">1W</span>
-      </div>
-
-      <div class="btn-graphic-div">
-        <span class="nunito-semi-bold-santas-gray-10px">1M</span>
-      </div> -->
+      <Bar
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :height="height"
+        :width="width"
+      />
     </div>
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :height="height"
-      :width="width"
-    />
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -70,7 +76,7 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  components: { Bar,progressCircular },
+  components: { Bar, progressCircular },
   props: {
     chartId: {
       type: String,
@@ -103,7 +109,7 @@ export default {
   },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       chartData: {
         labels: [
           "Enero",
@@ -124,7 +130,7 @@ export default {
             label: "% Dif",
             type: "line",
             backgroundColor: "#667085",
-            data: [20, 20, 12, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             label: "2021",
@@ -141,6 +147,7 @@ export default {
       chartOptions: {
         categoryPercentage: 0.8, // here
         barPercentage: 0.9, // here
+        animation: { easing: "easeInCirc" },
         plugins: {
           legend: {
             labels: {
@@ -158,10 +165,9 @@ export default {
             enabled: true,
             callbacks: {
               label: (tooltipItem, data) => {
-                let format =
-                  numeral(tooltipItem.raw)
-                    .format(" $ 0,0")
-                    .replaceAll(",", ".");
+                let format = numeral(tooltipItem.raw)
+                  .format(" $ 0,0")
+                  .replaceAll(",", ".");
                 return format;
               },
             },
@@ -194,11 +200,9 @@ export default {
   },
 
   methods: {
-
     loadGraph() {
-      this.init()
+      this.init();
     },
-
 
     init() {
       this.fethData(2021);
@@ -225,7 +229,7 @@ export default {
           data: {
             hostname: "https://" + url,
             year,
-            sid
+            sid,
           },
         };
 
@@ -239,12 +243,11 @@ export default {
             }
           });
 
-          this.loadComplete = true
+          this.loadComplete = false;
         });
       }
     },
   },
-
 };
 </script>
 

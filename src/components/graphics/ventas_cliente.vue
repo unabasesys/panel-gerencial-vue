@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
-    <progressCircular :statusSpinner="loadComplete" />
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :height="height"
-      :width="width"
-      class="mt-6"
-    />
-  </div>
+  <v-card class="rounded-box-div flex-grow-1" :loading="loadComplete">
+    <template slot="progress">
+      <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
+    </template>
+    <div class="pa-5">
+      <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
+      <Bar
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :height="height"
+        :width="width"
+        class="mt-6"
+      />
+    </div>
+  </v-card>
 </template>
   
   <script>
@@ -47,7 +51,7 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  components: { Bar, selectGraphic,progressCircular },
+  components: { Bar, selectGraphic, progressCircular },
   props: {
     chartId: {
       type: String,
@@ -80,7 +84,7 @@ export default {
   },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       chartData: {
         labels: [],
         datasets: [
@@ -111,10 +115,9 @@ export default {
             enabled: true,
             callbacks: {
               label: (tooltipItem, data) => {
-                let format =
-                  numeral(tooltipItem.raw)
-                    .format(" $ 0,0")
-                    .replaceAll(",", ".");
+                let format = numeral(tooltipItem.raw)
+                  .format(" $ 0,0")
+                  .replaceAll(",", ".");
                 return format;
               },
             },
@@ -160,7 +163,7 @@ export default {
         this.chartData.datasets[0].data.push(val.data);
       });
 
-      this.loadComplete = true
+      this.loadComplete = false;
     },
   },
 };

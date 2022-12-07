@@ -1,32 +1,36 @@
 <template>
-  <div>
-    <span class="nunito-bold-bright-gray-18px">Costos por mes comparativo</span>
-    <progressCircular :statusSpinner="loadComplete" />
-    
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :height="height"
-      :width="width"
-      class="mt-6"
-    />
-
-    <div style="float: left">
-      <v-switch
-        v-model="switch_por_gastar"
-        label="Por gastar"
-        dense
-        solo
-        color="#EA4E49"
-        @change="setPorGastar()"
-      ></v-switch>
+  <v-card class="rounded-box-div flex-grow-1" :loading="loadComplete">
+    <template slot="progress">
+      <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
+    </template>
+  
+    <div class="pa-5">
+      <span class="nunito-bold-bright-gray-18px">Costos por mes comparativo</span>
+      <Bar
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :height="height"
+        :width="width"
+        class="mt-6"
+      />
+  
+      <div style="float: left">
+        <v-switch
+          v-model="switch_por_gastar"
+          label="Por gastar"
+          dense
+          solo
+          color="#EA4E49"
+          @change="setPorGastar()"
+        ></v-switch>
+      </div>
     </div>
-  </div>
+  </v-card>
 </template>
   
   <script>
@@ -98,7 +102,7 @@ export default {
   },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       switch_por_gastar: true,
       data_current_year: [],
       data_past_year: [],
@@ -200,7 +204,7 @@ export default {
         this.chartData.datasets[1].data.push(val.compras);
       });
 
-      this.loadComplete = true;
+      this.loadComplete = false;
     },
 
     setPorGastar() {
