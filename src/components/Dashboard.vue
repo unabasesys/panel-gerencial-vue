@@ -57,9 +57,9 @@
                 </div>
 
                 <div cols="6" class="mt-2">
-                  <span class="nunito-normal-16px"
-                    >{{ formatIndicador(item.nValue) }}</span
-                  >
+                  <span class="nunito-normal-16px">{{
+                    formatIndicador(item.nValue)
+                  }}</span>
                 </div>
               </div>
 
@@ -111,7 +111,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="mr-2">
+        <!-- <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Compras ref="compras" />
@@ -119,7 +119,7 @@
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
           </v-col>
-        </v-row>
+        </v-row> -->
       </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="4000" top color="error">
@@ -221,11 +221,9 @@ export default {
 
   methods: {
     formatIndicador(num) {
-      debugger
       let res = parseFloat(String(num).replaceAll(".", "")) / 1000;
-      
-      return numeral(res)
-                  .format(" $ 0,0").replaceAll(',', '.') + 'K';
+
+      return numeral(res).format(" $ 0,0").replaceAll(",", ".") + "K";
     },
     formatNumber(num) {
       return String(
@@ -244,7 +242,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/is-login",
+        url: "https://dev3.unabase.com/node/is-login",
         data: {
           hostname: "https://" + url,
           sid,
@@ -283,7 +281,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-tareas",
+        url: "https://dev3.unabase.com/node/get-tareas",
         data: {
           date_from: 2022,
           date_to: 2022,
@@ -314,7 +312,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-indicadores",
+        url: "https://dev3.unabase.com/node/get-indicadores",
         data: {
           hostname: "https://" + url,
           date_from: dateFrom,
@@ -323,16 +321,19 @@ export default {
         },
       };
 
+      let year = date_.getFullYear()
+
       let config_ventas_compras = {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-ventas-compras",
+        url: "https://dev3.unabase.com/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
-          date_from: date_.getFullYear(),
+          date_from: year,
+          date_to: year,
           por_gastar: true,
         },
       };
@@ -343,7 +344,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-ventas-compras",
+        url: "https://dev3.unabase.com/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
           date_from: date_.getFullYear() - 1,
@@ -359,7 +360,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-ventas-mes",
+        url: "https://dev3.unabase.com/node/get-ventas-mes",
         data: {
           hostname: "https://" + url,
           year: currentYear,
@@ -373,7 +374,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://frank.unabase.com/node/get-ventas-cliente",
+        url: "https://dev3.unabase.com/node/get-ventas-cliente",
         data: {
           hostname: "https://" + url,
           fecha_asignacion: true,
@@ -456,6 +457,7 @@ export default {
             });
         });
       };
+      console.time("START");
 
       Promise.all([
         data_indicadores(),
@@ -463,7 +465,6 @@ export default {
         data_ventas_mes(),
         data_ventas_cliente(),
         data_tareas(),
-        data_compras_past_year(),
       ]).then((respuestas) => {
         try {
           let only_costos = [];
@@ -537,29 +538,29 @@ export default {
 
           //Costos por mes
 
-          const gastos_generales_past =
-            respuestas[5][0].gastos_generales.suma.months;
-          const por_gastar_past = respuestas[5][0].por_gastar.suma.months;
-          const costos_directos_past =
-            respuestas[5][0].costos_directos.suma.months;
-          let object_compras = {};
+          // const gastos_generales_past =
+          //   respuestas[5][0].gastos_generales.suma.months;
+          // const por_gastar_past = respuestas[5][0].por_gastar.suma.months;
+          // const costos_directos_past =
+          //   respuestas[5][0].costos_directos.suma.months;
+          // let object_compras = {};
 
-          costos_directos_past.forEach((val, index) => {
-            //12= acumulado
-            if (index != 12) {
-              let sum =
-                val.value +
-                por_gastar_past[index].value +
-                gastos_generales_past[index].value;
+          // costos_directos_past.forEach((val, index) => {
+          //   //12= acumulado
+          //   if (index != 12) {
+          //     let sum =
+          //       val.value +
+          //       por_gastar_past[index].value +
+          //       gastos_generales_past[index].value;
 
-              object_compras = {
-                compras_past: sum,
-                por_gastar_past: por_gastar[index].value,
-              };
+          //     object_compras = {
+          //       compras_past: sum,
+          //       por_gastar_past: por_gastar[index].value,
+          //     };
 
-              only_costos.push(object_compras);
-            }
-          });
+          //     only_costos.push(object_compras);
+          //   }
+          // });
 
           //Cargar demas graficos
           this.$refs.ventasClienteGraph.loadGraph(this.ventas_cliente);
@@ -568,7 +569,8 @@ export default {
           this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
 
-          this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
+          //this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
+          console.timeEnd("START");
         } catch (error) {
           console.log(error);
         } finally {
