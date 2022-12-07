@@ -17,6 +17,7 @@
         >
           <div class="row mt-1 ml-2">
             <div cols="6" style="min-width: 140px">
+              <progressCircular :statusSpinner="loadComplete" />
               <span class="nunito-semi-bold-santas-gray-12px">{{
                 item.name
               }}</span>
@@ -65,9 +66,12 @@
 
 <script>
 import axios from "axios";
+import progressCircular from "../progressCircular.vue";
 export default {
+  components: { progressCircular },
   data() {
     return {
+      loadComplete: false,
       indicadores: [
         {
           name: "Docs por aprobar",
@@ -91,6 +95,7 @@ export default {
     loadGraph(data) {
       this.indicadores[0].nValue = data[0].docs_aprobar;
       this.indicadores[1].nValue = data[0].total_rendiciones;
+      this.loadComplete = true
     },
     toRendiciones(item) {
       let url = this.$route.query.url;
@@ -147,6 +152,7 @@ export default {
           this.indicadores[0].nValue = respuestas.data[0].total_doc_por_aprobar;
           this.indicadores[1].nValue =
             respuestas.data[0].total_rendiciones_vencidas;
+          
         });
       }
     },

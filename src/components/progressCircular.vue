@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div style="margin-right: 50px; margin-left: 50px;" v-if="spinner">
+      <div style="margin-right: 50px; margin-left: 50px;" class="mt-2" v-if="!statusSpinner">
         <div class="loader-line"></div>
       </div>
     </div>
@@ -10,6 +10,7 @@
   import { mapGetters } from 'vuex'
   import { SemipolarSpinner } from 'epic-spinners'
   export default {
+    props: ['statusSpinner'],
     components: {
       SemipolarSpinner,
     },
@@ -23,6 +24,7 @@
       ...mapGetters({
         spinner: 'getSpinner',
       }),
+
     },
   }
   </script>

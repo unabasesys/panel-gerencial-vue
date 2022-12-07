@@ -1,6 +1,7 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas por cliente</span>
+    <progressCircular :statusSpinner="loadComplete" />
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -22,6 +23,7 @@ import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import axios from "axios";
 import numeral from "numeral";
+import progressCircular from "../progressCircular.vue";
 
 import {
   Chart as ChartJS,
@@ -45,7 +47,7 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  components: { Bar, selectGraphic },
+  components: { Bar, selectGraphic,progressCircular },
   props: {
     chartId: {
       type: String,
@@ -78,6 +80,7 @@ export default {
   },
   data() {
     return {
+      loadComplete: false,
       chartData: {
         labels: [],
         datasets: [
@@ -156,6 +159,8 @@ export default {
         this.chartData.labels.push(cutName(val.name));
         this.chartData.datasets[0].data.push(val.data);
       });
+
+      this.loadComplete = true
     },
   },
 };

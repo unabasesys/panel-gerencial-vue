@@ -1,10 +1,8 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Costos por mes comparativo</span>
-
-    <div style="margin-right: 50px; margin-left: 50px" v-if="!loadComplete">
-      <div class="loader-line"></div>
-    </div>
+    <progressCircular :statusSpinner="loadComplete" />
+    
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -38,6 +36,7 @@ import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
 import { mapGetters } from "vuex";
+import progressCircular from "../progressCircular.vue";
 
 import {
   Chart as ChartJS,
@@ -66,7 +65,7 @@ export default {
   por_gastar: [],
   gastos_generales: [],
   costos_directos: [],
-  components: { Bar, selectGraphic },
+  components: { Bar, selectGraphic,progressCircular },
   props: {
     chartId: {
       type: String,
@@ -305,59 +304,5 @@ export default {
   display: table;
   padding: 2px;
   margin-left: 6px;
-}
-
-.loading-screen {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  z-index: 9999;
-  top: -10vh;
-  right: -5vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
-}
-
-.loader-line {
-  width: 100%;
-  height: 3px;
-  position: relative;
-  overflow: hidden;
-  background-color: #f6f7f8;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-
-.loader-line:before {
-  content: "";
-  position: absolute;
-  left: -50%;
-  height: 3px;
-  width: 40%;
-  background-color: #e4e7ec;
-  -webkit-animation: lineAnim 1s linear infinite;
-  -moz-animation: lineAnim 1s linear infinite;
-  animation: lineAnim 1s linear infinite;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-
-@keyframes lineAnim {
-  0% {
-    left: -40%;
-  }
-  50% {
-    left: 20%;
-    width: 80%;
-  }
-  100% {
-    left: 100%;
-    width: 100%;
-  }
 }
 </style>

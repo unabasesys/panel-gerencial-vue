@@ -8,6 +8,13 @@ export default new Vuex.Store({
         ventasCompras: [],
         spinner: {
             visible: false,
+            indicadores: false,
+            ventas_mes: false,
+            rentabilidad: false,
+            mis_tareas: false,
+            ventas_cliente: false,
+            ventas_compras: false,
+            costos_mes: false
         },
         loading: {
             titulo: '',

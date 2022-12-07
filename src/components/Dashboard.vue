@@ -1,14 +1,5 @@
 <template>
   <div class="background-general">
-    <div style="width: 100%" v-if="loaded" id="loading-screen">
-      <div id="app">
-        <semipolar-spinner
-          :animation-duration="2000"
-          :size="120"
-          color="#20A789"
-        />
-      </div>
-    </div>
     <div id="container" class="content no-collapsed">
       <div class="ml-5">
         <v-row>
@@ -37,7 +28,9 @@
               outlined
             >
               <div class="row mt-1 ml-2">
+                
                 <div cols="6" style="min-width: 180px">
+                  <progressCircular :statusSpinner="loadComplete" />
                   <span class="nunito-semi-bold-santas-gray-12px">{{
                     item.name
                   }}</span>
@@ -65,6 +58,7 @@
 
               <div class="row">
                 <div cols="6" style="min-width: 150px">
+                  
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
                     >Año en curso</span
                   >
@@ -144,6 +138,7 @@ import numeral from "numeral";
 import axios from "axios";
 import rentabilidadVue from "../components/graphics/rentabilidad.vue";
 import { BreedingRhombusSpinner, SemipolarSpinner } from "epic-spinners";
+import progressCircular from "../components/progressCircular.vue";
 
 export default {
   components: {
@@ -156,9 +151,11 @@ export default {
     VentasCompras,
     SemipolarSpinner,
     Compras,
+    progressCircular
   },
   data() {
     return {
+      loadComplete: false,
       value: 0,
       username: this.$route.query.user,
       user: "",
@@ -590,7 +587,7 @@ export default {
           //this.$refs.ventasCompras.loadGraph(this.ventas_compras);
           //this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
-
+          this.loadComplete = true
           //this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
           console.timeEnd("START");
         } catch (error) {
@@ -650,23 +647,4 @@ export default {
   background-color: #fafafb;
 }
 
-#loading-screen {
-  background-color: rgba(25, 25, 25, 0.7);
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  z-index: 9999;
-  margin-top: 0;
-  top: 0;
-  text-align: center;
-}
-
-#loading-screen > #app {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  margin-top: -50px;
-  margin-left: 50%;
-  top: 50%;
-}
 </style>

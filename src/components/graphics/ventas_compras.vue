@@ -1,7 +1,7 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
-    <progressCircular />
+    <progressCircular :statusSpinner="loadComplete"/>
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -97,6 +97,7 @@ export default {
   data() {
     return {
       switch_por_gastar: true,
+      loadComplete: false,
       chartData: {
         labels: [
           "Enero",
@@ -191,7 +192,7 @@ export default {
       });
 
       this.costos_directos = data;
-      this.setSpinner(false);
+      this.loadComplete = true
 
       this.$emit("loadGraphRentabilidad", dataa);
     },

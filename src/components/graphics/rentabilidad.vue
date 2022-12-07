@@ -17,7 +17,7 @@
             <v-icon size="5">ub-arrow_down</v-icon>
           </template>
         </v-select>
-        <progressCircular />
+        <progressCircular :statusSpinner="loadComplete"  />
       </v-col>
     </v-row>
 
@@ -93,6 +93,7 @@ export default {
   },
   data() {
     return {
+      loadComplete: false,
       items: ["2021", "2022"],
       periodoSelect: "",
       chartData: {
@@ -161,7 +162,7 @@ export default {
       this.chartData.datasets[0].data.push(data[0].acumulado);
       this.chartData.datasets[0].data.push(data[0].rentabilidad);
 
-      this.setSpinner(false);
+      this.loadComplete = true
     },
     async setRentabilidadPeriodo() {
       this.fethData(this.periodoSelect);

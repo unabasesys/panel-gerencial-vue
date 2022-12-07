@@ -1,6 +1,7 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas por mes comparativo</span>
+    <progressCircular :statusSpinner="loadComplete" />
     <div class="row mr-1 mb-5 mt-2" style="float: right; margin-top: 30px">
       <!-- <div class="btn-graphic-div">
         <span class="nunito-semi-bold-santas-gray-10px">1H</span>
@@ -45,6 +46,7 @@ import { Bar } from "vue-chartjs/legacy";
 import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import numeral from "numeral";
+import progressCircular from "../progressCircular.vue";
 
 import {
   Chart as ChartJS,
@@ -68,7 +70,7 @@ ChartJS.register(
 
 export default {
   name: "BarChart",
-  components: { Bar },
+  components: { Bar,progressCircular },
   props: {
     chartId: {
       type: String,
@@ -101,6 +103,7 @@ export default {
   },
   data() {
     return {
+      loadComplete: false,
       chartData: {
         labels: [
           "Enero",
@@ -235,6 +238,8 @@ export default {
               this.chartData.datasets[2].data.push(val[1]);
             }
           });
+
+          this.loadComplete = true
         });
       }
     },
