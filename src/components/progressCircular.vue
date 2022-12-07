@@ -1,7 +1,7 @@
 <template>
     <div>
-      <div style="margin-right: 50px; margin-left: 50px;" class="mt-2">
-        <div class="loader-line" v-if="!statusSpinner"></div>
+      <div style="margin-right: 50px; margin-left: 50px;" class="mt-2" v-if="!statusSpinner">
+        <div class="loader-line"></div>
       </div>
     </div>
   </template>
