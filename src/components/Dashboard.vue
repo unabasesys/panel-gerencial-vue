@@ -111,7 +111,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="mr-2">
+        <!-- <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Compras ref="compras" />
@@ -119,7 +119,7 @@
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
           </v-col>
-        </v-row>
+        </v-row> -->
       </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="4000" top color="error">
