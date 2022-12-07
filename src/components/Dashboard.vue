@@ -23,14 +23,20 @@
             <v-card
               class="rounded-box"
               width="210"
-              height="120"
-              color="#ffffff"
+              height="130"
+              color=""
+              :loading="loadComplete"
+              loader-height="4"
               outlined
             >
-              <div class="row mt-1 ml-2">
-                
+              <template slot="progress">
+                <v-progress-linear
+                  color="#69DFC0"
+                  indeterminate
+                ></v-progress-linear>
+              </template>
+              <div class="row mt-2 ml-2">
                 <div cols="6" style="min-width: 180px">
-                  <progressCircular :statusSpinner="loadComplete" />
                   <span class="nunito-semi-bold-santas-gray-12px">{{
                     item.name
                   }}</span>
@@ -58,13 +64,12 @@
 
               <div class="row">
                 <div cols="6" style="min-width: 150px">
-                  
                   <span class="nunito-semi-bold-santas-gray-10px ml-6"
                     >Año en curso</span
                   >
                 </div>
 
-                <div cols="6" class="">
+                <div cols="6" style="min-width: 120px">
                   <!-- <span class="nunito-semi-bold-emerald-14px"
                     ><v-icon class="mr-1" size="15">ub-percent</v-icon>+{{
                       item.percent
@@ -151,11 +156,11 @@ export default {
     VentasCompras,
     SemipolarSpinner,
     Compras,
-    progressCircular
+    progressCircular,
   },
   data() {
     return {
-      loadComplete: false,
+      loadComplete: true,
       value: 0,
       username: this.$route.query.user,
       user: "",
@@ -587,7 +592,7 @@ export default {
           //this.$refs.ventasCompras.loadGraph(this.ventas_compras);
           //this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
-          this.loadComplete = true
+          this.loadComplete = false;
           //this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
           console.timeEnd("START");
         } catch (error) {
@@ -646,5 +651,4 @@ export default {
 .background-general {
   background-color: #fafafb;
 }
-
 </style>
