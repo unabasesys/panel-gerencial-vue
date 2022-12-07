@@ -1,6 +1,10 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Costos por mes comparativo</span>
+
+    <div style="margin-right: 50px; margin-left: 50px" v-if="!loadComplete">
+      <div class="loader-line"></div>
+    </div>
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -33,6 +37,7 @@ import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
+import { mapGetters } from "vuex";
 
 import {
   Chart as ChartJS,
@@ -43,6 +48,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import { load } from "mime";
 
 ChartJS.register(
   Title,
@@ -93,6 +99,7 @@ export default {
   },
   data() {
     return {
+      loadComplete: false,
       switch_por_gastar: true,
       data_current_year: [],
       data_past_year: [],
@@ -144,10 +151,9 @@ export default {
             enabled: true,
             callbacks: {
               label: (tooltipItem, data) => {
-                let format =
-                  numeral(tooltipItem.raw)
-                    .format(" $ 0,0")
-                    .replaceAll(",", ".");
+                let format = numeral(tooltipItem.raw)
+                  .format(" $ 0,0")
+                  .replaceAll(",", ".");
                 return format;
               },
             },
@@ -180,9 +186,12 @@ export default {
     };
   },
   methods: {
-    loadGraph(data_current_year,data_past_year) {
-      this.data_current_year = data_current_year
-      this.data_past_year = data_past_year
+    ...mapGetters({
+      getDataComprasVentas: "getVentasCompras",
+    }),
+    loadGraph(data_current_year, data_past_year) {
+      this.data_current_year = data_current_year;
+      this.data_past_year = data_past_year;
 
       data_past_year.forEach((val) => {
         this.chartData.datasets[0].data.push(val.compras_past);
@@ -192,14 +201,14 @@ export default {
         this.chartData.datasets[1].data.push(val.compras);
       });
 
+      this.loadComplete = true;
     },
 
     setPorGastar() {
       this.chartData.datasets[0].data = [];
       this.chartData.datasets[1].data = [];
 
-
-      this.data_past_year.forEach(v => {
+      this.data_past_year.forEach((v) => {
         if (this.switch_por_gastar) {
           let sum = v.compras_past;
           this.chartData.datasets[0].data.push(sum);
@@ -207,10 +216,9 @@ export default {
           let sum = v.compras_past - v.por_gastar_past;
           this.chartData.datasets[0].data.push(sum);
         }
-      })
+      });
 
-
-      this.data_current_year.forEach(v => {
+      this.data_current_year.forEach((v) => {
         if (this.switch_por_gastar) {
           let sum = v.compras;
           this.chartData.datasets[1].data.push(sum);
@@ -218,8 +226,57 @@ export default {
           let sum = v.compras - v.por_gastar;
           this.chartData.datasets[1].data.push(sum);
         }
-      })
+      });
+    },
 
+    async fethData() {
+      const url = this.$route.query.url;
+      const sid = this.$route.query.sid;
+      if (sid != undefined && sid != "" && url != undefined && url != "") {
+        let date = new Date();
+
+        let config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          url: "https://frank.unabase.com/node/get-ventas-compras",
+          data: {
+            hostname: "https://" + url,
+            date_from: date.getFullYear() - 1,
+            por_gastar: true,
+          },
+        };
+
+        await axios(config).then((res) => {
+          let only_costos = [];
+          const gastos_generales_past =
+            res.data[0].gastos_generales.suma.months;
+          const por_gastar_past = res.data[0].por_gastar.suma.months;
+          const costos_directos_past = res.data[0].costos_directos.suma.months;
+          let object_compras = {};
+
+          costos_directos_past.forEach((val, index) => {
+            //12= acumulado
+            if (index != 12) {
+              let sum =
+                val.value +
+                por_gastar_past[index].value +
+                gastos_generales_past[index].value;
+
+              object_compras = {
+                compras_past: sum,
+                por_gastar_past: por_gastar_past[index].value,
+              };
+
+              only_costos.push(object_compras);
+            }
+          });
+          let data_current = this.getDataComprasVentas();
+          this.loadGraph(data_current, only_costos);
+        });
+      }
     },
   },
 };
@@ -248,5 +305,59 @@ export default {
   display: table;
   padding: 2px;
   margin-left: 6px;
+}
+
+.loading-screen {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 9999;
+  top: -10vh;
+  right: -5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.loader-line {
+  width: 100%;
+  height: 3px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f6f7f8;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+
+.loader-line:before {
+  content: "";
+  position: absolute;
+  left: -50%;
+  height: 3px;
+  width: 40%;
+  background-color: #e4e7ec;
+  -webkit-animation: lineAnim 1s linear infinite;
+  -moz-animation: lineAnim 1s linear infinite;
+  animation: lineAnim 1s linear infinite;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+
+@keyframes lineAnim {
+  0% {
+    left: -40%;
+  }
+  50% {
+    left: 20%;
+    width: 80%;
+  }
+  100% {
+    left: 100%;
+    width: 100%;
+  }
 }
 </style>

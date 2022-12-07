@@ -1,6 +1,7 @@
 <template>
   <div>
     <span class="nunito-bold-bright-gray-18px">Ventas / Compras</span>
+    <progressCircular />
     <Bar
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -34,6 +35,7 @@ import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
 import { mapMutations, mapState, mapGetters } from "vuex";
+import progressCircular from "../progressCircular.vue";
 
 import {
   Chart as ChartJS,
@@ -61,7 +63,7 @@ export default {
   por_gastar: [],
   gastos_generales: [],
   costos_directos: [],
-  components: { Bar, selectGraphic },
+  components: { Bar, selectGraphic, progressCircular },
   props: {
     chartId: {
       type: String,
@@ -143,10 +145,9 @@ export default {
             enabled: true,
             callbacks: {
               label: (tooltipItem, data) => {
-                let format =
-                  numeral(tooltipItem.raw)
-                    .format(" $ 0,0")
-                    .replaceAll(",", ".");
+                let format = numeral(tooltipItem.raw)
+                  .format(" $ 0,0")
+                  .replaceAll(",", ".");
                 return format;
               },
             },
@@ -181,14 +182,18 @@ export default {
   methods: {
     ...mapMutations({
       setSpinner: "SET_SPINNER",
+      setVentasCompras: "setVentasCompras",
     }),
-    loadGraph(data) {
+    loadGraph(data, dataa) {
       data.forEach((val) => {
         this.chartData.datasets[0].data.push(val.compras);
         this.chartData.datasets[1].data.push(val.ventas);
       });
 
       this.costos_directos = data;
+      this.setSpinner(false);
+
+      this.$emit("loadGraphRentabilidad", dataa);
     },
 
     setPorGastar() {
@@ -208,12 +213,8 @@ export default {
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
         let date = new Date();
-        let c_date =
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear();
+
+        let year = date.getFullYear();
 
         let config = {
           headers: {
@@ -224,35 +225,39 @@ export default {
           url: "https://frank.unabase.com/node/get-ventas-compras",
           data: {
             hostname: "https://" + url,
-            date_from: date.getFullYear(),
+            date_from: year,
+            date_to: year,
             por_gastar: true,
-            sid,
           },
         };
-
         await axios(config).then((respuestas) => {
-          this.gastos_generales =
+          let ventas_compras = [];
+          const gastos_generales =
             respuestas.data[0].gastos_generales.suma.months;
-          this.por_gastar = respuestas.data[0].por_gastar.suma.months;
-          this.costos_directos = respuestas.data[0].costos_directos.suma.months;
+          const por_gastar = respuestas.data[0].por_gastar.suma.months;
+          const costos_directos =
+            respuestas.data[0].costos_directos.suma.months;
+          let object_ventas_compras = {};
 
-          this.costos_directos.map((val, index) => {
+          costos_directos.forEach((val, index) => {
             //12= acumulado
             if (index != 12) {
               let sum =
                 val.value +
-                this.por_gastar[index].value +
-                this.gastos_generales[index].value;
-              this.chartData.datasets[0].data.push(sum);
+                por_gastar[index].value +
+                gastos_generales[index].value;
+
+              object_ventas_compras = {
+                compras: sum,
+                por_gastar: por_gastar[index].value,
+                ventas: respuestas.data[0].ventas.suma.months[index].value,
+              };
+              ventas_compras.push(object_ventas_compras);
             }
           });
 
-          respuestas.data[0].ventas.suma.months.map((val, index) => {
-            //12= acumulado
-            if (index != 12) {
-              this.chartData.datasets[1].data.push(val.value);
-            }
-          });
+          this.setVentasCompras(ventas_compras);
+          this.loadGraph(ventas_compras, respuestas);
         });
       }
     },

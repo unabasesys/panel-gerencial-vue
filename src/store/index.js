@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        ventasCompras: [],
         spinner: {
             visible: false,
         },
@@ -86,6 +87,10 @@ export default new Vuex.Store({
             state.user = payload
         },
 
+        setVentasCompras(state, payload) {
+            state.ventasCompras = payload
+        },
+
     },
     getters: {
         getNegocios: state => state.negocios,
@@ -93,6 +98,7 @@ export default new Vuex.Store({
         getTipoCambio: state => state.tipoCambio,
         getUser: state => state.user,
         getSpinner: state => state.spinner,
+        getVentasCompras: state => state.ventasCompras
     },
     actions: {
 

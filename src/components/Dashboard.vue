@@ -106,12 +106,15 @@
 
           <v-col cols="6" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div flex-grow-1">
-              <VentasCompras ref="ventasCompras" />
+              <VentasCompras
+                ref="ventasCompras"
+                @loadGraphRentabilidad="loadRentabilidad"
+              />
             </v-card>
           </v-col>
         </v-row>
 
-        <!-- <v-row class="mr-2">
+        <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Compras ref="compras" />
@@ -119,7 +122,7 @@
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
           </v-col>
-        </v-row> -->
+        </v-row>
       </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="4000" top color="error">
@@ -257,6 +260,19 @@ export default {
       return success;
     },
 
+    async loadRentabilidad(res) {
+      const acumulado_ventas = res.data[0].ventas.suma.months[12].value;
+      const rentabilidad_final = res.data[0].resultado.months[12].value;
+      let obj_rentabilidad = {
+        acumulado: acumulado_ventas,
+        rentabilidad: rentabilidad_final,
+      };
+
+      this.rentabilidad.push(obj_rentabilidad);
+
+      this.$refs.rentabilidad.loadGraph(this.rentabilidad);
+    },
+
     async fetchData() {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
@@ -321,7 +337,7 @@ export default {
         },
       };
 
-      let year = date_.getFullYear()
+      let year = date_.getFullYear();
 
       let config_ventas_compras = {
         headers: {
@@ -459,10 +475,15 @@ export default {
       };
       console.time("START");
 
+      // data_indicadores(),
+      //   data_ventas_compras(),
+      //   data_ventas_mes(),
+      //   data_ventas_cliente(),
+      //   data_tareas(),
+      //   data_compras_past_year(),
+
       Promise.all([
         data_indicadores(),
-        data_ventas_compras(),
-        data_ventas_mes(),
         data_ventas_cliente(),
         data_tareas(),
       ]).then((respuestas) => {
@@ -477,8 +498,9 @@ export default {
             this.indicadores[4].nValue = this.formatNumber(val.por_pagar);
           });
 
-          var size = 10;
-          var items = respuestas[3][0].clientes.slice(0, size).map((i) => {
+          //VENTAS POR CLIENTE
+
+          var items = respuestas[1][0].clientes.slice(0, 10).map((i) => {
             return i;
           });
           items.forEach((val) => {
@@ -490,44 +512,44 @@ export default {
           });
 
           //VENTAS COMPRASS
-          const gastos_generales =
-            respuestas[1][0].gastos_generales.suma.months;
-          const por_gastar = respuestas[1][0].por_gastar.suma.months;
-          const costos_directos = respuestas[1][0].costos_directos.suma.months;
-          let object_ventas_compras = {};
+          // const gastos_generales =
+          //   respuestas[1][0].gastos_generales.suma.months;
+          // const por_gastar = respuestas[1][0].por_gastar.suma.months;
+          // const costos_directos = respuestas[1][0].costos_directos.suma.months;
+          // let object_ventas_compras = {};
 
-          costos_directos.forEach((val, index) => {
-            //12= acumulado
-            if (index != 12) {
-              let sum =
-                val.value +
-                por_gastar[index].value +
-                gastos_generales[index].value;
+          // costos_directos.forEach((val, index) => {
+          //   //12= acumulado
+          //   if (index != 12) {
+          //     let sum =
+          //       val.value +
+          //       por_gastar[index].value +
+          //       gastos_generales[index].value;
 
-              object_ventas_compras = {
-                compras: sum,
-                por_gastar: por_gastar[index].value,
-                ventas: respuestas[1][0].ventas.suma.months[index].value,
-              };
-              this.ventas_compras.push(object_ventas_compras);
-            }
-          });
+          //     object_ventas_compras = {
+          //       compras: sum,
+          //       por_gastar: por_gastar[index].value,
+          //       ventas: respuestas[1][0].ventas.suma.months[index].value,
+          //     };
+          //     this.ventas_compras.push(object_ventas_compras);
+          //   }
+          // });
 
           //Rentabilidad
-          const acumulado_ventas =
-            respuestas[1][0].ventas.suma.months[12].value;
-          const rentabilidad_final =
-            respuestas[1][0].resultado.months[12].value;
-          let obj_rentabilidad = {
-            acumulado: acumulado_ventas,
-            rentabilidad: rentabilidad_final,
-          };
+          // const acumulado_ventas =
+          //   respuestas[3][0].ventas.suma.months[12].value;
+          // const rentabilidad_final =
+          //   respuestas[3][0].resultado.months[12].value;
+          // let obj_rentabilidad = {
+          //   acumulado: acumulado_ventas,
+          //   rentabilidad: rentabilidad_final,
+          // };
 
-          this.rentabilidad.push(obj_rentabilidad);
+          // this.rentabilidad.push(obj_rentabilidad);
 
           //TAREAS
-          const docs_aprobar = respuestas[4][0].total_doc_por_aprobar;
-          const total_rendiciones = respuestas[4][0].total_rendiciones_vencidas;
+          const docs_aprobar = respuestas[2][0].total_doc_por_aprobar;
+          const total_rendiciones = respuestas[2][0].total_rendiciones_vencidas;
 
           let obj_tareas = {
             docs_aprobar,
@@ -564,9 +586,9 @@ export default {
 
           //Cargar demas graficos
           this.$refs.ventasClienteGraph.loadGraph(this.ventas_cliente);
-          this.$refs.ventasMes.loadGraph(this.ventas_compras);
-          this.$refs.ventasCompras.loadGraph(this.ventas_compras);
-          this.$refs.rentabilidad.loadGraph(this.rentabilidad);
+          this.$refs.ventasMes.loadGraph();
+          //this.$refs.ventasCompras.loadGraph(this.ventas_compras);
+          //this.$refs.rentabilidad.loadGraph(this.rentabilidad);
           this.$refs.tareas.loadGraph(this.tareas);
 
           //this.$refs.compras.loadGraph(this.ventas_compras, only_costos);
@@ -589,6 +611,8 @@ export default {
         this.activeNav = false;
         this.user = this.$route.params.user;
         this.fetchData();
+        await this.$refs.ventasCompras.fethData();
+        await this.$refs.compras.fethData();
       } else if (!res) {
         this.snackbar_message = "Error al iniciar";
         this.snackbar = true;

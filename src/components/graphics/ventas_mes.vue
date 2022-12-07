@@ -192,7 +192,7 @@ export default {
 
   methods: {
 
-    loadGraph(data) {
+    loadGraph() {
       this.init()
     },
 
