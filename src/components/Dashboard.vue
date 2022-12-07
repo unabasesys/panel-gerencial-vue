@@ -111,7 +111,7 @@
           </v-col>
         </v-row>
 
-        <!-- <v-row class="mr-2">
+        <v-row class="mr-2">
           <v-col cols="7" class="d-flex" style="flex-direction: column">
             <v-card class="pa-5 rounded-box-div mb-1 flex-grow-1">
               <Compras ref="compras" />
@@ -119,7 +119,7 @@
           </v-col>
           <v-col cols="5" class="d-flex" style="flex-direction: column">
           </v-col>
-        </v-row> -->
+        </v-row>
       </div>
     </div>
     <v-snackbar v-model="snackbar" :timeout="4000" top color="error">
@@ -242,7 +242,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/is-login",
+        url: "https://frank.unabase.com/node/is-login",
         data: {
           hostname: "https://" + url,
           sid,
@@ -281,7 +281,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-tareas",
+        url: "https://frank.unabase.com/node/get-tareas",
         data: {
           date_from: 2022,
           date_to: 2022,
@@ -312,7 +312,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-indicadores",
+        url: "https://frank.unabase.com/node/get-indicadores",
         data: {
           hostname: "https://" + url,
           date_from: dateFrom,
@@ -329,7 +329,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-ventas-compras",
+        url: "https://frank.unabase.com/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
           date_from: year,
@@ -344,7 +344,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-ventas-compras",
+        url: "https://frank.unabase.com/node/get-ventas-compras",
         data: {
           hostname: "https://" + url,
           date_from: date_.getFullYear() - 1,
@@ -360,7 +360,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-ventas-mes",
+        url: "https://frank.unabase.com/node/get-ventas-mes",
         data: {
           hostname: "https://" + url,
           year: currentYear,
@@ -374,7 +374,7 @@ export default {
           "Content-Type": "application/json",
         },
         method: "POST",
-        url: "https://dev3.unabase.com/node/get-ventas-cliente",
+        url: "https://frank.unabase.com/node/get-ventas-cliente",
         data: {
           hostname: "https://" + url,
           fecha_asignacion: true,

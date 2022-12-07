@@ -33,6 +33,7 @@ import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import selectGraphic from "../selector/select_graphic.vue";
 import numeral from "numeral";
+import { mapMutations, mapState, mapGetters } from "vuex";
 
 import {
   Chart as ChartJS,
@@ -178,6 +179,9 @@ export default {
     };
   },
   methods: {
+    ...mapMutations({
+      setSpinner: "SET_SPINNER",
+    }),
     loadGraph(data) {
       data.forEach((val) => {
         this.chartData.datasets[0].data.push(val.compras);
@@ -217,7 +221,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: "https://" + url + "/node/get-ventas-compras",
+          url: "https://frank.unabase.com/node/get-ventas-compras",
           data: {
             hostname: "https://" + url,
             date_from: date.getFullYear(),
