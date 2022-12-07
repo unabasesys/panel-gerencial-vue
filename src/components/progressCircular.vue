@@ -1,7 +1,7 @@
 <template>
     <div>
-      <div style="margin-right: 50px; margin-left: 50px;" class="mt-2" v-if="!statusSpinner">
-        <div class="loader-line"></div>
+      <div style="margin-right: 50px; margin-left: 50px;" class="mt-2">
+        <div class="loader-line" v-if="!statusSpinner"></div>
       </div>
     </div>
   </template>
@@ -49,7 +49,7 @@
     height: 3px;
     position: relative;
     overflow: hidden;
-    background-color: #F6F7F8;
+    background-color: #69DFC0;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
