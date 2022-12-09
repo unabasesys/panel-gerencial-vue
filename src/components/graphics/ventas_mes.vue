@@ -134,12 +134,12 @@ export default {
           },
           {
             label: "2021",
-            backgroundColor: "#6871EC",
+            backgroundColor: "#A8BAF9",
             data: [],
           },
           {
             label: "2022",
-            backgroundColor: "#A8BAF9",
+            backgroundColor: "#6871EC",
             data: [],
           },
         ],
