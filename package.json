@@ -11,9 +11,7 @@
         "serve": "vue-cli-service serve",
         "hola": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "postinstall": "npm run build",
-        "lint": "vue-cli-service lint",
-        "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+        "postinstall": "npm run build"
     },
     "dependencies": {
         "@interactjs/actions": "^1.10.17",
