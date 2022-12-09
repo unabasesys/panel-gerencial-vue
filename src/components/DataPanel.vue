@@ -37,6 +37,7 @@
                   </template>
                   <span>Total ventas: $ {{ total_ventas }}</span>
                 </v-tooltip>
+
                 <v-list-item-content class="pl-6">
                   <span class="nunito-semi-bold-santas-gray-16px mb-4"
                     >Total ventas</span
@@ -392,7 +393,7 @@ export default {
     async checkSession() {
       let success = false;
       let t = localStorage.getItem("token");
-      debugger;
+
       let config = {
         headers: {
           Accept: "application/json",
@@ -408,9 +409,7 @@ export default {
       };
 
       await axios(config).then((respuestas) => {
-        debugger;
         if (respuestas.data[0].success) {
-          debugger;
           let currentToken = localStorage.getItem("token");
           if (currentToken === respuestas.data[0].token) {
             success = true;
@@ -632,7 +631,7 @@ export default {
         this.setSnackbar("Debe seleccionar un rango de fechas");
       }
     },
-    async getNegocios(value, date_start = "", date_end = "") {
+    getNegocios(value, date_start = "", date_end = "") {
       const getAllNegocios = (url_ = "") => {
         console.log("URL: ", url_);
         this.mostrarLoading({
@@ -841,70 +840,80 @@ export default {
           });
       };
 
-      const getNeg = async (
-        token,
-        date_start = "",
-        date_end = "",
-        currency = ""
-      ) => {
+      const getNeg = (token, date_start = "", date_end = "", currency = "") => {
         this.mostrarLoading({
           titulo: "Cargando información",
           color: "#03D6F9",
           percent: 0,
         });
-
         //Si viene filtro de fecha
-        let config = {
+        config = {
+          method: "get",
+          url:
+            date_start && date_end
+              ? `https://api-v3-new.herokuapp.com/v1/negocios/meses/${date_start}/${date_end}`
+              : `https://api-v3-new.herokuapp.com/v1/negocios`,
           headers: {
             Authorization: token,
-            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          method: "GET",
-          url:
-            date_start && date_end
-              ? `https://v3api.herokuapp.com/v1/negocios/meses/${date_start}/${date_end}`
-              : `https://v3api.herokuapp.com/v1/negocios`,
         };
-        debugger;
+
         this.token = token;
-
-        await axios(config).then((respuestas) => {
-          debugger
-          let dt = [];
-
-          respuestas.forEach((e) => {
-            e.data.rows.forEach((e) => {
-              let close_compras = this.negocio.cierre_compras ? true : false;
-              this.cierre_compras_v = close_compras ? "Si" : "No";
-              if (
-                e.estado === "NOTA DE VENTA" &&
-                e.closed_compras === close_compras
-              ) {
-                let data_table = {
-                  nro_neg: e.folio,
-                  fecha_asignacion: e.fecha_asignacion,
-                  referencia: e.referencia,
-                  cliente: e.razon_cliente,
-                  total_venta: currency + this.parse(e.total_neto),
-                  gasto_p: currency + this.parse(e.costo.presupuestado),
-                  gasto_r: currency + this.parse(e.costo.real),
-                  utilidad_final: currency + this.parse(e.utilidad.final),
-                  facturado: currency + this.parse(e.total_facturado),
-                  por_facturar: currency + this.parse(e.total_por_facturar),
-                };
-
-                dt.push(data_table);
-              }
-            });
+        let doc = () => {
+          return new Promise((resolve, reject) => {
+            axios(config)
+              .then((r) => {
+                resolve(r.data);
+              })
+              .catch((err) => {
+                reject();
+              });
           });
-          this.desserts = [];
-          this.desserts = dt;
-          this.addNegocio(this.desserts);
-          this.setCards();
-          this.$refs.tipoCambio.setTipoCambio(value);
-          this.tipo_cambio_v = null;
+        };
+
+        Promise.all([doc()]).then((respuestas) => {
+          let dt = [];
+          try {
+            respuestas.forEach((e) => {
+              e.data.rows.forEach((e) => {
+                let close_compras = this.negocio.cierre_compras ? true : false;
+                this.cierre_compras_v = close_compras ? "Si" : "No";
+                if (
+                  e.estado === "NOTA DE VENTA" &&
+                  e.closed_compras === close_compras
+                ) {
+                  let data_table = {
+                    nro_neg: e.folio,
+                    fecha_asignacion: e.fecha_asignacion,
+                    referencia: e.referencia,
+                    cliente: e.razon_cliente,
+                    total_venta: currency + this.parse(e.total_neto),
+                    gasto_p: currency + this.parse(e.costo.presupuestado),
+                    gasto_r: currency + this.parse(e.costo.real),
+                    utilidad_final: currency + this.parse(e.utilidad.final),
+                    facturado: currency + this.parse(e.total_facturado),
+                    por_facturar: currency + this.parse(e.total_por_facturar),
+                  };
+
+                  dt.push(data_table);
+                }
+              });
+            });
+            this.desserts = [];
+            this.desserts = dt;
+            this.addNegocio(this.desserts);
+            this.setCards();
+            this.$refs.tipoCambio.setTipoCambio(value);
+            this.tipo_cambio_v = null;
+          } catch (error) {
+            this.ocultarLoading(100);
+            this.desserts = [];
+            console.log(error);
+          } finally {
+            this.ocultarLoading(100);
+          }
         });
       };
 
@@ -961,8 +970,14 @@ export default {
       }
     },
   },
-  created: function () {
-    this.init();
+
+  mounted() {
+    let param = this.$route.params;
+    if (param.username === "primo") {
+      this.init();
+    } else {
+      this.$router.push({ name: "Home" });
+    }
   },
 };
 </script>
