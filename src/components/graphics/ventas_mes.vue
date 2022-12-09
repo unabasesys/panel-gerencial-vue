@@ -4,6 +4,7 @@
       <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
     </template>
     <div class="pa-5">
+      
       <span class="nunito-bold-bright-gray-18px"
         >Ventas por mes comparativo</span
       >
