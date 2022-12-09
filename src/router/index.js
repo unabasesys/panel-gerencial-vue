@@ -23,20 +23,6 @@ const routes = [{
         import( /* webpackChunkName: "about" */ '../views/Dashboard.vue')
 },
 {
-    path: '/dashboard?',
-    name: 'Dashboard',
-    props: true,
-    meta: {
-        reload: true,
-    },
-    // route level code-splittingi
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-        import( /* webpackChunkName: "about" */ '../views/Dashboard.vue')
-},
-
-{
     path: '/panel',
     name: 'Panel',
     props: true,
