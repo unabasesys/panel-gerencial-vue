@@ -37,7 +37,6 @@
                   </template>
                   <span>Total ventas: $ {{ total_ventas }}</span>
                 </v-tooltip>
-
                 <v-list-item-content class="pl-6">
                   <span class="nunito-semi-bold-santas-gray-16px mb-4"
                     >Total ventas</span
