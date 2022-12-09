@@ -10,7 +10,8 @@
         "serve": "vue-cli-service serve",
         "hola": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "postinstall": "npm run build"
+        "postinstall": "npm run build",
+        "lint": "vue-cli-service lint"
     },
     "dependencies": {
         "@interactjs/actions": "^1.10.17",
