@@ -5,8 +5,9 @@
     "engines": {
         "node": "16.13.2"
     },
+    "main": "server.js",
     "scripts": {
-        "start": "node index.js",
+        "start": "nodemon server.js",
         "serve": "vue-cli-service serve",
         "hola": "vue-cli-service serve",
         "build": "vue-cli-service build",
