@@ -27,12 +27,12 @@ export default new Vuex.Store({
         tipoCambio: [],
 
         tokens: {
-            esp_madrid: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjQ0LjE5OS4xNjEuMTUxIiwicG9ydCI6Ijg1MDAiLCJuYW1lIjoiUFJJTU9CVUVOT1NBSVJFU1MuTCIsImlkIjoiMjc2MjYiLCJpYXQiOjE2NTg3NjQ3NDcsImV4cCI6MTY5MDMwMDc0N30.yUAmyZEIfraEutcSwrGJ-HWyS4A30DlqfwMcvmy5L4g',
-            esp_barcelona: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjEwNy4yMy4xNzkuMjQyIiwicG9ydCI6Ijg1MDEiLCJuYW1lIjoiUFJJTU9CQVJDRUxPTkEiLCJpZCI6IjMxNzQ1IiwiaWF0IjoxNjUwOTA1ODE4LCJleHAiOjE2ODI0NDE4MTh9.b4EfBvsZEu00ntI_lKVsZXQv4zrLfgtpwI0qQxNFalw',
-            arg: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjQ0LjE5OS4xNjEuMTUxIiwicG9ydCI6IjgxMDAiLCJuYW1lIjoiUFJJTU9DT05URU5UQVJHRU5USU5BIiwiaWQiOiIyNDg2NSIsImlhdCI6MTY1ODc2MjM4MSwiZXhwIjoxNjkwMjk4MzgxfQ.mBbzyY313rq0eK1N8kqX_1vFs5eJfLUz8HJV-T24pII',
-            mex: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjQ0LjE5OS4xNjEuMTUxIiwicG9ydCI6Ijg1NTAiLCJuYW1lIjoiUFJJTU9DT05URU5UTUVYSUNPIiwiaWQiOiIxNDgyOCIsImlhdCI6MTY1ODc2NDMxOSwiZXhwIjoxNjkwMzAwMzE5fQ.ew8CpFqPP5F2cUeztEYcA924viKeQZQs4uN__ElLISE',
-            chile: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjMuMjEzLjE4Ny4xNTciLCJwb3J0IjoiODUzOCIsIm5hbWUiOiJQUklNT0NPTlRFTlQiLCJpZCI6IjIzOTM2IiwiaWF0IjoxNjY3NDE0MDA3LCJleHAiOjE2OTg5NTAwMDd9.NAncGr-r0Z_UzNgBU5gkRDRmUCqprUSTfLzywB400UI',
-            brasil: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6IjQ0LjE5OS4xNjEuMTUxIiwicG9ydCI6Ijg0NTAiLCJuYW1lIjoiUFJJTU9DT05URU5UQlJBU0lMIiwiaWQiOiIzMjIwNiIsImlhdCI6MTY1ODc2NDQ3MCwiZXhwIjoxNjkwMzAwNDcwfQ.TGu24h8E35ZPR6Zbqjk5k8sW_HhdNtE5pgX4eF5eFwc'
+            esp_madrid: process.env.VUE_APP_ESP_MADRID,
+            esp_barcelona: process.env.VUE_APP_ESP_BARCELONA,
+            arg: process.env.VUE_APP_ARG,
+            mex: process.env.VUE_APP_MEX,
+            chile: process.env.VUE_APP_CHILE,
+            brasil: process.env.VUE_APP_BRASIL
         },
 
         sid: '',

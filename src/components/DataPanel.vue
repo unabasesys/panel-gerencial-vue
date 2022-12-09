@@ -276,7 +276,7 @@ export default {
     SelectOption,
     Aside,
     TipoCambio,
-    draggable
+    draggable,
   },
   data() {
     return {
@@ -317,8 +317,18 @@ export default {
           value: "total_venta",
           class: "nunito-normal-12px",
         },
-        { align: "right", text: "GASTO P", value: "gasto_p", class: "nunito-normal-12px" },
-        { align: "right", text: "GASTO R", value: "gasto_r", class: "nunito-normal-12px" },
+        {
+          align: "right",
+          text: "GASTO P",
+          value: "gasto_p",
+          class: "nunito-normal-12px",
+        },
+        {
+          align: "right",
+          text: "GASTO R",
+          value: "gasto_r",
+          class: "nunito-normal-12px",
+        },
         {
           align: "right",
           text: "UTILIDAD FINAL",
@@ -361,7 +371,7 @@ export default {
       getNegocioStore: "getNegocios",
       getCardsStore: "getDataCards",
       getTipoCambioStore: "getTipoCambio",
-      getUserStore: "getUser"
+      getUserStore: "getUser",
     }),
   },
   methods: {
@@ -378,12 +388,12 @@ export default {
       this.snackbar_message = message;
     },
     async init() {
-        this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
+      this.cierre_compras_v = this.negocio.cierre_compras ? "Si" : "";
     },
     async checkSession() {
       let success = false;
-      let t = localStorage.getItem('token')
-      debugger
+      let t = localStorage.getItem("token");
+      debugger;
       let config = {
         headers: {
           Accept: "application/json",
@@ -401,7 +411,7 @@ export default {
       await axios(config).then((respuestas) => {
         debugger;
         if (respuestas.data[0].success) {
-          debugger
+          debugger;
           let currentToken = localStorage.getItem("token");
           if (currentToken === respuestas.data[0].token) {
             success = true;
@@ -623,7 +633,7 @@ export default {
         this.setSnackbar("Debe seleccionar un rango de fechas");
       }
     },
-    getNegocios(value, date_start = "", date_end = "") {
+    async getNegocios(value, date_start = "", date_end = "") {
       const getAllNegocios = (url_ = "") => {
         console.log("URL: ", url_);
         this.mostrarLoading({
@@ -637,7 +647,9 @@ export default {
           url: url_,
           timeout: 8000,
           headers: {
-            Authorization: `Bearer ${this.tokens.chile}`,
+            Authorization: `${this.tokens.chile}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -646,7 +658,9 @@ export default {
           timeout: 8000,
           url: url_,
           headers: {
-            Authorization: `Bearer ${this.tokens.esp_barcelona}`,
+            Authorization: `${this.tokens.esp_barcelona}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -655,7 +669,9 @@ export default {
           timeout: 8000,
           url: url_,
           headers: {
-            Authorization: `Bearer ${this.tokens.esp_madrid}`,
+            Authorization: `${this.tokens.esp_madrid}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -664,7 +680,9 @@ export default {
           timeout: 8000,
           url: url_,
           headers: {
-            Authorization: `Bearer ${this.tokens.mex}`,
+            Authorization: `${this.tokens.mex}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -673,7 +691,9 @@ export default {
           timeout: 8000,
           url: url_,
           headers: {
-            Authorization: `Bearer ${this.tokens.arg}`,
+            Authorization: `${this.tokens.arg}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -682,7 +702,9 @@ export default {
           timeout: 8000,
           url: url_,
           headers: {
-            Authorization: `Bearer ${this.tokens.brasil}`,
+            Authorization: `${this.tokens.brasil}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         };
 
@@ -820,78 +842,70 @@ export default {
           });
       };
 
-      const getNeg = (token, date_start = "", date_end = "", currency = "") => {
+      const getNeg = async (
+        token,
+        date_start = "",
+        date_end = "",
+        currency = ""
+      ) => {
         this.mostrarLoading({
           titulo: "Cargando información",
           color: "#03D6F9",
           percent: 0,
         });
+
         //Si viene filtro de fecha
-        config = {
-          method: "get",
+        let config = {
+          headers: {
+            Authorization: token,
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "GET",
           url:
             date_start && date_end
               ? `https://v3api.herokuapp.com/v1/negocios/meses/${date_start}/${date_end}`
               : `https://v3api.herokuapp.com/v1/negocios`,
-          headers: {
-            Authorization: token,
-          },
         };
-
+        debugger;
         this.token = token;
-        let doc = () => {
-          return new Promise((resolve, reject) => {
-            axios(config)
-              .then((r) => {
-                resolve(r.data);
-              })
-              .catch((err) => {
-                reject();
-              });
-          });
-        };
 
-        Promise.all([doc()]).then((respuestas) => {
+        await axios(config).then((respuestas) => {
+          debugger
           let dt = [];
-          try {
-            respuestas.forEach((e) => {
-              e.data.rows.forEach((e) => {
-                let close_compras = this.negocio.cierre_compras ? true : false;
-                this.cierre_compras_v = close_compras ? "Si" : "No";
-                if (
-                  e.estado === "NOTA DE VENTA" &&
-                  e.closed_compras === close_compras
-                ) {
-                  let data_table = {
-                    nro_neg: e.folio,
-                    fecha_asignacion: e.fecha_asignacion,
-                    referencia: e.referencia,
-                    cliente: e.razon_cliente,
-                    total_venta: currency + this.parse(e.total_neto),
-                    gasto_p: currency + this.parse(e.costo.presupuestado),
-                    gasto_r: currency + this.parse(e.costo.real),
-                    utilidad_final: currency + this.parse(e.utilidad.final),
-                    facturado: currency + this.parse(e.total_facturado),
-                    por_facturar: currency + this.parse(e.total_por_facturar),
-                  };
 
-                  dt.push(data_table);
-                }
-              });
+          respuestas.forEach((e) => {
+            e.data.rows.forEach((e) => {
+              let close_compras = this.negocio.cierre_compras ? true : false;
+              this.cierre_compras_v = close_compras ? "Si" : "No";
+              if (
+                e.estado === "NOTA DE VENTA" &&
+                e.closed_compras === close_compras
+              ) {
+                let data_table = {
+                  nro_neg: e.folio,
+                  fecha_asignacion: e.fecha_asignacion,
+                  referencia: e.referencia,
+                  cliente: e.razon_cliente,
+                  total_venta: currency + this.parse(e.total_neto),
+                  gasto_p: currency + this.parse(e.costo.presupuestado),
+                  gasto_r: currency + this.parse(e.costo.real),
+                  utilidad_final: currency + this.parse(e.utilidad.final),
+                  facturado: currency + this.parse(e.total_facturado),
+                  por_facturar: currency + this.parse(e.total_por_facturar),
+                };
+
+                dt.push(data_table);
+              }
             });
-            this.desserts = [];
-            this.desserts = dt;
-            this.addNegocio(this.desserts);
-            this.setCards();
-            this.$refs.tipoCambio.setTipoCambio(value);
-            this.tipo_cambio_v = null;
-          } catch (error) {
-            this.ocultarLoading(100);
-            this.desserts = [];
-            console.log(error);
-          } finally {
-            this.ocultarLoading(100);
-          }
+          });
+          this.desserts = [];
+          this.desserts = dt;
+          this.addNegocio(this.desserts);
+          this.setCards();
+          this.$refs.tipoCambio.setTipoCambio(value);
+          this.tipo_cambio_v = null;
         });
       };
 
@@ -900,39 +914,39 @@ export default {
       this.select_empresa = value;
       switch (value) {
         case "Primo españa barcelona": {
-          token = `Bearer ${this.tokens.esp_barcelona}`;
+          token = this.tokens.esp_barcelona;
 
           getNeg(token, date_start, date_end, "€");
           break;
         }
 
         case "Primo españa madrid": {
-          token = `Bearer ${this.tokens.esp_madrid}`;
+          token = this.tokens.esp_madrid;
 
           getNeg(token, date_start, date_end, "€");
           break;
         }
 
         case "Primo brasil": {
-          token = `Bearer ${this.tokens.brasil}`;
+          token = this.tokens.brasil;
           getNeg(token, date_start, date_end, "R$");
           break;
         }
 
         case "Primo chile": {
-          token = `Bearer ${this.tokens.chile}`;
+          token = this.tokens.chile;
           getNeg(token, date_start, date_end, "$");
           break;
         }
 
         case "Primo argentina": {
-          token = `Bearer ${this.tokens.arg}`;
+          token = this.tokens.arg;
           getNeg(token, date_start, date_end, "$");
           break;
         }
 
         case "Primo mexico": {
-          token = `Bearer ${this.tokens.mex}`;
+          token = this.tokens.mex;
           getNeg(token, date_start, date_end, "$");
           break;
         }
