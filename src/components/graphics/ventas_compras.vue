@@ -218,7 +218,6 @@ export default {
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
         let date = new Date();
-
         let year = date.getFullYear();
 
         let config = {
