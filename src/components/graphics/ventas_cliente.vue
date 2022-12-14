@@ -159,7 +159,7 @@ export default {
       };
 
       data.forEach((val) => {
-        this.chartData.labels.push(val.name);
+        this.chartData.labels.push(cutName(val.name));
         this.chartData.datasets[0].data.push(val.data);
       });
 
