@@ -223,9 +223,20 @@ export default {
 
   methods: {
     formatIndicador(num) {
-      let res = parseFloat(String(num).replaceAll(".", "")) / 1000;
+      let count = 0;
+      num.match(/./g).forEach((v) => {
+        if (v === ".") count++;
+      });
 
-      return numeral(res).format(" $ 0,0").replaceAll(",", ".") + "K";
+      let res = null;
+      if (count >= 3) {
+        res = parseFloat(String(num).replaceAll(".", "")) / 1000;
+      } else {
+        res = parseFloat(String(num).replaceAll(".", ""));
+      }
+
+      let k = count >= 3 ? "K" : "";
+      return numeral(res).format(" $ 0,0").replaceAll(",", ".") + k;
     },
     formatNumber(num) {
       return String(
@@ -492,9 +503,8 @@ export default {
           var items = respuestas[1][0].clientes.slice(0, 10).map((i) => {
             return i;
           });
-          debugger
+          debugger;
           items.forEach((val) => {
-            
             let data = {
               name: val.nombre,
               data: val.neto,
