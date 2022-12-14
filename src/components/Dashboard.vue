@@ -492,9 +492,11 @@ export default {
           var items = respuestas[1][0].clientes.slice(0, 10).map((i) => {
             return i;
           });
+          debugger
           items.forEach((val) => {
+            
             let data = {
-              name: val.alias != undefined ? val.alias : val.nombre,
+              name: val.nombre,
               data: val.neto,
             };
             this.ventas_cliente.push(data);
