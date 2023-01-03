@@ -245,6 +245,10 @@ export default {
         )
       );
     },
+    getCurrentYear() {
+      let date = new Date();
+      return date.getFullYear();
+    },
 
     async checkSession() {
       const url = this.$route.query.url;
@@ -307,8 +311,8 @@ export default {
         method: "POST",
         url: "https://frank.unabase.com/node/get-tareas",
         data: {
-          date_from: 2022,
-          date_to: 2022,
+          date_from: this.getCurrentYear(),
+          date_to: this.getCurrentYear(),
           user: username,
           hostname: "https://" + url,
           sid,
@@ -404,8 +408,8 @@ export default {
           fecha_asignacion: true,
           estado_en_proceso: true,
           estado_cerrado: true,
-          date_from: 2022,
-          date_to: 2022,
+          date_from: this.getCurrentYear(),
+          date_to: this.getCurrentYear(),
           sid,
         },
       };
@@ -503,7 +507,7 @@ export default {
           var items = respuestas[1][0].clientes.slice(0, 10).map((i) => {
             return i;
           });
-          debugger;
+          ;
           items.forEach((val) => {
             let data = {
               name: val.nombre,

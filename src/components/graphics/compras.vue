@@ -123,12 +123,12 @@ export default {
         ],
         datasets: [
           {
-            label: "2021",
+            label: this.getCurrentYear() - 1,
             backgroundColor: "#F8AFAC",
             data: [],
           },
           {
-            label: "2022",
+            label: this.getCurrentYear(),
             backgroundColor: "#D83934",
             data: [],
           },
@@ -192,6 +192,10 @@ export default {
     ...mapGetters({
       getDataComprasVentas: "getVentasCompras",
     }),
+    getCurrentYear() {
+      let date = new Date();
+      return date.getFullYear();
+    },
     loadGraph(data_current_year, data_past_year) {
       this.data_current_year = data_current_year;
       this.data_past_year = data_past_year;

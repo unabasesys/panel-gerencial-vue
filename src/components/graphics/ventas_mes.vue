@@ -4,7 +4,6 @@
       <v-progress-linear color="#69DFC0" indeterminate></v-progress-linear>
     </template>
     <div class="pa-5">
-      
       <span class="nunito-bold-bright-gray-18px"
         >Ventas por mes comparativo</span
       >
@@ -134,12 +133,12 @@ export default {
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
-            label: "2021",
+            label: this.getCurrentYear() - 1,
             backgroundColor: "#A8BAF9",
             data: [],
           },
           {
-            label: "2022",
+            label: this.getCurrentYear(),
             backgroundColor: "#6871EC",
             data: [],
           },
@@ -204,14 +203,18 @@ export default {
     loadGraph() {
       this.init();
     },
+    getCurrentYear() {
+      let date = new Date();
+      return date.getFullYear();
+    },
 
     init() {
-      this.fethData(2021);
-
+      this.fethData(this.getCurrentYear()-1);
       let date = new Date();
       let currentYear = date.getFullYear();
       this.fethData(currentYear);
     },
+
     async fethData(year) {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;

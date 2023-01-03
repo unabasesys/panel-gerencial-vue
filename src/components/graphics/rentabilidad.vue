@@ -100,7 +100,7 @@ export default {
   data() {
     return {
       loadComplete: true,
-      items: ["2021", "2022"],
+      items: [this.getCurrentYear() - 1, this.getCurrentYear()],
       periodoSelect: "",
       chartData: {
         labels: ["Total venta", "Rentabilidad"],
@@ -151,6 +151,10 @@ export default {
     ...mapMutations({
       setSpinner: "SET_SPINNER",
     }),
+    getCurrentYear() {
+      let date = new Date();
+      return date.getFullYear();
+    },
     loadGraph(data) {
       if (data[0].acumulado < 0) {
         this.chartData.datasets[0].backgroundColor[0] = "#D83934";
@@ -177,7 +181,7 @@ export default {
       const url = this.$route.query.url;
       const sid = this.$route.query.sid;
       if (sid != undefined && sid != "" && url != undefined && url != "") {
-        this.loadComplete = true
+        this.loadComplete = true;
         this.chartData.datasets[0].data = [];
         let date = new Date();
         const year_ = year != "" ? year : date.getFullYear();
@@ -217,7 +221,7 @@ export default {
 
           this.chartData.datasets[0].data.push(acumulado_ventas);
           this.chartData.datasets[0].data.push(rentabilidad_final);
-          this.loadComplete = false
+          this.loadComplete = false;
         });
       }
     },
