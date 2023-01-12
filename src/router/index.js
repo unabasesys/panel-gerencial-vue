@@ -6,10 +6,16 @@ Vue.use(VueRouter)
 
 const routes = [
     {
+        path: '*',
+        name: '',
+    }, 
+    {
         path: '/',
         name: 'Home',
         component: Home
     },
+
+
     {
         path: '/dashboard',
         name: 'Dashboard',
