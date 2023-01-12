@@ -2,6 +2,15 @@ const express = require('express');
 const serveStatic = require("serve-static")
 const path = require('path');
 app = express();
-app.use(serveStatic(path.join(__dirname, 'dist')));
-const port = process.env.PORT || 3000;
-app.listen(port);
+//add this middleware
+app.use(history());    
+app.use(serveStatic(__dirname))
+var port = process.env.PORT || 3000
+app.listen(port)
+console.log('server started '+ port) 
+
+
+
+// app.use(serveStatic(path.join(__dirname, 'dist')));
+// const port = process.env.PORT || 3000;
+// app.listen(port);

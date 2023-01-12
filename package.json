@@ -21,6 +21,7 @@
         "@interactjs/modifiers": "^1.10.17",
         "axios": "^1.2.0",
         "chart.js": "^3.9.1",
+        "connect-history-api-fallback": "^2.0.0",
         "console": "^0.7.2",
         "core-js": "^3.6.5",
         "epic-spinners": "^1.1.0",
