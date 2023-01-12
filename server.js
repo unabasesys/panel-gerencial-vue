@@ -1,6 +1,7 @@
 const express = require('express');
 const serveStatic = require("serve-static")
 const path = require('path');
+var history = require('connect-history-api-fallback');
 app = express();
 //add this middleware
 app.use(history());    
